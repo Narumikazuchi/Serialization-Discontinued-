@@ -4,20 +4,16 @@
     <TargetFramework>net5.0</TargetFramework>
     <Nullable>enable</Nullable>
     <Authors>Narumikazuchi</Authors>
-    <Description>
-      A small framework containing different serializers.
+    <Description>A small framework containing different serializer interfaces.
 
       Contents:
-      - ByteSerializer with the IByteSerializable interface to implement into serializable classes
-      - MarkupSerializer with the IMarkupSerializable interface to implement into serializable classes
-      - MarkupReader and MarkupWriter abstract classes to use with the MArkupSerializer
-      - MarkupDocument class to browse markup files
-      - MarkupElement class to represent a node in an MarkupDocument
-    </Description>
+      - ISerializable interface to implement into serializable classes
+      - ISerializer interface to implement into serializer classes
+      - SerializationFinishAction enum defining how to handle a stream after serialization</Description>
     <Copyright>©2021 Narumikazuchi</Copyright>
-    <RepositoryUrl>https://github.com/Narumikazuchi/CSharp-Utilities</RepositoryUrl>
+    <RepositoryUrl>https://github.com/Narumikazuchi/Serialization</RepositoryUrl>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.0.0.37</Version>
+    <Version>1.0.2</Version>
     <PackageReleaseNotes>
     </PackageReleaseNotes>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
