@@ -1,0 +1,43 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <Authors>Narumikazuchi</Authors>
+    <Description>
+      A small framework containing different serializers.
+
+      Contents:
+      - ByteSerializer with the IByteSerializable interface to implement into serializable classes
+      - MarkupSerializer with the IMarkupSerializable interface to implement into serializable classes
+      - MarkupReader and MarkupWriter abstract classes to use with the MArkupSerializer
+      - MarkupDocument class to browse markup files
+      - MarkupElement class to represent a node in an MarkupDocument
+    </Description>
+    <Copyright>©2021 Narumikazuchi</Copyright>
+    <RepositoryUrl>https://github.com/Narumikazuchi/CSharp-Utilities</RepositoryUrl>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>1.0.0.37</Version>
+    <PackageReleaseNotes>
+    </PackageReleaseNotes>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <NoPackageAnalysis>true</NoPackageAnalysis>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>..\Narumikazuchi.Serialization.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>..\..\..\Managed Code Libraries\Custom\net5.0\Narumikazuchi.Serialization.xml</DocumentationFile>
+    <OutputPath>..\..\..\Managed Code Libraries\Custom\</OutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
+
+</Project>
