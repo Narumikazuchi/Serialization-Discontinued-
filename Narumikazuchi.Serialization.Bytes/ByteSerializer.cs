@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -40,7 +41,7 @@ namespace Narumikazuchi.Serialization.Bytes
         /// </summary>
         /// <param name="graph">The graph to serialize into it's byte representation.</param>
         /// <returns>The specified graph in it's byte representation</returns>
-        public Byte[] Serialize(TType graph)
+        public Byte[] Serialize([DisallowNull] TType graph)
         {
             if (typeof(TType).IsInterface)
             {
@@ -56,7 +57,7 @@ namespace Narumikazuchi.Serialization.Bytes
         /// </summary>
         /// <param name="stream">The stream to serialize the graph into.</param>
         /// <param name="graph">The graph to serialize.</param>
-        public void Serialize(Stream stream, TType graph) =>
+        public void Serialize([DisallowNull] Stream stream, [DisallowNull] TType graph) =>
             this.Serialize(stream, graph, -1, SerializationFinishAction.None);
         /// <summary>
         /// Serializes the specified graph into the specified stream starting at the specified offset in the stream.
@@ -64,7 +65,7 @@ namespace Narumikazuchi.Serialization.Bytes
         /// <param name="stream">The stream to serialize the graph into.</param>
         /// <param name="graph">The graph to serialize.</param>
         /// <param name="offset">The offset in the stream where to begin writing.</param>
-        public void Serialize(Stream stream, TType graph, in Int64 offset) =>
+        public void Serialize([DisallowNull] Stream stream, [DisallowNull] TType graph, in Int64 offset) =>
             this.Serialize(stream, graph, offset, SerializationFinishAction.None);
         /// <summary>
         /// Serializes the specified graph into the specified stream.
@@ -72,7 +73,7 @@ namespace Narumikazuchi.Serialization.Bytes
         /// <param name="stream">The stream to serialize the graph into.</param>
         /// <param name="graph">The graph to serialize.</param>
         /// <param name="actionAfter">The actions to perform after the writing operation has finished.</param>
-        public void Serialize(Stream stream, TType graph, in SerializationFinishAction actionAfter) =>
+        public void Serialize([DisallowNull] Stream stream, [DisallowNull] TType graph, in SerializationFinishAction actionAfter) =>
             this.Serialize(stream, graph, -1, actionAfter);
         /// <summary>
         /// Serializes the specified graph into the specified stream starting at the specified offset in the stream.
@@ -81,7 +82,7 @@ namespace Narumikazuchi.Serialization.Bytes
         /// <param name="graph">The graph to serialize.</param>
         /// <param name="offset">The offset in the stream where to begin writing.</param>
         /// <param name="actionAfter">The actions to perform after the writing operation has finished.</param>
-        public void Serialize(Stream stream, TType graph, in Int64 offset, in SerializationFinishAction actionAfter)
+        public void Serialize([DisallowNull] Stream stream, [DisallowNull] TType graph, in Int64 offset, in SerializationFinishAction actionAfter)
         {
             if (stream is null)
             {
@@ -123,7 +124,7 @@ namespace Narumikazuchi.Serialization.Bytes
         /// <param name="stream">The stream to serialize the graph into.</param>
         /// <param name="graph">The graph to serialize.</param>
         /// <returns><see langword="true"/> if the serialization succeeded; else, <see langword="false"/></returns>
-        public Boolean TrySerialize(Stream stream, TType graph) =>
+        public Boolean TrySerialize([DisallowNull] Stream stream, [DisallowNull] TType graph) =>
             this.TrySerialize(stream, graph, -1, SerializationFinishAction.None);
         /// <summary>
         /// Tries to serialize the specified graph into the specified stream starting at the specified offset in the stream.
@@ -132,7 +133,7 @@ namespace Narumikazuchi.Serialization.Bytes
         /// <param name="graph">The graph to serialize.</param>
         /// <param name="offset">The offset in the stream where to begin writing.</param>
         /// <returns><see langword="true"/> if the serialization succeeded; else, <see langword="false"/></returns>
-        public Boolean TrySerialize(Stream stream, TType graph, in Int64 offset) =>
+        public Boolean TrySerialize([DisallowNull] Stream stream, [DisallowNull] TType graph, in Int64 offset) =>
             this.TrySerialize(stream, graph, offset, SerializationFinishAction.None);
         /// <summary>
         /// Tries to serialize the specified graph into the specified stream.
@@ -141,7 +142,7 @@ namespace Narumikazuchi.Serialization.Bytes
         /// <param name="graph">The graph to serialize.</param>
         /// <param name="actionAfter">The actions to perform after the writing operation has finished.</param>
         /// <returns><see langword="true"/> if the serialization succeeded; else, <see langword="false"/></returns>
-        public Boolean TrySerialize(Stream stream, TType graph, in SerializationFinishAction actionAfter) =>
+        public Boolean TrySerialize([DisallowNull] Stream stream, [DisallowNull] TType graph, in SerializationFinishAction actionAfter) =>
             this.TrySerialize(stream, graph, -1, actionAfter);
         /// <summary>
         /// Tries to serialize the specified graph into the specified stream starting at the specified offset in the stream.
@@ -151,7 +152,7 @@ namespace Narumikazuchi.Serialization.Bytes
         /// <param name="offset">The offset in the stream where to begin writing.</param>
         /// <param name="actionAfter">The actions to perform after the writing operation has finished.</param>
         /// <returns><see langword="true"/> if the serialization succeeded; else, <see langword="false"/></returns>
-        public Boolean TrySerialize(Stream stream, TType graph, in Int64 offset, in SerializationFinishAction actionAfter)
+        public Boolean TrySerialize([DisallowNull] Stream stream, [DisallowNull] TType graph, in Int64 offset, in SerializationFinishAction actionAfter)
         {
             try
             {
@@ -224,8 +225,12 @@ namespace Narumikazuchi.Serialization.Bytes
         /// <param name="bytes">The bytes supposed to represent an instance of <typeparamref name="TType"/>.</param>
         /// <param name="offset">The amount of elements in <paramref name="bytes"/> to ignore, starting from the first.</param>
         /// <returns>The instance represented by the specified bytes starting at the specified offset</returns>
-        public TType Deserialize(Byte[] bytes, in Int32 offset)
+        public TType Deserialize([DisallowNull] Byte[] bytes, in Int32 offset)
         {
+            if (bytes is null)
+            {
+                throw new ArgumentNullException(nameof(bytes));
+            }
             if (typeof(TType).IsInterface)
             {
                 throw new InvalidOperationException("The generic type TType can't be an interface.");
@@ -254,7 +259,7 @@ namespace Narumikazuchi.Serialization.Bytes
         /// </summary>
         /// <param name="stream">The stream to deserialize the graph from.</param>
         /// <returns>The instance represented by the bytes in the specified stream</returns>
-        public TType Deserialize(Stream stream) =>
+        public TType Deserialize([DisallowNull] Stream stream) =>
             this.Deserialize(stream, -1, SerializationFinishAction.None);
         /// <summary>
         /// Deserializes the specified stream starting at the specified offset into an instance of type <typeparamref name="TType"/>.
@@ -262,7 +267,7 @@ namespace Narumikazuchi.Serialization.Bytes
         /// <param name="stream">The stream to deserialize the graph from.</param>
         /// <param name="offset">The offset in the stream where to begin reading.</param>
         /// <returns>The instance represented by the bytes in the specified stream</returns>
-        public TType Deserialize(Stream stream, in Int64 offset) =>
+        public TType Deserialize([DisallowNull] Stream stream, in Int64 offset) =>
             this.Deserialize(stream, offset, SerializationFinishAction.None);
         /// <summary>
         /// Deserializes the specified stream into an instance of type <typeparamref name="TType"/>.
@@ -270,7 +275,7 @@ namespace Narumikazuchi.Serialization.Bytes
         /// <param name="stream">The stream to deserialize the graph from.</param>
         /// <param name="actionAfter">The actions to perform after the reading operation has finished.</param>
         /// <returns>The instance represented by the bytes in the specified stream</returns>
-        public TType Deserialize(Stream stream, in SerializationFinishAction actionAfter) =>
+        public TType Deserialize([DisallowNull] Stream stream, in SerializationFinishAction actionAfter) =>
             this.Deserialize(stream, -1, actionAfter);
         /// <summary>
         /// Deserializes the specified stream starting at the specified offset into an instance of type <typeparamref name="TType"/>.
@@ -279,7 +284,7 @@ namespace Narumikazuchi.Serialization.Bytes
         /// <param name="offset">The offset in the stream where to begin reading.</param>
         /// <param name="actionAfter">The actions to perform after the reading operation has finished.</param>
         /// <returns>The instance represented by the bytes in the specified stream</returns>
-        public TType Deserialize(Stream stream, in Int64 offset, in SerializationFinishAction actionAfter)
+        public TType Deserialize([DisallowNull] Stream stream, in Int64 offset, in SerializationFinishAction actionAfter)
         {
             if (stream is null)
             {
@@ -320,7 +325,7 @@ namespace Narumikazuchi.Serialization.Bytes
         /// <param name="stream">The stream to deserialize the graph from.</param>
         /// <param name="result">The instance represented by the bytes in the specified stream.</param>
         /// <returns><see langword="true"/> if the serialization succeeded; else, <see langword="false"/></returns>
-        public Boolean TryDeserialize(Stream stream, out TType? result) =>
+        public Boolean TryDeserialize([DisallowNull] Stream stream, [MaybeNullWhen(false)] out TType? result) =>
             this.TryDeserialize(stream, -1, SerializationFinishAction.None, out result);
         /// <summary>
         /// Tries to deserialize the specified stream starting at the specified offset into an instance of type <typeparamref name="TType"/>.
@@ -329,7 +334,7 @@ namespace Narumikazuchi.Serialization.Bytes
         /// <param name="offset">The offset in the stream where to begin reading.</param>
         /// <param name="result">The instance represented by the bytes in the specified stream.</param>
         /// <returns><see langword="true"/> if the serialization succeeded; else, <see langword="false"/></returns>
-        public Boolean TryDeserialize(Stream stream, in Int64 offset, out TType? result) =>
+        public Boolean TryDeserialize([DisallowNull] Stream stream, in Int64 offset, [MaybeNullWhen(false)] out TType? result) =>
             this.TryDeserialize(stream, offset, SerializationFinishAction.None, out result);
         /// <summary>
         /// Tries to deserialize the specified stream into an instance of type <typeparamref name="TType"/>.
@@ -338,7 +343,7 @@ namespace Narumikazuchi.Serialization.Bytes
         /// <param name="actionAfter">The actions to perform after the reading operation has finished.</param>
         /// <param name="result">The instance represented by the bytes in the specified stream.</param>
         /// <returns><see langword="true"/> if the serialization succeeded; else, <see langword="false"/></returns>
-        public Boolean TryDeserialize(Stream stream, in SerializationFinishAction actionAfter, out TType? result) =>
+        public Boolean TryDeserialize([DisallowNull] Stream stream, in SerializationFinishAction actionAfter, [MaybeNullWhen(false)] out TType? result) =>
             this.TryDeserialize(stream, -1, actionAfter, out result);
         /// <summary>
         /// Tries to deserialize the specified stream starting at the specified offset into an instance of type <typeparamref name="TType"/>.
@@ -348,7 +353,7 @@ namespace Narumikazuchi.Serialization.Bytes
         /// <param name="actionAfter">The actions to perform after the reading operation has finished.</param>
         /// <param name="result">The instance represented by the bytes in the specified stream.</param>
         /// <returns><see langword="true"/> if the serialization succeeded; else, <see langword="false"/></returns>
-        public Boolean TryDeserialize(Stream stream, in Int64 offset, in SerializationFinishAction actionAfter, out TType? result)
+        public Boolean TryDeserialize([DisallowNull] Stream stream, in Int64 offset, in SerializationFinishAction actionAfter, [MaybeNullWhen(false)] out TType? result)
         {
             try
             {
