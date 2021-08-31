@@ -11,6 +11,22 @@ namespace Narumikazuchi.Serialization.Bytes
     /// </summary>
     public class ByteSerializer<TType> : ISerializer<TType> where TType : class, IByteSerializable
     {
+        #region Constructor
+
+        /// <summary>
+        /// Instantiates a new instance of the <see cref="ByteSerializer{TType}"/> class.
+        /// </summary>
+        public ByteSerializer()
+        {
+            if (typeof(TType).IsAbstract ||
+                typeof(TType).IsInterface)
+            {
+                throw new InvalidOperationException("The generic type TType needs to be instantiable.");
+            }
+        }
+
+        #endregion
+
         #region Serialize
 
         private static Byte[] SerializeInternal(TType graph)
@@ -43,11 +59,6 @@ namespace Narumikazuchi.Serialization.Bytes
         /// <returns>The specified graph in it's byte representation</returns>
         public Byte[] Serialize([DisallowNull] TType graph)
         {
-            if (typeof(TType).IsInterface)
-            {
-                throw new InvalidOperationException("The generic type TType can't be an interface.");
-            }
-
             Byte[] data = SerializeInternal(graph);
             return BitConverter.GetBytes(data.Length).Concat(data).ToArray();
         }
@@ -223,33 +234,53 @@ namespace Narumikazuchi.Serialization.Bytes
         /// Deserializes the specified bytes starting at the specified offset into an instance of type <typeparamref name="TType"/>.
         /// </summary>
         /// <param name="bytes">The bytes supposed to represent an instance of <typeparamref name="TType"/>.</param>
+        /// <returns>The instance represented by the specified bytes starting at the specified offset</returns>
+        public TType Deserialize([DisallowNull] Byte[] bytes) =>
+            this.Deserialize(bytes, 0, out UInt32 _);
+        /// <summary>
+        /// Deserializes the specified bytes starting at the specified offset into an instance of type <typeparamref name="TType"/>.
+        /// </summary>
+        /// <param name="bytes">The bytes supposed to represent an instance of <typeparamref name="TType"/>.</param>
+        /// <param name="read">The amount of elements read from the <paramref name="bytes"/> parameter.</param>
+        /// <returns>The instance represented by the specified bytes starting at the specified offset</returns>
+        public TType Deserialize([DisallowNull] Byte[] bytes, out UInt32 read) =>
+            this.Deserialize(bytes, 0, out read);
+        /// <summary>
+        /// Deserializes the specified bytes starting at the specified offset into an instance of type <typeparamref name="TType"/>.
+        /// </summary>
+        /// <param name="bytes">The bytes supposed to represent an instance of <typeparamref name="TType"/>.</param>
         /// <param name="offset">The amount of elements in <paramref name="bytes"/> to ignore, starting from the first.</param>
         /// <returns>The instance represented by the specified bytes starting at the specified offset</returns>
-        public TType Deserialize([DisallowNull] Byte[] bytes, in Int32 offset)
+        public TType Deserialize([DisallowNull] Byte[] bytes, in Int32 offset) =>
+            this.Deserialize(bytes, offset, out UInt32 _);
+        /// <summary>
+        /// Deserializes the specified bytes starting at the specified offset into an instance of type <typeparamref name="TType"/>.
+        /// </summary>
+        /// <param name="bytes">The bytes supposed to represent an instance of <typeparamref name="TType"/>.</param>
+        /// <param name="offset">The amount of elements in <paramref name="bytes"/> to ignore, starting from the first.</param>
+        /// <param name="read">The amount of elements read from the <paramref name="bytes"/> parameter.</param>
+        /// <returns>The instance represented by the specified bytes starting at the specified offset</returns>
+        public TType Deserialize([DisallowNull] Byte[] bytes, in Int32 offset, out UInt32 read)
         {
             if (bytes is null)
             {
                 throw new ArgumentNullException(nameof(bytes));
-            }
-            if (typeof(TType).IsInterface)
-            {
-                throw new InvalidOperationException("The generic type TType can't be an interface.");
             }
 
             Int32 size = BitConverter.ToInt32(bytes, offset);
             Byte[] data = bytes.Skip(offset + 4).Take(size).ToArray();
 
             TType result;
-            ConstructorInfo? constructor = typeof(TType).GetConstructor(BindingFlags.Public | BindingFlags.Instance, null, Array.Empty<Type>(), null);
+            ConstructorInfo? constructor = typeof(TType).GetConstructor(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance, null, Array.Empty<Type>(), null);
             if (constructor is not null)
             {
                 result = (TType)constructor.Invoke(Array.Empty<Object>());
-                DeserializeInitializedInternal(result, data);
+                read = DeserializeInitializedInternal(result, data);
             }
             else
             {
                 result = (TType)System.Runtime.Serialization.FormatterServices.GetSafeUninitializedObject(typeof(TType));
-                DeserializeUninitializedInternal(result, data);
+                read = DeserializeUninitializedInternal(result, data);
             }
             return result;
         }
