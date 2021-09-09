@@ -32,7 +32,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Narumikazuchi.Serialization" Version="[1,2)" />
+    <PackageReference Include="Narumikazuchi.Serialization" Version="1.0.0" />
   </ItemGroup>
 
 </Project>

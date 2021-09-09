@@ -5,8 +5,6 @@
     /// </summary>
     public interface IByteSerializable : ISerializable
     {
-        #region Serialization
-
         /// <summary>
         /// Initializes this instance from it's byte representation.
         /// </summary>
@@ -33,7 +31,5 @@
         /// <see cref="SetState(System.Byte[])"/> will be called before the implementation of this type.
         /// </remarks>
         internal protected System.UInt32 SetState(System.Byte[] bytes);
-
-        #endregion
     }
 }
