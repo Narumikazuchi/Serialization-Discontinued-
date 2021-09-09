@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31424.327
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Narumikazuchi.Serialization", "Narumikazuchi.Serialization\Narumikazuchi.Serialization.csproj", "{EDABC30A-3A73-4D6F-8C8F-2E0F274AB369}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Narumikazuchi.Serialization", "Narumikazuchi.Serialization\Narumikazuchi.Serialization.csproj", "{EDABC30A-3A73-4D6F-8C8F-2E0F274AB369}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Narumikazuchi.Serialization.Bytes", "Narumikazuchi.Serialization.Bytes\Narumikazuchi.Serialization.Bytes.csproj", "{58E203BA-D322-40FB-90FF-62724E9207C5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Narumikazuchi.Serialization.Bytes", "Narumikazuchi.Serialization.Bytes\Narumikazuchi.Serialization.Bytes.csproj", "{58E203BA-D322-40FB-90FF-62724E9207C5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTest", "UnitTest\UnitTest.csproj", "{9AE7C9FB-231F-435F-ADCD-F8EEF90B98DB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{58E203BA-D322-40FB-90FF-62724E9207C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{58E203BA-D322-40FB-90FF-62724E9207C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{58E203BA-D322-40FB-90FF-62724E9207C5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9AE7C9FB-231F-435F-ADCD-F8EEF90B98DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9AE7C9FB-231F-435F-ADCD-F8EEF90B98DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9AE7C9FB-231F-435F-ADCD-F8EEF90B98DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9AE7C9FB-231F-435F-ADCD-F8EEF90B98DB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
