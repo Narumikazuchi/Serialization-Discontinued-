@@ -141,6 +141,7 @@
         /// </summary>
         /// <param name="stream">The stream to deserialize the graph from.</param>
         /// <returns>The instance represented by the bytes in the specified stream</returns>
+        [return: System.Diagnostics.CodeAnalysis.NotNull]
         public TType Deserialize([System.Diagnostics.CodeAnalysis.DisallowNull] System.IO.Stream stream);
         /// <summary>
         /// Deserializes the specified bytes starting at the specified offset into an instance of type <typeparamref name="TType"/>.
@@ -148,6 +149,7 @@
         /// <param name="stream">The stream to deserialize the graph from.</param>
         /// <param name="read">The amount of elements read from the <paramref name="stream"/> parameter.</param>
         /// <returns>The instance represented by the specified bytes starting at the specified offset</returns>
+        [return: System.Diagnostics.CodeAnalysis.NotNull]
         public TType Deserialize([System.Diagnostics.CodeAnalysis.DisallowNull] System.IO.Stream stream, 
                                  out System.UInt32 read);
         /// <summary>
@@ -156,6 +158,7 @@
         /// <param name="stream">The stream to deserialize the graph from.</param>
         /// <param name="offset">The offset in the stream where to begin reading.</param>
         /// <returns>The instance represented by the bytes in the specified stream</returns>
+        [return: System.Diagnostics.CodeAnalysis.NotNull]
         public TType Deserialize([System.Diagnostics.CodeAnalysis.DisallowNull] System.IO.Stream stream, 
                                  in System.Int64 offset);
         /// <summary>
@@ -165,6 +168,7 @@
         /// <param name="offset">The offset in the stream where to begin reading.</param>
         /// <param name="read">The amount of elements read from the <paramref name="stream"/> parameter.</param>
         /// <returns>The instance represented by the bytes in the specified stream</returns>
+        [return: System.Diagnostics.CodeAnalysis.NotNull]
         public TType Deserialize([System.Diagnostics.CodeAnalysis.DisallowNull] System.IO.Stream stream,
                                  in System.Int64 offset,
                                  out System.UInt32 read);
@@ -174,6 +178,7 @@
         /// <param name="stream">The stream to deserialize the graph from.</param>
         /// <param name="actionAfter">The actions to perform after the reading operation has finished.</param>
         /// <returns>The instance represented by the bytes in the specified stream</returns>
+        [return: System.Diagnostics.CodeAnalysis.NotNull]
         public TType Deserialize([System.Diagnostics.CodeAnalysis.DisallowNull] System.IO.Stream stream, 
                                  in SerializationFinishAction actionAfter);
         /// <summary>
@@ -183,6 +188,7 @@
         /// <param name="offset">The offset in the stream where to begin reading.</param>
         /// <param name="actionAfter">The actions to perform after the reading operation has finished.</param>
         /// <returns>The instance represented by the bytes in the specified stream</returns>
+        [return: System.Diagnostics.CodeAnalysis.NotNull]
         public TType Deserialize([System.Diagnostics.CodeAnalysis.DisallowNull] System.IO.Stream stream,
                                  in System.Int64 offset,
                                  in SerializationFinishAction actionAfter);
@@ -193,6 +199,7 @@
         /// <param name="read">The amount of elements read from the <paramref name="stream"/> parameter.</param>
         /// <param name="actionAfter">The actions to perform after the reading operation has finished.</param>
         /// <returns>The instance represented by the bytes in the specified stream</returns>
+        [return: System.Diagnostics.CodeAnalysis.NotNull]
         public TType Deserialize([System.Diagnostics.CodeAnalysis.DisallowNull] System.IO.Stream stream,
                                  out System.UInt32 read,
                                  in SerializationFinishAction actionAfter);
@@ -204,6 +211,7 @@
         /// <param name="read">The amount of elements read from the <paramref name="stream"/> parameter.</param>
         /// <param name="actionAfter">The actions to perform after the reading operation has finished.</param>
         /// <returns>The instance represented by the bytes in the specified stream</returns>
+        [return: System.Diagnostics.CodeAnalysis.NotNull]
         public TType Deserialize([System.Diagnostics.CodeAnalysis.DisallowNull] System.IO.Stream stream, 
                                  in System.Int64 offset,
                                  out System.UInt32 read, 

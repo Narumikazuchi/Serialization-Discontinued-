@@ -35,7 +35,9 @@ namespace Narumikazuchi.Serialization.Bytes
         /// <param name="graph">The graph to serialize into it's byte representation.</param>
         /// <returns>The specified graph in it's byte representation</returns>
         /// <exception cref="ArgumentNullException"/>
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.NonPublicMethods)]
         [Pure]
+        [return: NotNull]
         public Byte[] Serialize([DisallowNull] TType graph)
         {
             if (graph is null)
@@ -54,7 +56,9 @@ namespace Narumikazuchi.Serialization.Bytes
         /// <param name="bytes">The bytes supposed to represent an instance of <typeparamref name="TType"/>.</param>
         /// <returns>The instance represented by the specified bytes starting at the specified offset</returns>
         /// <exception cref="ArgumentNullException"/>
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.NonPublicConstructors | DynamicallyAccessedMemberTypes.NonPublicMethods)]
         [Pure]
+        [return: NotNull]
         public TType Deserialize([DisallowNull] Byte[] bytes) =>
             this.Deserialize(bytes, 
                              0, 
@@ -66,7 +70,9 @@ namespace Narumikazuchi.Serialization.Bytes
         /// <param name="offset">The amount of elements in <paramref name="bytes"/> to ignore, starting from the first.</param>
         /// <returns>The instance represented by the specified bytes starting at the specified offset</returns>
         /// <exception cref="ArgumentNullException"/>
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.NonPublicConstructors | DynamicallyAccessedMemberTypes.NonPublicMethods)]
         [Pure]
+        [return: NotNull]
         public TType Deserialize([DisallowNull] Byte[] bytes,
                                  in Int32 offset) =>
             this.Deserialize(bytes,
@@ -79,7 +85,9 @@ namespace Narumikazuchi.Serialization.Bytes
         /// <param name="read">The amount of elements read from the <paramref name="bytes"/> parameter.</param>
         /// <returns>The instance represented by the specified bytes starting at the specified offset</returns>
         /// <exception cref="ArgumentNullException"/>
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.NonPublicConstructors | DynamicallyAccessedMemberTypes.NonPublicMethods)]
         [Pure]
+        [return: NotNull]
         public TType Deserialize([DisallowNull] Byte[] bytes, 
                                  out UInt32 read) =>
             this.Deserialize(bytes, 
@@ -93,7 +101,9 @@ namespace Narumikazuchi.Serialization.Bytes
         /// <param name="read">The amount of elements read from the <paramref name="bytes"/> parameter.</param>
         /// <returns>The instance represented by the specified bytes starting at the specified offset</returns>
         /// <exception cref="ArgumentNullException"/>
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.NonPublicConstructors | DynamicallyAccessedMemberTypes.NonPublicMethods)]
         [Pure]
+        [return: NotNull]
         public TType Deserialize([DisallowNull] Byte[] bytes, 
                                  in Int32 offset, 
                                  out UInt32 read)
@@ -221,6 +231,7 @@ namespace Narumikazuchi.Serialization.Bytes
         /// <returns>The amount of bytes written</returns>
         /// <exception cref="ArgumentNullException"/>
         /// <exception cref="InvalidOperationException"/>
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.NonPublicMethods)]
         public UInt32 Serialize([DisallowNull] Stream stream, 
                                 [DisallowNull] TType graph) =>
             this.Serialize(stream, 
@@ -236,6 +247,7 @@ namespace Narumikazuchi.Serialization.Bytes
         /// <returns>The amount of bytes written</returns>
         /// <exception cref="ArgumentNullException"/>
         /// <exception cref="InvalidOperationException"/>
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.NonPublicMethods)]
         public UInt32 Serialize([DisallowNull] Stream stream, 
                                 [DisallowNull] TType graph, 
                                 in Int64 offset) =>
@@ -252,6 +264,7 @@ namespace Narumikazuchi.Serialization.Bytes
         /// <returns>The amount of bytes written</returns>
         /// <exception cref="ArgumentNullException"/>
         /// <exception cref="InvalidOperationException"/>
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.NonPublicMethods)]
         public UInt32 Serialize([DisallowNull] Stream stream, 
                                 [DisallowNull] TType graph, 
                                 in SerializationFinishAction actionAfter) =>
@@ -269,6 +282,7 @@ namespace Narumikazuchi.Serialization.Bytes
         /// <returns>The amount of bytes written</returns>
         /// <exception cref="ArgumentNullException"/>
         /// <exception cref="InvalidOperationException"/>
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.NonPublicMethods)]
         public UInt32 Serialize([DisallowNull] Stream stream, 
                                 [DisallowNull] TType graph, 
                                 in Int64 offset, 
@@ -320,6 +334,7 @@ namespace Narumikazuchi.Serialization.Bytes
         /// <param name="stream">The stream to serialize the graph into.</param>
         /// <param name="graph">The graph to serialize.</param>
         /// <returns><see langword="true"/> if the serialization succeeded; else, <see langword="false"/></returns>
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.NonPublicMethods)]
         public Boolean TrySerialize([DisallowNull] Stream stream, 
                                     [DisallowNull] TType graph) =>
             this.TrySerialize(stream, 
@@ -334,6 +349,7 @@ namespace Narumikazuchi.Serialization.Bytes
         /// <param name="graph">The graph to serialize.</param>
         /// <param name="offset">The offset in the stream where to begin writing.</param>
         /// <returns><see langword="true"/> if the serialization succeeded; else, <see langword="false"/></returns>
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.NonPublicMethods)]
         public Boolean TrySerialize([DisallowNull] Stream stream, 
                                     [DisallowNull] TType graph, 
                                     in Int64 offset) =>
@@ -349,6 +365,7 @@ namespace Narumikazuchi.Serialization.Bytes
         /// <param name="graph">The graph to serialize.</param>
         /// <param name="written">The amount of bytes written.</param>
         /// <returns><see langword="true"/> if the serialization succeeded; else, <see langword="false"/></returns>
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.NonPublicMethods)]
         public Boolean TrySerialize([DisallowNull] Stream stream,
                                     [DisallowNull] TType graph,
                                     out UInt32 written) =>
@@ -365,6 +382,7 @@ namespace Narumikazuchi.Serialization.Bytes
         /// <param name="offset">The offset in the stream where to begin writing.</param>
         /// <param name="written">The amount of bytes written.</param>
         /// <returns><see langword="true"/> if the serialization succeeded; else, <see langword="false"/></returns>
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.NonPublicMethods)]
         public Boolean TrySerialize([DisallowNull] Stream stream,
                                     [DisallowNull] TType graph,
                                     in Int64 offset,
@@ -381,6 +399,7 @@ namespace Narumikazuchi.Serialization.Bytes
         /// <param name="graph">The graph to serialize.</param>
         /// <param name="actionAfter">The actions to perform after the writing operation has finished.</param>
         /// <returns><see langword="true"/> if the serialization succeeded; else, <see langword="false"/></returns>
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.NonPublicMethods)]
         public Boolean TrySerialize([DisallowNull] Stream stream, 
                                     [DisallowNull] TType graph, 
                                     in SerializationFinishAction actionAfter) =>
@@ -397,6 +416,7 @@ namespace Narumikazuchi.Serialization.Bytes
         /// <param name="offset">The offset in the stream where to begin writing.</param>
         /// <param name="actionAfter">The actions to perform after the writing operation has finished.</param>
         /// <returns><see langword="true"/> if the serialization succeeded; else, <see langword="false"/></returns>
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.NonPublicMethods)]
         public Boolean TrySerialize([DisallowNull] Stream stream,
                                     [DisallowNull] TType graph,
                                     in Int64 offset,
@@ -414,6 +434,7 @@ namespace Narumikazuchi.Serialization.Bytes
         /// <param name="written">The amount of bytes written.</param>
         /// <param name="actionAfter">The actions to perform after the writing operation has finished.</param>
         /// <returns><see langword="true"/> if the serialization succeeded; else, <see langword="false"/></returns>
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.NonPublicMethods)]
         public Boolean TrySerialize([DisallowNull] Stream stream,
                                     [DisallowNull] TType graph,
                                     out UInt32 written,
@@ -432,6 +453,7 @@ namespace Narumikazuchi.Serialization.Bytes
         /// <param name="written">The amount of bytes written.</param>
         /// <param name="actionAfter">The actions to perform after the writing operation has finished.</param>
         /// <returns><see langword="true"/> if the serialization succeeded; else, <see langword="false"/></returns>
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.NonPublicMethods)]
         public Boolean TrySerialize([DisallowNull] Stream stream, 
                                     [DisallowNull] TType graph, 
                                     in Int64 offset,
@@ -460,6 +482,8 @@ namespace Narumikazuchi.Serialization.Bytes
         /// <returns>The instance represented by the bytes in the specified stream</returns>
         /// <exception cref="ArgumentNullException"/>
         /// <exception cref="InvalidOperationException"/>
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.NonPublicConstructors | DynamicallyAccessedMemberTypes.NonPublicMethods)]
+        [return: NotNull]
         public TType Deserialize([DisallowNull] Stream stream) =>
             this.Deserialize(stream, 
                              -1,
@@ -473,6 +497,8 @@ namespace Narumikazuchi.Serialization.Bytes
         /// <returns>The instance represented by the bytes in the specified stream</returns>
         /// <exception cref="ArgumentNullException"/>
         /// <exception cref="InvalidOperationException"/>
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.NonPublicConstructors | DynamicallyAccessedMemberTypes.NonPublicMethods)]
+        [return: NotNull]
         public TType Deserialize([DisallowNull] Stream stream,
                                  in Int64 offset) =>
             this.Deserialize(stream,
@@ -487,6 +513,8 @@ namespace Narumikazuchi.Serialization.Bytes
         /// <returns>The instance represented by the bytes in the specified stream</returns>
         /// <exception cref="ArgumentNullException"/>
         /// <exception cref="InvalidOperationException"/>
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.NonPublicConstructors | DynamicallyAccessedMemberTypes.NonPublicMethods)]
+        [return: NotNull]
         public TType Deserialize([DisallowNull] Stream stream,
                                  out UInt32 read) =>
             this.Deserialize(stream,
@@ -502,6 +530,8 @@ namespace Narumikazuchi.Serialization.Bytes
         /// <returns>The instance represented by the bytes in the specified stream</returns>
         /// <exception cref="ArgumentNullException"/>
         /// <exception cref="InvalidOperationException"/>
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.NonPublicConstructors | DynamicallyAccessedMemberTypes.NonPublicMethods)]
+        [return: NotNull]
         public TType Deserialize([DisallowNull] Stream stream, 
                                  in Int64 offset,
                                  out UInt32 read) =>
@@ -517,6 +547,8 @@ namespace Narumikazuchi.Serialization.Bytes
         /// <returns>The instance represented by the bytes in the specified stream</returns>
         /// <exception cref="ArgumentNullException"/>
         /// <exception cref="InvalidOperationException"/>
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.NonPublicConstructors | DynamicallyAccessedMemberTypes.NonPublicMethods)]
+        [return: NotNull]
         public TType Deserialize([DisallowNull] Stream stream, 
                                  in SerializationFinishAction actionAfter) =>
             this.Deserialize(stream, 
@@ -532,6 +564,8 @@ namespace Narumikazuchi.Serialization.Bytes
         /// <returns>The instance represented by the bytes in the specified stream</returns>
         /// <exception cref="ArgumentNullException"/>
         /// <exception cref="InvalidOperationException"/>
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.NonPublicConstructors | DynamicallyAccessedMemberTypes.NonPublicMethods)]
+        [return: NotNull]
         public TType Deserialize([DisallowNull] Stream stream,
                                  in Int64 offset,
                                  in SerializationFinishAction actionAfter) =>
@@ -548,6 +582,8 @@ namespace Narumikazuchi.Serialization.Bytes
         /// <returns>The instance represented by the bytes in the specified stream</returns>
         /// <exception cref="ArgumentNullException"/>
         /// <exception cref="InvalidOperationException"/>
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.NonPublicConstructors | DynamicallyAccessedMemberTypes.NonPublicMethods)]
+        [return: NotNull]
         public TType Deserialize([DisallowNull] Stream stream,
                                  out UInt32 read, 
                                  in SerializationFinishAction actionAfter) =>
@@ -565,6 +601,8 @@ namespace Narumikazuchi.Serialization.Bytes
         /// <returns>The instance represented by the bytes in the specified stream</returns>
         /// <exception cref="ArgumentNullException"/>
         /// <exception cref="InvalidOperationException"/>
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.NonPublicConstructors | DynamicallyAccessedMemberTypes.NonPublicMethods)]
+        [return: NotNull]
         public TType Deserialize([DisallowNull] Stream stream, 
                                  in Int64 offset, 
                                  out UInt32 read,
@@ -614,6 +652,7 @@ namespace Narumikazuchi.Serialization.Bytes
         /// <param name="stream">The stream to deserialize the graph from.</param>
         /// <param name="result">The instance represented by the bytes in the specified stream.</param>
         /// <returns><see langword="true"/> if the serialization succeeded; else, <see langword="false"/></returns>
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.NonPublicConstructors | DynamicallyAccessedMemberTypes.NonPublicMethods)]
         public Boolean TryDeserialize([DisallowNull] Stream stream,
                                       [NotNullWhen(true)] out TType? result) =>
             this.TryDeserialize(stream,
@@ -628,6 +667,7 @@ namespace Narumikazuchi.Serialization.Bytes
         /// <param name="offset">The offset in the stream where to begin reading.</param>
         /// <param name="result">The instance represented by the bytes in the specified stream.</param>
         /// <returns><see langword="true"/> if the serialization succeeded; else, <see langword="false"/></returns>
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.NonPublicConstructors | DynamicallyAccessedMemberTypes.NonPublicMethods)]
         public Boolean TryDeserialize([DisallowNull] Stream stream,
                                       in Int64 offset,
                                       [NotNullWhen(true)] out TType? result) =>
@@ -643,6 +683,7 @@ namespace Narumikazuchi.Serialization.Bytes
         /// <param name="read">The amount of elements read from the <paramref name="stream"/> parameter.</param>
         /// <param name="result">The instance represented by the bytes in the specified stream.</param>
         /// <returns><see langword="true"/> if the serialization succeeded; else, <see langword="false"/></returns>
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.NonPublicConstructors | DynamicallyAccessedMemberTypes.NonPublicMethods)]
         public Boolean TryDeserialize([DisallowNull] Stream stream,
                                       out UInt32 read,
                                       [NotNullWhen(true)] out TType? result) =>
@@ -659,6 +700,7 @@ namespace Narumikazuchi.Serialization.Bytes
         /// <param name="read">The amount of elements read from the <paramref name="stream"/> parameter.</param>
         /// <param name="result">The instance represented by the bytes in the specified stream.</param>
         /// <returns><see langword="true"/> if the serialization succeeded; else, <see langword="false"/></returns>
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.NonPublicConstructors | DynamicallyAccessedMemberTypes.NonPublicMethods)]
         public Boolean TryDeserialize([DisallowNull] Stream stream,
                                       in Int64 offset,
                                       out UInt32 read,
@@ -675,6 +717,7 @@ namespace Narumikazuchi.Serialization.Bytes
         /// <param name="actionAfter">The actions to perform after the reading operation has finished.</param>
         /// <param name="result">The instance represented by the bytes in the specified stream.</param>
         /// <returns><see langword="true"/> if the serialization succeeded; else, <see langword="false"/></returns>
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.NonPublicConstructors | DynamicallyAccessedMemberTypes.NonPublicMethods)]
         public Boolean TryDeserialize([DisallowNull] Stream stream,
                                       in SerializationFinishAction actionAfter,
                                       [NotNullWhen(true)] out TType? result) =>
@@ -691,6 +734,7 @@ namespace Narumikazuchi.Serialization.Bytes
         /// <param name="actionAfter">The actions to perform after the reading operation has finished.</param>
         /// <param name="result">The instance represented by the bytes in the specified stream.</param>
         /// <returns><see langword="true"/> if the serialization succeeded; else, <see langword="false"/></returns>
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.NonPublicConstructors | DynamicallyAccessedMemberTypes.NonPublicMethods)]
         public Boolean TryDeserialize([DisallowNull] Stream stream,
                                       in Int64 offset,
                                       in SerializationFinishAction actionAfter,
@@ -708,6 +752,7 @@ namespace Narumikazuchi.Serialization.Bytes
         /// <param name="actionAfter">The actions to perform after the reading operation has finished.</param>
         /// <param name="result">The instance represented by the bytes in the specified stream.</param>
         /// <returns><see langword="true"/> if the serialization succeeded; else, <see langword="false"/></returns>
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.NonPublicConstructors | DynamicallyAccessedMemberTypes.NonPublicMethods)]
         public Boolean TryDeserialize([DisallowNull] Stream stream,
                                       out UInt32 read,
                                       in SerializationFinishAction actionAfter,
@@ -726,6 +771,7 @@ namespace Narumikazuchi.Serialization.Bytes
         /// <param name="actionAfter">The actions to perform after the reading operation has finished.</param>
         /// <param name="result">The instance represented by the bytes in the specified stream.</param>
         /// <returns><see langword="true"/> if the serialization succeeded; else, <see langword="false"/></returns>
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.NonPublicConstructors | DynamicallyAccessedMemberTypes.NonPublicMethods)]
         public Boolean TryDeserialize([DisallowNull] Stream stream, 
                                       in Int64 offset,
                                       out UInt32 read, 

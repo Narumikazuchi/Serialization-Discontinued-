@@ -10,6 +10,7 @@
         /// </summary>
         /// <returns>This instance represented in byte form</returns>
         [System.Diagnostics.Contracts.Pure]
+        [return: System.Diagnostics.CodeAnalysis.NotNull]
         public abstract System.Byte[] ToBytes();
     }
 }
