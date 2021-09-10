@@ -18,7 +18,7 @@
         /// If the inherited type implements <see cref="IByteSerializable"/> as well, it's implementation of 
         /// <see cref="InitializeUninitializedState(System.Byte[])"/> will be called before the implementation of this type.
         /// </remarks>
-        internal protected System.UInt32 InitializeUninitializedState(System.Byte[] bytes);
+        public System.UInt32 InitializeUninitializedState(System.Byte[] bytes);
 
         /// <summary>
         /// Sets the state of this instance from it's byte representation.
@@ -30,6 +30,6 @@
         /// If inheriting from another type and the inherited type implements <see cref="IByteSerializable"/> as well, it's implementation of 
         /// <see cref="SetState(System.Byte[])"/> will be called before the implementation of this type.
         /// </remarks>
-        internal protected System.UInt32 SetState(System.Byte[] bytes);
+        public System.UInt32 SetState(System.Byte[] bytes);
     }
 }

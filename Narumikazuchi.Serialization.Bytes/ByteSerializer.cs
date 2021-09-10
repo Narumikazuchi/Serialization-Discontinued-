@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 using System.IO;
@@ -199,9 +200,13 @@ namespace Narumikazuchi.Serialization.Bytes
 #nullable enable
         }
 
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private const String GENERIC_TYPE_NOT_INSTANTIABLE = "The generic type {0} needs to be instantiable to be used as type parameter.";
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private const String STREAM_DOES_NOT_SUPPORT_READING = "The specified stream does not support reading.";
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private const String STREAM_DOES_NOT_SUPPORT_WRITING = "The specified stream does not support writing.";
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private const String STREAM_DOES_NOT_SUPPORT_SEEKING = "The specified stream does not support seeking.";
     }
 

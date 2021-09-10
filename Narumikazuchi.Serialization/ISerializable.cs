@@ -9,6 +9,7 @@
         /// Serializes this instance into a <see cref="System.Byte"/>[].
         /// </summary>
         /// <returns>This instance represented in byte form</returns>
-        internal protected abstract System.Byte[] ToBytes();
+        [System.Diagnostics.Contracts.Pure]
+        public abstract System.Byte[] ToBytes();
     }
 }
