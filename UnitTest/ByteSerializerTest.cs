@@ -47,8 +47,9 @@ namespace UnitTest
 
             stream.Seek(0, SeekOrigin.Begin);
 
-            Serializable obj = serializer.Deserialize(stream);
+            Serializable obj = serializer.Deserialize(stream, out UInt32 read);
             Assert.IsNotNull(obj);
+            Assert.AreEqual((UInt32)12, read);
             Assert.AreEqual(original._bytes.Length, obj._bytes.Length);
             Assert.IsTrue(obj._bytes.SequenceEqual(original._bytes));
         }
@@ -63,8 +64,9 @@ namespace UnitTest
 
             stream.Seek(0, SeekOrigin.Begin);
 
-            Serializable obj = serializer.Deserialize(stream, SerializationFinishAction.CloseStream);
+            Serializable obj = serializer.Deserialize(stream, out UInt32 read, SerializationFinishAction.CloseStream);
             Assert.IsNotNull(obj);
+            Assert.AreEqual((UInt32)12, read);
             Assert.AreEqual(original._bytes.Length, obj._bytes.Length);
             Assert.IsTrue(obj._bytes.SequenceEqual(original._bytes));
             Assert.ThrowsException<ObjectDisposedException>(() => stream.WriteByte(0x00));
@@ -82,9 +84,9 @@ namespace UnitTest
 
             Serializable obj = serializer.Deserialize(stream, out UInt32 read);
             Assert.IsNotNull(obj);
+            Assert.AreEqual((UInt32)12, read);
             Assert.AreEqual(original._bytes.Length, obj._bytes.Length);
             Assert.IsTrue(obj._bytes.SequenceEqual(original._bytes));
-            Assert.AreEqual((UInt32)8, read);
         }
 
         [TestMethod]

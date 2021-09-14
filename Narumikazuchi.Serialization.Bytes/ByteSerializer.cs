@@ -127,14 +127,14 @@ namespace Narumikazuchi.Serialization.Bytes
             if (constructor is not null)
             {
                 result = (TType)constructor.Invoke(Array.Empty<Object>());
-                read = ByteSerializer<TType>.DeserializeInitializedInternal(result, 
-                                                                            data);
+                read = 4 + ByteSerializer<TType>.DeserializeInitializedInternal(result, 
+                                                                                data);
             }
             else
             {
                 result = (TType)FormatterServices.GetSafeUninitializedObject(typeof(TType));
-                read = ByteSerializer<TType>.DeserializeUninitializedInternal(result, 
-                                                                              data);
+                read = 4 + ByteSerializer<TType>.DeserializeUninitializedInternal(result, 
+                                                                                  data);
             }
             return result;
         }
