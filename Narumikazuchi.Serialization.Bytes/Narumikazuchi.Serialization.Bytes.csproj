@@ -4,7 +4,8 @@
     <TargetFramework>net5.0</TargetFramework>
     <Nullable>enable</Nullable>
     <Authors>Narumikazuchi</Authors>
-    <Description>Can serialize any class which implements the IByteSerializable interface from and into bytes.</Description>
+    <Description>An implementation of the Narumikazuchi.Serialization interfaces to serialize classes into an array of bytes.
+For more information about it's usage visit https://github.com/Narumikazuchi/Serialization/wiki.</Description>
     <Copyright>©2021 Narumikazuchi</Copyright>
     <RepositoryUrl>https://github.com/Narumikazuchi/Serialization</RepositoryUrl>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -13,6 +14,9 @@
     </PackageReleaseNotes>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <NoPackageAnalysis>true</NoPackageAnalysis>
+    <PackageProjectUrl>https://github.com/Narumikazuchi/Serialization</PackageProjectUrl>
+    <PackageIcon>Narumikazuchi nuget.png</PackageIcon>
+    <PackageTags>Serialization; Serializer; Bytes; Byte Representation</PackageTags>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -27,6 +31,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="..\..\Narumikazuchi nuget.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
     <None Include="..\LICENSE">
       <Pack>True</Pack>
       <PackagePath></PackagePath>

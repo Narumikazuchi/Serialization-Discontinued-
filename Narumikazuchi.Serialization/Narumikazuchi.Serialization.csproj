@@ -4,12 +4,7 @@
     <TargetFramework>net5.0</TargetFramework>
     <Nullable>enable</Nullable>
     <Authors>Narumikazuchi</Authors>
-    <Description>A small framework containing different serializer interfaces.
-
-Contents:
-- ISerializable interface to implement into serializable classes
-- ISerializer interface to implement into serializer classes
-- SerializationFinishAction enum defining how to handle a stream after serialization</Description>
+    <Description>Provides the basics for any derived serializers. For a list of implementing frameworks and their usage visit https://github.com/Narumikazuchi/Serialization/wiki. </Description>
     <Copyright>©2021 Narumikazuchi</Copyright>
     <RepositoryUrl>https://github.com/Narumikazuchi/Serialization</RepositoryUrl>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -18,6 +13,9 @@ Contents:
     </PackageReleaseNotes>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <NoPackageAnalysis>true</NoPackageAnalysis>
+    <PackageProjectUrl>https://github.com/Narumikazuchi/Serialization</PackageProjectUrl>
+    <PackageIcon>Narumikazuchi nuget.png</PackageIcon>
+    <PackageTags>Serialization; Serializer; Interface</PackageTags>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -32,6 +30,10 @@ Contents:
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="..\..\Narumikazuchi nuget.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
     <None Include="..\LICENSE">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
