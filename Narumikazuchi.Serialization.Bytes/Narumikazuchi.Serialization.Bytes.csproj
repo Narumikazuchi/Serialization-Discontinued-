@@ -14,7 +14,7 @@ For more information about it's usage visit https://github.com/Narumikazuchi/Ser
     </PackageReleaseNotes>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <NoPackageAnalysis>true</NoPackageAnalysis>
-    <PackageProjectUrl>https://github.com/Narumikazuchi/Serialization</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/Narumikazuchi/Serialization/wiki</PackageProjectUrl>
     <PackageIcon>Narumikazuchi nuget.png</PackageIcon>
     <PackageTags>Serialization; Serializer; Bytes; Byte Representation</PackageTags>
   </PropertyGroup>

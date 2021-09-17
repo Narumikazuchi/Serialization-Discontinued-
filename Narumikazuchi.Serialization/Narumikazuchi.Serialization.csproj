@@ -13,7 +13,7 @@
     </PackageReleaseNotes>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <NoPackageAnalysis>true</NoPackageAnalysis>
-    <PackageProjectUrl>https://github.com/Narumikazuchi/Serialization</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/Narumikazuchi/Serialization/wiki</PackageProjectUrl>
     <PackageIcon>Narumikazuchi nuget.png</PackageIcon>
     <PackageTags>Serialization; Serializer; Interface</PackageTags>
   </PropertyGroup>
