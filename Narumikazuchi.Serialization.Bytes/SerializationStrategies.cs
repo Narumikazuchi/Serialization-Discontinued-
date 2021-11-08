@@ -2,6 +2,28 @@
 {
     internal static class __SerializationStrategies
     {
+        public static Dictionary<Type, ISerializationStrategy<System.Byte[]>> Integrated { get; } = new()
+        {
+            { typeof(System.Boolean),   Boolean.Default },
+            { typeof(System.Byte),      Byte.Default },
+            { typeof(System.Char),      Char.Default },
+            { typeof(System.Double),    Double.Default },
+            { typeof(System.Int16),     Int16.Default },
+            { typeof(System.Int32),     Int32.Default },
+            { typeof(System.Int64),     Int64.Default },
+            { typeof(System.IntPtr),    IntPtr.Default },
+            { typeof(System.SByte),     SByte.Default },
+            { typeof(System.Single),    Single.Default },
+            { typeof(System.UInt16),    UInt16.Default },
+            { typeof(System.UInt32),    UInt32.Default },
+            { typeof(System.UInt64),    UInt64.Default },
+            { typeof(System.UIntPtr),   UIntPtr.Default },
+            { typeof(System.DateTime),  DateTime.Default },
+            { typeof(System.Guid),      Guid.Default },
+            { typeof(System.Half),      Half.Default },
+            { typeof(System.String),    String.Default }
+        };
+
 #pragma warning disable CS8605
         public readonly struct Boolean : ISerializationStrategy<System.Byte[], System.Boolean>
         {

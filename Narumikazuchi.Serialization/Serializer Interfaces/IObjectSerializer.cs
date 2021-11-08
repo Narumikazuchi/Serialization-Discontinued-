@@ -6,6 +6,14 @@
     public interface IObjectSerializer : ISerializer
     {
         /// <summary>
+        /// Serializes the specified graph into the specified stream.
+        /// </summary>
+        /// <param name="stream">The stream to serialize the graph into.</param>
+        /// <param name="graph">The graph to serialize.</param>
+        /// <returns>The amount of bytes written to the stream</returns>
+        public System.UInt64 Serialize([System.Diagnostics.CodeAnalysis.DisallowNull] System.IO.Stream stream,
+                                       [System.Diagnostics.CodeAnalysis.DisallowNull] System.Object graph);
+        /// <summary>
         /// Serializes the specified graph into the specified stream starting at the specified offset in the stream.
         /// </summary>
         /// <param name="stream">The stream to serialize the graph into.</param>
@@ -38,6 +46,14 @@
                                        in System.Int64 offset,
                                        in SerializationFinishAction actionAfter);
 
+        /// <summary>
+        /// Tries to serialize the specified graph into the specified stream.
+        /// </summary>
+        /// <param name="stream">The stream to serialize the graph into.</param>
+        /// <param name="graph">The graph to serialize.</param>
+        /// <returns><see langword="true"/> if the serialization succeeded; else, <see langword="false"/></returns>
+        public System.Boolean TrySerialize([System.Diagnostics.CodeAnalysis.DisallowNull] System.IO.Stream stream,
+                                           [System.Diagnostics.CodeAnalysis.DisallowNull] System.Object graph);
         /// <summary>
         /// Tries to serialize the specified graph into the specified stream.
         /// </summary>
@@ -120,6 +136,13 @@
                                            in SerializationFinishAction actionAfter);
 
         /// <summary>
+        /// Deserializes the specified stream into an instance of it's type.
+        /// </summary>
+        /// <param name="stream">The stream to deserialize the graph from.</param>
+        /// <returns>The instance represented by the bytes in the specified stream</returns>
+        [return: System.Diagnostics.CodeAnalysis.NotNull]
+        public System.Object Deserialize([System.Diagnostics.CodeAnalysis.DisallowNull] System.IO.Stream stream);
+        /// <summary>
         /// Deserializes the specified bytes starting at the specified offset into an instance of it's type.
         /// </summary>
         /// <param name="stream">The stream to deserialize the graph from.</param>
@@ -193,6 +216,14 @@
                                          out System.UInt64 read,
                                          in SerializationFinishAction actionAfter);
 
+        /// <summary>
+        /// Tries to deserialize the specified stream into an instance of it's type.
+        /// </summary>
+        /// <param name="stream">The stream to deserialize the graph from.</param>
+        /// <param name="result">The instance represented by the bytes in the specified stream.</param>
+        /// <returns><see langword="true"/> if the serialization succeeded; else, <see langword="false"/></returns>
+        public System.Boolean TryDeserialize([System.Diagnostics.CodeAnalysis.DisallowNull] System.IO.Stream stream,
+                                             [System.Diagnostics.CodeAnalysis.NotNullWhen(true)] out System.Object? result);
         /// <summary>
         /// Tries to deserialize the specified stream starting at the specified offset into an instance of it's type.
         /// </summary>

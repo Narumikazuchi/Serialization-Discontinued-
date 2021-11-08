@@ -1,9 +1,9 @@
 ﻿namespace Narumikazuchi.Serialization.Bytes
 {
     /// <summary>
-    /// Represents an <see cref="IDeclaredSerializer"/> for objects that are marked with the <see cref="CustomSerializableAttribute"/> or are provided with a custom state-reader/writer.
+    /// Represents an <see cref="ISerializer"/> for objects that are marked with the <see cref="CustomSerializableAttribute"/> or are provided with a custom state-reader/writer.
     /// </summary>
-    public sealed partial class ByteSerializer
+    public sealed partial class ByteSerializer : SharedByteSerializer
     {
         /// <summary>
         /// Instantiates a new instance of the <see cref="ByteSerializer"/> class.
@@ -11,45 +11,12 @@
         public ByteSerializer() :
             base()
         { }
-    }
-
-    // Non-Public
-    partial class ByteSerializer : SharedByteSerializer
-    {
-        internal ByteSerializer(IReadOnlyDictionary<Type, ISerializationStrategy<Byte[]>> strategies) :
+        /// <summary>
+        /// Instantiates a new instance of the <see cref="ByteSerializer"/> class.
+        /// </summary>
+        public ByteSerializer(IReadOnlyDictionary<Type, ISerializationStrategy<Byte[]>> strategies) :
             base(strategies)
         { }
-
-        private static Object CreateObject(SerializationInfo info)
-        {
-#nullable disable
-            ConstructorInfo ctor = info.Type.GetConstructor(Type.EmptyTypes);
-            Object result = ctor.Invoke(Array.Empty<Object>());
-            foreach (String member in info.Members)
-            {
-                PropertyInfo property = info.Type.GetProperty(member,
-                                                              BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-                if (property is not null)
-                {
-                    property.SetValue(result,
-                                      info.Get<Object>(member));
-                    continue;
-                }
-                FieldInfo field = info.Type.GetField(member,
-                                                     BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-                if (field is not null)
-                {
-                    field.SetValue(result,
-                                   info.Get<Object>(member));
-                    continue;
-                }
-                // Member not found?
-                throw new MissingMemberException();
-            }
-
-            return result;
-#nullable enable
-        }
     }
 
     // IDeclaredSerializer
@@ -109,6 +76,7 @@
                 stream.Seek(offset,
                             SeekOrigin.Begin);
             }
+
             UInt64 result = this.SerializeInternal(stream,
                                                    graph);
 
@@ -243,8 +211,8 @@
         }
     }
 
-    // ISerializer
-    partial class ByteSerializer : ISerializer
+    // IObjectSerializer
+    partial class ByteSerializer : IObjectSerializer
     {
         /// <inheritdoc/>
         /// <exception cref="ArgumentNullException"/>
@@ -256,45 +224,6 @@
                            graph,
                            -1,
                            SerializationFinishAction.None);
-
-        /// <inheritdoc/>
-        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.NonPublicMethods)]
-        public Boolean TrySerialize([DisallowNull] Stream stream,
-                                    [DisallowNull] Object graph) =>
-            this.TrySerialize(stream,
-                              graph,
-                              -1,
-                              out UInt64 _,
-                              SerializationFinishAction.None);
-
-        /// <inheritdoc/>
-        /// <exception cref="ArgumentNullException"/>
-        /// <exception cref="InvalidOperationException"/>
-        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.NonPublicConstructors | DynamicallyAccessedMemberTypes.NonPublicMethods)]
-        [return: NotNull]
-        public Object Deserialize([DisallowNull] Stream stream) =>
-            this.Deserialize(stream,
-                             -1,
-                             out UInt64 _,
-                             SerializationFinishAction.None);
-
-        /// <inheritdoc/>
-        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.NonPublicConstructors | DynamicallyAccessedMemberTypes.NonPublicMethods)]
-        public Boolean TryDeserialize([DisallowNull] Stream stream,
-                                      [NotNullWhen(true)] out Object? result) =>
-            this.TryDeserialize(stream,
-                                -1,
-                                out UInt64 _,
-                                SerializationFinishAction.None,
-                                out result);
-
-        /// <inheritdoc/>
-        public IReadOnlyCollection<Type> RegisteredStrategies => this._strategies.Keys;
-    }
-
-    // IObjectSerializer
-    partial class ByteSerializer : IObjectSerializer
-    {
         /// <inheritdoc/>
         /// <exception cref="ArgumentNullException"/>
         /// <exception cref="InvalidOperationException"/>
@@ -365,7 +294,16 @@
 
             return result;
         }
-        
+
+        /// <inheritdoc/>
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.NonPublicMethods)]
+        public Boolean TrySerialize([DisallowNull] Stream stream,
+                                    [DisallowNull] Object graph) =>
+            this.TrySerialize(stream,
+                              graph,
+                              -1,
+                              out UInt64 _,
+                              SerializationFinishAction.None);
         /// <inheritdoc/>
         [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.NonPublicMethods)]
         public Boolean TrySerialize([DisallowNull] Stream stream,
@@ -474,6 +412,17 @@
 
             return true;
         }
+
+        /// <inheritdoc/>
+        /// <exception cref="ArgumentNullException"/>
+        /// <exception cref="InvalidOperationException"/>
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.NonPublicConstructors | DynamicallyAccessedMemberTypes.NonPublicMethods)]
+        [return: NotNull]
+        public Object Deserialize([DisallowNull] Stream stream) =>
+            this.Deserialize(stream,
+                             -1,
+                             out UInt64 _,
+                             SerializationFinishAction.None);
         /// <inheritdoc/>
         /// <exception cref="ArgumentNullException"/>
         /// <exception cref="InvalidOperationException"/>
@@ -593,6 +542,16 @@
 
             return result;
         }
+
+        /// <inheritdoc/>
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.NonPublicConstructors | DynamicallyAccessedMemberTypes.NonPublicMethods)]
+        public Boolean TryDeserialize([DisallowNull] Stream stream,
+                                      [NotNullWhen(true)] out Object? result) =>
+            this.TryDeserialize(stream,
+                                -1,
+                                out UInt64 _,
+                                SerializationFinishAction.None,
+                                out result);
         /// <inheritdoc/>
         [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.NonPublicConstructors | DynamicallyAccessedMemberTypes.NonPublicMethods)]
         public Boolean TryDeserialize([DisallowNull] Stream stream,

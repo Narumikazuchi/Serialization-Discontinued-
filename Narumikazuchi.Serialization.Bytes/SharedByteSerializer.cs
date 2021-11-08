@@ -5,38 +5,16 @@
     /// </summary>
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public abstract partial class SharedByteSerializer
+    // Internals
+    public abstract partial class SharedByteSerializer : SerializerBase<Byte[]>
     {
-        /// <summary>
-        /// Applies the specified strategy for the specified type, when serializing that type.
-        /// </summary>
-        /// <param name="forType">The type the strategy aims to serialize and deserialize.</param>
-        /// <param name="strategy">The strategy to use during serialization and deserialization.</param>
-        /// <exception cref="ArgumentNullException" />
-        public void ApplyStrategy(Type forType,
-                                  ISerializationStrategy<Byte[]> strategy)
-        {
-            ExceptionHelpers.ThrowIfNull(forType);
-            ExceptionHelpers.ThrowIfNull(strategy);
-
-            if (this._strategies.ContainsKey(forType))
-            {
-                this._strategies[forType] = strategy;
-                return;
-            }
-            this._strategies.Add(forType,
-                                 strategy);
-        }
-    }
-
-    // Non-Public, Non-Private
-    partial class SharedByteSerializer
-    {
-        private protected SharedByteSerializer()
+        private protected SharedByteSerializer() :
+            base(__SerializationStrategies.Integrated)
         { }
 
-        private protected SharedByteSerializer(IReadOnlyDictionary<Type, ISerializationStrategy<Byte[]>> strategies) =>
-            this._strategies = new(strategies);
+        private protected SharedByteSerializer(IReadOnlyDictionary<Type, ISerializationStrategy<Byte[]>> strategies) :
+            base(strategies)
+        { }
 
         /**
          * FF FF FF FF FF FF FF FF -> Number of bytes for the entire object
@@ -128,11 +106,14 @@
                 return 3 * sizeof(UInt64);
             }
 
-            __Header header = new(graph.GetType());
-            SerializationInfo info = SerializationInfo.Create(graph);
-            return this.SerializeWithInfo(stream,
-                                          info,
-                                          header);
+            lock (graph)
+            {
+                __Header header = new(graph.GetType());
+                SerializationInfo info = SerializationInfo.Create(graph);
+                return this.SerializeWithInfo(stream,
+                                              info,
+                                              header);
+            }
 #nullable enable
         }
         internal UInt64 SerializeInternal(Stream stream,
@@ -147,11 +128,14 @@
                 return 3 * sizeof(UInt64);
             }
 
-            __Header header = new(graph.GetType());
-            SerializationInfo info = SerializationInfo.Create(graph);
-            return this.SerializeWithInfo(stream,
-                                          info,
-                                          header);
+            lock (graph)
+            {
+                __Header header = new(graph.GetType());
+                SerializationInfo info = SerializationInfo.Create(graph);
+                return this.SerializeWithInfo(stream,
+                                              info,
+                                              header);
+            }
 #nullable enable
         }
 
@@ -240,36 +224,6 @@
             return result;
 #pragma warning restore
         }
-
-        private protected readonly Dictionary<Type, ISerializationStrategy<Byte[]>> _strategies = new()
-        {
-            { typeof(Boolean),  __SerializationStrategies.Boolean.Default },
-            { typeof(Byte),     __SerializationStrategies.Byte.Default },
-            { typeof(Char),     __SerializationStrategies.Char.Default },
-            { typeof(Double),   __SerializationStrategies.Double.Default },
-            { typeof(Int16),    __SerializationStrategies.Int16.Default },
-            { typeof(Int32),    __SerializationStrategies.Int32.Default },
-            { typeof(Int64),    __SerializationStrategies.Int64.Default },
-            { typeof(IntPtr),   __SerializationStrategies.IntPtr.Default },
-            { typeof(SByte),    __SerializationStrategies.SByte.Default },
-            { typeof(Single),   __SerializationStrategies.Single.Default },
-            { typeof(UInt16),   __SerializationStrategies.UInt16.Default },
-            { typeof(UInt32),   __SerializationStrategies.UInt32.Default },
-            { typeof(UInt64),   __SerializationStrategies.UInt64.Default },
-            { typeof(UIntPtr),  __SerializationStrategies.UIntPtr.Default },
-            { typeof(DateTime), __SerializationStrategies.DateTime.Default },
-            { typeof(Guid),     __SerializationStrategies.Guid.Default },
-            { typeof(Half),     __SerializationStrategies.Half.Default },
-            { typeof(String),   __SerializationStrategies.String.Default }
-        };
-
-
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        private protected const String STREAM_DOES_NOT_SUPPORT_READING = "The specified stream does not support reading.";
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        private protected const String STREAM_DOES_NOT_SUPPORT_WRITING = "The specified stream does not support writing.";
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        private protected const String STREAM_DOES_NOT_SUPPORT_SEEKING = "The specified stream does not support seeking.";
     }
 
     // Private

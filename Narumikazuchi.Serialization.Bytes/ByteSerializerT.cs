@@ -1,10 +1,9 @@
-﻿// SerializationStrategy
-namespace Narumikazuchi.Serialization.Bytes
+﻿namespace Narumikazuchi.Serialization.Bytes
 {
     /// <summary>
     /// A serializer for classes that implement <see cref="ISerializable{TSelf}"/>.
     /// </summary>
-    public sealed partial class ByteSerializer<TSerializable>
+    public sealed partial class ByteSerializer<TSerializable> : SharedByteSerializer
         where TSerializable : ISerializable<TSerializable>
     {
         /// <summary>
@@ -14,12 +13,11 @@ namespace Narumikazuchi.Serialization.Bytes
         public ByteSerializer() :
             base()
         { }
-    }
-
-    // Non-Public
-    partial class ByteSerializer<TSerializable> : SharedByteSerializer
-    {
-        internal ByteSerializer(IReadOnlyDictionary<Type, ISerializationStrategy<Byte[]>> strategies) :
+        /// <summary>
+        /// Instantiates a new instance of the <see cref="ByteSerializer{TSerializable}"/> class.
+        /// </summary>
+        /// <exception cref="InvalidOperationException"/>
+        public ByteSerializer(IReadOnlyDictionary<Type, ISerializationStrategy<Byte[]>> strategies) :
             base(strategies)
         { }
     }
@@ -783,46 +781,5 @@ namespace Narumikazuchi.Serialization.Bytes
 
             return true;
         }
-    }
-
-    // ISerializer
-    partial class ByteSerializer<TSerializable> : ISerializer
-    {
-        UInt64 ISerializer.Serialize([DisallowNull] Stream stream,
-                                     [DisallowNull] Object graph) =>
-            this.Serialize(stream,
-                           (TSerializable)graph,
-                           -1,
-                           SerializationFinishAction.None);
-
-        Boolean ISerializer.TrySerialize([DisallowNull] Stream stream,
-                                         [DisallowNull] Object graph) =>
-            this.TrySerialize(stream,
-                              (TSerializable)graph,
-                              -1,
-                              out UInt64 _,
-                              SerializationFinishAction.None);
-
-        [return: NotNull]
-        Object ISerializer.Deserialize([DisallowNull] Stream stream) =>
-            this.Deserialize(stream,
-                             -1,
-                             out UInt64 _,
-                             SerializationFinishAction.None);
-
-        Boolean ISerializer.TryDeserialize([DisallowNull] Stream stream,
-                                           [NotNullWhen(true)] out Object? result)
-        {
-            Boolean success = this.TryDeserialize(stream,
-                                                  -1,
-                                                  out UInt64 _,
-                                                  SerializationFinishAction.None,
-                                                  out TSerializable? obj);
-            result = obj;
-            return success;
-        }
-
-        /// <inheritdoc/>
-        public IReadOnlyCollection<Type> RegisteredStrategies => this._strategies.Keys;
     }
 }
