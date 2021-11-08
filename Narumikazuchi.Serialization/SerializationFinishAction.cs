@@ -9,7 +9,9 @@
 #pragma warning disable
         None = 0x0,
         CloseStream = 0x1,
-        FlushStream = 0x2
+        FlushStream = 0x2,
+        DisposeStream = 0x4,
+        MoveToBeginning = 0x8
 #pragma warning restore
     }
 }
