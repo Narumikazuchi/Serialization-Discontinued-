@@ -1,9 +1,14 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
 
+    <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <LangVersion>preview</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -15,7 +20,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Narumikazuchi.Serialization.Bytes\Narumikazuchi.Serialization.Bytes.csproj" />
-    <ProjectReference Include="..\Narumikazuchi.Serialization\Narumikazuchi.Serialization.csproj" />
   </ItemGroup>
 
 </Project>
