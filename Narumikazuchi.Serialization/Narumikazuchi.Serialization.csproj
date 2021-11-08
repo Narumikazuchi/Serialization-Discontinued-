@@ -20,17 +20,20 @@
 
   <PropertyGroup>
     <LangVersion>preview</LangVersion>
+    <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>..\Narumikazuchi.Serialization.xml</DocumentationFile>
+    <DocumentationFile></DocumentationFile>
     <PlatformTarget>x64</PlatformTarget>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <DocumentationFile>..\..\..\Managed Code Libraries\Custom\net5.0\Narumikazuchi.Serialization.xml</DocumentationFile>
     <OutputPath>..\..\..\Managed Code Libraries\Custom\</OutputPath>
     <PlatformTarget>x64</PlatformTarget>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
   </PropertyGroup>
 
   <ItemGroup>

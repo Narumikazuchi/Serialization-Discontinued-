@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Narumikazuchi.Serialization
+﻿namespace Narumikazuchi.Serialization
 {
     /// <summary>
     /// Marks a type as serializable for <see cref="IDeclaredSerializer"/>.

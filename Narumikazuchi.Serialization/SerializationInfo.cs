@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-
-namespace Narumikazuchi.Serialization
+﻿namespace Narumikazuchi.Serialization
 {
     /// <summary>
     /// Contains the current state information of an object that should be serialized.

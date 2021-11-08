@@ -1,11 +1,8 @@
-﻿using System;
-using System.Linq;
-using System.Text;
-
-namespace Narumikazuchi.Serialization.Bytes
+﻿namespace Narumikazuchi.Serialization.Bytes
 {
-    internal static class SerializationStrategies
+    internal static class __SerializationStrategies
     {
+#pragma warning disable CS8605
         public readonly struct Boolean : ISerializationStrategy<System.Byte[], System.Boolean>
         {
             public System.Byte[] Serialize(System.Boolean input) =>

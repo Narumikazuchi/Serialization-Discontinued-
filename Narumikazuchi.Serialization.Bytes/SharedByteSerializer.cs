@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-
-namespace Narumikazuchi.Serialization.Bytes
+﻿namespace Narumikazuchi.Serialization.Bytes
 {
     /// <summary>
     /// Base class for the 2 different byte serializer classes, which can't be inherited.
@@ -74,7 +66,7 @@ namespace Narumikazuchi.Serialization.Bytes
 
             foreach (MemberState data in info)
             {
-                HeaderItem item = new()
+                __HeaderItem item = new()
                 {
                     Position = body.Position
                 };
@@ -251,24 +243,24 @@ namespace Narumikazuchi.Serialization.Bytes
 
         private protected readonly Dictionary<Type, ISerializationStrategy<Byte[]>> _strategies = new()
         {
-            { typeof(Boolean),  SerializationStrategies.Boolean.Default },
-            { typeof(Byte),     SerializationStrategies.Byte.Default },
-            { typeof(Char),     SerializationStrategies.Char.Default },
-            { typeof(Double),   SerializationStrategies.Double.Default },
-            { typeof(Int16),    SerializationStrategies.Int16.Default },
-            { typeof(Int32),    SerializationStrategies.Int32.Default },
-            { typeof(Int64),    SerializationStrategies.Int64.Default },
-            { typeof(IntPtr),   SerializationStrategies.IntPtr.Default },
-            { typeof(SByte),    SerializationStrategies.SByte.Default },
-            { typeof(Single),   SerializationStrategies.Single.Default },
-            { typeof(UInt16),   SerializationStrategies.UInt16.Default },
-            { typeof(UInt32),   SerializationStrategies.UInt32.Default },
-            { typeof(UInt64),   SerializationStrategies.UInt64.Default },
-            { typeof(UIntPtr),  SerializationStrategies.UIntPtr.Default },
-            { typeof(DateTime), SerializationStrategies.DateTime.Default },
-            { typeof(Guid),     SerializationStrategies.Guid.Default },
-            { typeof(Half),     SerializationStrategies.Half.Default },
-            { typeof(String),   SerializationStrategies.String.Default }
+            { typeof(Boolean),  __SerializationStrategies.Boolean.Default },
+            { typeof(Byte),     __SerializationStrategies.Byte.Default },
+            { typeof(Char),     __SerializationStrategies.Char.Default },
+            { typeof(Double),   __SerializationStrategies.Double.Default },
+            { typeof(Int16),    __SerializationStrategies.Int16.Default },
+            { typeof(Int32),    __SerializationStrategies.Int32.Default },
+            { typeof(Int64),    __SerializationStrategies.Int64.Default },
+            { typeof(IntPtr),   __SerializationStrategies.IntPtr.Default },
+            { typeof(SByte),    __SerializationStrategies.SByte.Default },
+            { typeof(Single),   __SerializationStrategies.Single.Default },
+            { typeof(UInt16),   __SerializationStrategies.UInt16.Default },
+            { typeof(UInt32),   __SerializationStrategies.UInt32.Default },
+            { typeof(UInt64),   __SerializationStrategies.UInt64.Default },
+            { typeof(UIntPtr),  __SerializationStrategies.UIntPtr.Default },
+            { typeof(DateTime), __SerializationStrategies.DateTime.Default },
+            { typeof(Guid),     __SerializationStrategies.Guid.Default },
+            { typeof(Half),     __SerializationStrategies.Half.Default },
+            { typeof(String),   __SerializationStrategies.String.Default }
         };
 
 
@@ -283,7 +275,7 @@ namespace Narumikazuchi.Serialization.Bytes
     // Private
     partial class SharedByteSerializer
     {
-        private void SerializeWithStrategy(HeaderItem item,
+        private void SerializeWithStrategy(__HeaderItem item,
                                            Stream body,
                                            MemberState data)
         {
@@ -297,7 +289,7 @@ namespace Narumikazuchi.Serialization.Bytes
 #nullable enable
         }
 
-        private void SerializeThroughInterface(HeaderItem item,
+        private void SerializeThroughInterface(__HeaderItem item,
                                                Stream body,
                                                MemberState data)
         {
@@ -320,7 +312,7 @@ namespace Narumikazuchi.Serialization.Bytes
             temp.CopyTo(body);
 #nullable enable
         }
-        private void SerializeAsObject(HeaderItem item,
+        private void SerializeAsObject(__HeaderItem item,
                                        Stream body,
                                        MemberState data)
         {
@@ -341,7 +333,7 @@ namespace Narumikazuchi.Serialization.Bytes
         private Object? DeserializeWithStrategy(Stream stream,
                                                 Type type,
                                                 Int64 bodyStart,
-                                                HeaderItem item)
+                                                __HeaderItem item)
         {
 #nullable disable
             stream.Position = bodyStart + (Int64)item.Position;
@@ -364,7 +356,7 @@ namespace Narumikazuchi.Serialization.Bytes
         private Object? DeserializeThroughInterface(Stream stream,
                                                     Type type,
                                                     Int64 bodyStart,
-                                                    HeaderItem item,
+                                                    __HeaderItem item,
                                                     out UInt64 read)
         {
 #nullable disable
@@ -412,7 +404,7 @@ namespace Narumikazuchi.Serialization.Bytes
         private Object? DeserializeAsObject(Stream stream,
                                             Type type,
                                             Int64 bodyStart,
-                                            HeaderItem item,
+                                            __HeaderItem item,
                                             out UInt64 read)
         {
 #nullable disable

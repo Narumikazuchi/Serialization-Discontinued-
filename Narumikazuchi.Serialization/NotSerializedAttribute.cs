@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Narumikazuchi.Serialization
+﻿namespace Narumikazuchi.Serialization
 {
     /// <summary>
     /// Indicates that this member shall not be serialized.

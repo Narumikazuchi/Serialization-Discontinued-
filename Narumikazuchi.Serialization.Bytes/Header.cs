@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
-
-namespace Narumikazuchi.Serialization.Bytes
+﻿namespace Narumikazuchi.Serialization.Bytes
 {
     internal class __Header
     {
@@ -56,7 +51,7 @@ namespace Narumikazuchi.Serialization.Bytes
 
             for (Int32 i = 0; i < count; i++)
             {
-                HeaderItem item = new();
+                __HeaderItem item = new();
                 item.Position = BitConverter.ToInt64(data,
                                                       offset);
                 offset += sizeof(Int64);
@@ -123,7 +118,7 @@ namespace Narumikazuchi.Serialization.Bytes
                 return temp.Length;
             }
         }
-        public List<HeaderItem> Items { get; } = new List<HeaderItem>();
+        public List<__HeaderItem> Items { get; } = new List<__HeaderItem>();
 
         private String _typename = String.Empty;
         private Byte[] _typenameRaw = Array.Empty<Byte>();

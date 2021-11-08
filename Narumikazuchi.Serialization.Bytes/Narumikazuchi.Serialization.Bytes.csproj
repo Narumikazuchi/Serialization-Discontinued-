@@ -21,10 +21,11 @@ For more information about it's usage visit https://github.com/Narumikazuchi/Ser
   
   <PropertyGroup>
     <LangVersion>preview</LangVersion>
+    <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>..\Narumikazuchi.Serialization.Bytes.xml</DocumentationFile>
+    <DocumentationFile></DocumentationFile>
     <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
 

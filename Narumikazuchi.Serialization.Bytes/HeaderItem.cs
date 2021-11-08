@@ -1,10 +1,6 @@
-﻿using System;
-using System.IO;
-using System.Text;
-
-namespace Narumikazuchi.Serialization.Bytes
+﻿namespace Narumikazuchi.Serialization.Bytes
 {
-    internal class HeaderItem
+    internal class __HeaderItem
     {
         public MemoryStream AsMemory()
         {

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Narumikazuchi.Serialization
+﻿namespace Narumikazuchi.Serialization
 {
     /// <summary>
     /// Contains the information on a specific member of an object.
