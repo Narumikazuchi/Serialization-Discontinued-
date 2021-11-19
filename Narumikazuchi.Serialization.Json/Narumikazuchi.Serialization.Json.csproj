@@ -1,0 +1,45 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <LangVersion>preview</LangVersion>
+    <EnablePreviewFeatures>True</EnablePreviewFeatures>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PlatformTarget>x64</PlatformTarget>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Version>0.0.1</Version>
+    <Authors>Narumikazuchi</Authors>
+    <Copyright>©2021 Narumikazuchi</Copyright>
+    <PackageProjectUrl>https://github.com/Narumikazuchi/Serialization/wiki</PackageProjectUrl>
+    <PackageIcon>Narumikazuchi nuget.png</PackageIcon>
+    <RepositoryUrl>https://github.com/Narumikazuchi/Serialization</RepositoryUrl>
+    <PackageTags>Serialization; Serializer; Interface; Json</PackageTags>
+    <Description>An implementation of the Narumikazuchi.Serialization interfaces to serialize classes into a JSON object.
+For more information about it's usage visit https://github.com/Narumikazuchi/Serialization/wiki.</Description>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\Narumikazuchi nuget.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Narumikazuchi.Serialization\Narumikazuchi.Serialization.csproj" />
+  </ItemGroup>
+
+</Project>
