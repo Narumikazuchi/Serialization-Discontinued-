@@ -3,9 +3,14 @@
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>preview</LangVersion>
+    <EnablePreviewFeatures>True</EnablePreviewFeatures>
     <Authors>Narumikazuchi</Authors>
-    <Description>An implementation of the Narumikazuchi.Serialization interfaces to serialize classes into an array of bytes.
-For more information about it's usage visit https://github.com/Narumikazuchi/Serialization/wiki.</Description>
+    <Description>
+      An implementation of the Narumikazuchi.Serialization interfaces to serialize classes into an array of bytes.
+      For more information about it's usage visit https://github.com/Narumikazuchi/Serialization/wiki.
+    </Description>
     <Copyright>©2021 Narumikazuchi</Copyright>
     <RepositoryUrl>https://github.com/Narumikazuchi/Serialization</RepositoryUrl>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -17,11 +22,6 @@ For more information about it's usage visit https://github.com/Narumikazuchi/Ser
     <PackageProjectUrl>https://github.com/Narumikazuchi/Serialization/wiki</PackageProjectUrl>
     <PackageIcon>Narumikazuchi nuget.png</PackageIcon>
     <PackageTags>Serialization; Serializer; Bytes; Byte Representation</PackageTags>
-  </PropertyGroup>
-  
-  <PropertyGroup>
-    <LangVersion>preview</LangVersion>
-    <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
