@@ -3,6 +3,9 @@
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
+    <LangVersion>preview</LangVersion>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <EnablePreviewFeatures>True</EnablePreviewFeatures>
     <Authors>Narumikazuchi</Authors>
     <Description>Provides the basics for any derived serializers. For a list of implementing frameworks and their usage visit https://github.com/Narumikazuchi/Serialization/wiki. </Description>
     <Copyright>©2021 Narumikazuchi</Copyright>
@@ -16,11 +19,6 @@
     <PackageProjectUrl>https://github.com/Narumikazuchi/Serialization/wiki</PackageProjectUrl>
     <PackageIcon>Narumikazuchi nuget.png</PackageIcon>
     <PackageTags>Serialization; Serializer; Interface</PackageTags>
-  </PropertyGroup>
-
-  <PropertyGroup>
-    <LangVersion>preview</LangVersion>
-    <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

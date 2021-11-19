@@ -1,20 +1,36 @@
-﻿namespace Narumikazuchi.Serialization
-{
-    internal sealed class __TypeCache
-    {
-        public __TypeCache(Type type)
-        {
-            ExceptionHelpers.ThrowIfNull(type);
-            this.Properties = type.GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
-                                  .Where(p => p.GetIndexParameters().Length == 0 &&
-                                              !AttributeResolver.HasAttribute<NotSerializedAttribute>(p))
-                                  .ToList();
-            this.Fields = type.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
-                              .Where(f => !AttributeResolver.HasAttribute<NotSerializedAttribute>(f))
-                              .ToList();
-        }
+﻿namespace Narumikazuchi.Serialization;
 
-        public IReadOnlyCollection<PropertyInfo> Properties { get; }
-        public IReadOnlyCollection<FieldInfo> Fields { get; }
+internal sealed class __TypeCache : IEnumerable<MemberInfo>
+{
+    public __TypeCache(SerializationInfo info)
+    {
+        ExceptionHelpers.ThrowIfArgumentNull(info);
+        List<MemberInfo> items = new();
+        foreach (MemberState state in info)
+        {
+            PropertyInfo? property = info.Type.GetProperty(state.Name,
+                                                           BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+            if (property is not null)
+            {
+                items.Add(property);
+                continue;
+            }
+
+            FieldInfo? field = info.Type.GetField(state.Name,
+                                                  BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+            if (field is not null)
+            {
+                items.Add(field);
+                continue;
+            }
+        }
+        this._items = items;
     }
+
+    public IEnumerator<MemberInfo> GetEnumerator() => 
+        this._items.GetEnumerator();
+    IEnumerator IEnumerable.GetEnumerator() =>
+        this._items.GetEnumerator();
+
+    private readonly IEnumerable<MemberInfo> _items;
 }
