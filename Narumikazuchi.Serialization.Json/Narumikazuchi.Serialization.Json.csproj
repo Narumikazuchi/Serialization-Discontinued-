@@ -24,6 +24,8 @@ For more information about it's usage visit https://github.com/Narumikazuchi/Ser
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>..\..\..\Managed Code Libraries\Custom\net5.0\Narumikazuchi.Serialization.Bytes.xml</DocumentationFile>
+    <OutputPath>..\..\..\Managed Code Libraries\Custom\</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>
