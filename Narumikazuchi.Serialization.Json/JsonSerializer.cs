@@ -39,60 +39,58 @@ partial class JsonSerializer<TSerializable>
 
         JsonObject jsonObject = this.SerializeAsObject(graph);
         String json = jsonObject.ToString();
-        data = Encoding.UTF8.GetBytes(json);
-        stream.Write(data);
-        return (UInt64)data.Length;
+        Int64 start = stream.Position;
+        using StreamWriter writer = new(stream, 
+                                        Encoding.UTF8);
+        writer.Write(json);
+        return (UInt64)(stream.Position - start);
 #pragma warning restore
-    }
-    private UInt64 SerializeInternal(Stream stream,
-                                     SerializationInfo info)
-    {
-        JsonObject result = this.SerializeWithInfo(info);
-        String json = result.ToString();
-        Byte[] data = Encoding.UTF8.GetBytes(json);
-        stream.Write(data);
-        return (UInt64)data.Length;
     }
 
     private SerializationInfo DeserializeInternal(Stream stream,
                                                   out UInt64 read)
     {
 #pragma warning disable
-        List<Byte> buffer = new();
+        using StreamReader reader = new(stream);
+        read = 0;
         Int32 depth = 0;
-        Int32 b;
-        while ((b = stream.ReadByte()) != -1)
+        String? line;
+        StringBuilder json = new();
+        while ((line = reader.ReadLine()) != null)
         {
-            buffer.Add((Byte)b);
-
-            if (buffer.Count == 4)
+            Boolean cancel = false;
+            for (Int32 i = 0; i < line.Length; i++)
             {
-                String nullJson = Encoding.UTF8.GetString(buffer.ToArray());
-                if (JsonObject.IsJsonNullString(nullJson))
+                json.Append(line[i]);
+                read += (UInt64)Encoding.UTF8.GetBytes(line[i].ToString())
+                                             .Length;
+                if (line[i] == '{')
                 {
-                    read = 4;
-                    return SerializationInfo.CreateNull();
+                    depth++;
+                    continue;
+                }
+                if (line[i] == '}')
+                {
+                    depth--;
+                }
+                if (depth == 0)
+                {
+                    cancel = true;
+                    if (i < line.Length - 1)
+                    {
+                        stream.Position -= Encoding.UTF8.GetBytes(line[(i + 1)..])
+                                                        .Length;
+                    }
+                    break;
                 }
             }
-
-            if ((Char)b == '{')
-            {
-                depth++;
-                continue;
-            }
-            if ((Char)b == '}')
-            {
-                depth--;
-            }
-            if (depth == 0)
+            if (cancel)
             {
                 break;
             }
         }
-        read = (UInt64)buffer.Count;
 
-        String json = Encoding.UTF8.GetString(buffer.ToArray());
-        JsonObject jsonObject = JsonObject.FromJsonString(json);
+        JsonObject jsonObject = JsonObject.FromJsonString(json.ToString());
         if (!jsonObject.HasMember(TYPENAME))
         {
             // Needs typename to create object
@@ -132,7 +130,6 @@ partial class JsonSerializer<TSerializable>
             Boolean serialized = false;
             foreach (Type key in this.RegisteredStrategies)
             {
-                Boolean assign = member.MemberType.IsAssignableTo(key);
                 if (member.MemberType.IsAssignableTo(key))
                 {
                     result.Add(member.Name,
@@ -240,8 +237,7 @@ partial class JsonSerializer<TSerializable>
         return elements;
     }
 
-    private void DeserializeInformation(String memberName,
-                                        JsonElement jsonElement,
+    private void DeserializeInformation(JsonElement jsonElement,
                                         SerializationInfo info,
                                         MemberState state)
     {
@@ -249,11 +245,11 @@ partial class JsonSerializer<TSerializable>
         {
             if (this._strategies.ContainsKey(state.MemberType))
             {
-                info.Set(memberName,
+                info.Set(state.Name,
                          this._strategies[state.MemberType].Deserialize(jsonElement));
                 return;
             }
-            info.Set(memberName,
+            info.Set(state.Name,
                      this.TransformJsonArray((JsonArray)jsonElement));
             return;
         }
@@ -261,11 +257,11 @@ partial class JsonSerializer<TSerializable>
         {
             if (this._strategies.ContainsKey(state.MemberType))
             {
-                info.Set(memberName,
+                info.Set(state.Name,
                          this._strategies[state.MemberType].Deserialize(jsonElement));
                 return;
             }
-            info.Set(memberName,
+            info.Set(state.Name,
                      (Boolean)jsonElement);
             return;
         }
@@ -273,11 +269,11 @@ partial class JsonSerializer<TSerializable>
         {
             if (this._strategies.ContainsKey(state.MemberType))
             {
-                info.Set(memberName,
+                info.Set(state.Name,
                          this._strategies[state.MemberType].Deserialize(jsonElement));
                 return;
             }
-            info.Set(memberName,
+            info.Set(state.Name,
                      (Double)jsonElement);
             return;
         }
@@ -285,11 +281,11 @@ partial class JsonSerializer<TSerializable>
         {
             if (this._strategies.ContainsKey(state.MemberType))
             {
-                info.Set(memberName,
+                info.Set(state.Name,
                          this._strategies[state.MemberType].Deserialize(jsonElement));
                 return;
             }
-            info.Set(memberName,
+            info.Set(state.Name,
                      (Int64)jsonElement);
             return;
         }
@@ -297,11 +293,11 @@ partial class JsonSerializer<TSerializable>
         {
             if (this._strategies.ContainsKey(state.MemberType))
             {
-                info.Set(memberName,
+                info.Set(state.Name,
                          this._strategies[state.MemberType].Deserialize(jsonElement));
                 return;
             }
-            info.Set(memberName,
+            info.Set(state.Name,
                      this.CreateObjectFromJson((JsonObject)jsonElement));
             return;
         }
@@ -309,11 +305,11 @@ partial class JsonSerializer<TSerializable>
         {
             if (this._strategies.ContainsKey(state.MemberType))
             {
-                info.Set(memberName,
+                info.Set(state.Name,
                          this._strategies[state.MemberType].Deserialize(jsonElement));
                 return;
             }
-            info.Set(memberName,
+            info.Set(state.Name,
                      (String)jsonElement);
             return;
         }
@@ -321,11 +317,11 @@ partial class JsonSerializer<TSerializable>
         {
             if (this._strategies.ContainsKey(state.MemberType))
             {
-                info.Set(memberName,
+                info.Set(state.Name,
                          this._strategies[state.MemberType].Deserialize(jsonElement));
                 return;
             }
-            info.Set(memberName,
+            info.Set(state.Name,
                      (UInt64)jsonElement);
             return;
         }
@@ -358,8 +354,7 @@ partial class JsonSerializer<TSerializable>
                          this.CreateObjectFromJson(memberObject));
                 continue;
             }
-            this.DeserializeInformation(state.Name,
-                                        element,
+            this.DeserializeInformation(element,
                                         info,
                                         state);
         }
