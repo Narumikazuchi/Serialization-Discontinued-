@@ -80,8 +80,8 @@ partial class __SerializationInfo : ISerializationInfo
 // ISerializationInfoAddable
 partial class __SerializationInfo : ISerializationInfoAdder
 {
-    public ISerializationInfoAdder Add<TMember>([DisallowNull] String memberName,
-                                                  [AllowNull] TMember? memberValue)
+    public ISerializationInfoAdder AddState<TMember>([DisallowNull] String memberName,
+                                                     [AllowNull] TMember? memberValue)
     {
         ExceptionHelpers.ThrowIfNullOrEmpty(memberName);
 
@@ -103,14 +103,14 @@ partial class __SerializationInfo : ISerializationInfoAdder
         return this;
     }
 
-    public ISerializationInfo Finalize() => 
+    public ISerializationInfo Construct() => 
         this;
 }
 
 // ISerializationInfoGettable
 partial class __SerializationInfo : ISerializationInfoGetter
 {
-    public TMember? Get<TMember>([DisallowNull] String memberName)
+    public TMember? GetState<TMember>([DisallowNull] String memberName)
     {
         ExceptionHelpers.ThrowIfNullOrEmpty(memberName);
 
@@ -130,8 +130,8 @@ partial class __SerializationInfo : ISerializationInfoGetter
 // ISerializationInfoSettable
 partial class __SerializationInfo : ISerializationInfoSetter
 {
-    public void Set<TMember>([DisallowNull] String memberName,
-                             [AllowNull] TMember? memberValue)
+    public void SetState<TMember>([DisallowNull] String memberName,
+                                  [AllowNull] TMember? memberValue)
     {
         ExceptionHelpers.ThrowIfNullOrEmpty(memberName);
 

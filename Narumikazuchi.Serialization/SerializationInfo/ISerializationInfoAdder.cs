@@ -12,12 +12,12 @@ public interface ISerializationInfoAdder :
     /// <param name="memberName">The name of the member in the object.</param>
     /// <param name="memberValue">The current value of the member.</param>
     /// <exception cref="ArgumentException"/>
-    public ISerializationInfoAdder Add<TMember>([DisallowNull] String memberName,
-                                                  [AllowNull] TMember? memberValue);
+    public ISerializationInfoAdder AddState<TMember>([DisallowNull] String memberName,
+                                                     [AllowNull] TMember? memberValue);
 
     /// <summary>
     /// Finalizes the configuration process and returns the current state information.
     /// </summary>
     /// <returns>The current state information after every member has been added</returns>
-    public ISerializationInfo Finalize();
+    public ISerializationInfo Construct();
 }

@@ -13,5 +13,5 @@ public interface ISerializationInfoGetter :
     /// <returns>The value of the specified member</returns>
     /// <exception cref="KeyNotFoundException"/>
     [return: MaybeNull]
-    public TMember? Get<TMember>([DisallowNull] String memberName);
+    public TMember? GetState<TMember>([DisallowNull] String memberName);
 }

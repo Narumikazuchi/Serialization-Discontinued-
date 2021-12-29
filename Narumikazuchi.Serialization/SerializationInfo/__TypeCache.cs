@@ -32,7 +32,7 @@ internal sealed partial class __TypeCache :
 }
 
 // Non-Public
-partial class __TypeCache : IEnumerable<MemberInfo>
+partial class __TypeCache
 {
     private readonly IEnumerable<MemberInfo> _items;
 }

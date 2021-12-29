@@ -3,7 +3,7 @@
 /// <summary>
 /// Build an <see cref="ISerializationInfo"/> object to store the state information of an object for serialization.
 /// </summary>
-public static partial class SerializationInfoBuilder
+public static partial class CreateSerializationInfo
 {
     /// <summary>
     /// Creates a new <see cref="ISerializationInfo"/> object for the specified type.
@@ -15,8 +15,8 @@ public static partial class SerializationInfoBuilder
     /// <param name="isNull">Whether the object of the specified type is set to <see langword="null"/>.</param>
     /// <returns>An empty state object to be filled by the deserializer</returns>
     [return: NotNull]
-    public static ISerializationInfoMutator CreateFrom([DisallowNull] Type type,
-                                                       Boolean isNull)
+    public static ISerializationInfoMutator From([DisallowNull] Type type,
+                                                 Boolean isNull)
     {
         ExceptionHelpers.ThrowIfArgumentNull(type);
 
@@ -57,20 +57,20 @@ public static partial class SerializationInfoBuilder
     /// </remarks>
     /// <returns>A filled state object representing the specified <typeparamref name="TSerializable"/></returns>
     [return: NotNull]
-    public static ISerializationInfoAdder CreateFrom<TSerializable>([AllowNull] TSerializable? from)
+    public static ISerializationInfoAdder From<TSerializable>([AllowNull] TSerializable? from)
         where TSerializable : ISerializable
     {
         if (from is null)
         {
             return new __SerializationInfo(type: typeof(TSerializable),
-                                           isNull: from is null);
+                                           isNull: true);
         }
 
         Type type = from.GetType();
         __SerializationInfo result = new(type: type,
-                                         isNull: from is null);
+                                         isNull: false);
 
-        from!.GetSerializationData(result);
+        from.GetSerializationData(result);
         if (!_knownTypes.ContainsKey(type))
         {
             _knownTypes.Add(key: type,
@@ -85,11 +85,11 @@ public static partial class SerializationInfoBuilder
     /// <param name="write">The <see langword="delegate"/> which provides the state for the object.</param>
     /// <returns>The current state information of the specified object.</returns>
     /// <remarks>
-    /// This method is designed for types that don't or can't implement the <see cref="ISerializable{TSelf}"/> interface.
+    /// This method is designed for types that don't or can't implement the <see cref="IDeserializable{TSelf}"/> interface.
     /// </remarks>
     /// <returns>A filled state object representing the specified <typeparamref name="TAny"/></returns>
     [return: NotNull]
-    public static ISerializationInfoAdder CreateFrom<TAny>([AllowNull] TAny? from,
+    public static ISerializationInfoAdder From<TAny>([AllowNull] TAny? from,
                                                            [DisallowNull] Action<TAny, ISerializationInfoAdder> write)
     {
         ExceptionHelpers.ThrowIfArgumentNull(write);
@@ -115,7 +115,7 @@ public static partial class SerializationInfoBuilder
     }
 }
 
-partial class SerializationInfoBuilder
+partial class CreateSerializationInfo
 {
     private static readonly IDictionary<Type, IEnumerable<MemberInfo>> _knownTypes = new Dictionary<Type, IEnumerable<MemberInfo>>();
 }

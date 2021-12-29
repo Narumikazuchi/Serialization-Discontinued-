@@ -11,6 +11,6 @@ public interface ISerializationInfoSetter :
     /// </summary>
     /// <param name="memberName">The name of the member in the object.</param>
     /// <param name="memberValue">The current value of the member.</param>
-    public void Set<TMember>([DisallowNull] String memberName,
-                             [AllowNull] TMember? memberValue);
+    public void SetState<TMember>([DisallowNull] String memberName,
+                                  [AllowNull] TMember? memberValue);
 }
