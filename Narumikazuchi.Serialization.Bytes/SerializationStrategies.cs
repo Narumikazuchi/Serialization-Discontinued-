@@ -2,7 +2,7 @@
 
 internal static class __SerializationStrategies
 {
-    public static Dictionary<Type, ISerializationStrategy<System.Byte[]>> Integrated { get; } = new()
+    public static IDictionary<Type, ISerializationStrategy<System.Byte[]>> Integrated { get; } = new Dictionary<Type, ISerializationStrategy<System.Byte[]>>()
     {
         { typeof(System.Boolean),   Boolean.Default },
         { typeof(System.Byte),      Byte.Default },

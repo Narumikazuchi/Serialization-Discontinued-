@@ -11,14 +11,28 @@ public sealed partial class ByteSerializer<TSerializable> : SharedByteSerializer
     /// </summary>
     /// <exception cref="InvalidOperationException"/>
     public ByteSerializer() :
-        base()
+        base(__SerializationStrategies.Integrated)
     { }
     /// <summary>
     /// Instantiates a new instance of the <see cref="ByteSerializer{TSerializable}"/> class.
     /// </summary>
     /// <exception cref="InvalidOperationException"/>
-    public ByteSerializer([DisallowNull] IReadOnlyDictionary<Type, ISerializationStrategy<Byte[]>> strategies) :
-        base(strategies)
+    public ByteSerializer([DisallowNull] IEnumerable<KeyValuePair<Type, ISerializationStrategy<Byte[]>>> strategies) :
+        base(strategies: strategies)
+    { }
+    /// <summary>
+    /// Instantiates a new instance of the <see cref="ByteSerializer{TSerializable}"/> class.
+    /// </summary>
+    /// <exception cref="InvalidOperationException"/>
+    public ByteSerializer([DisallowNull] IEnumerable<(Type, ISerializationStrategy<Byte[]>)> strategies) :
+        base(strategies: strategies)
+    { }
+    /// <summary>
+    /// Instantiates a new instance of the <see cref="ByteSerializer{TSerializable}"/> class.
+    /// </summary>
+    /// <exception cref="InvalidOperationException"/>
+    public ByteSerializer([DisallowNull] IEnumerable<Tuple<Type, ISerializationStrategy<Byte[]>>> strategies) :
+        base(strategies: strategies)
     { }
 }
 
@@ -34,11 +48,11 @@ partial class ByteSerializer<TSerializable> : IBothWaySerializer<TSerializable>
     /// <exception cref="ArgumentNullException"/>
     /// <exception cref="InvalidOperationException"/>
     public UInt64 Serialize([DisallowNull] Stream stream, 
-                            [DisallowNull] TSerializable graph) =>
-        this.Serialize(stream, 
-                       graph, 
-                       -1, 
-                       SerializationFinishAction.None);
+                            [AllowNull] TSerializable? graph) =>
+        base.Serialize(stream: stream, 
+                       graph: graph, 
+                       offset: -1, 
+                       actionAfter: SerializationFinishAction.None);
     /// <summary>
     /// Serializes the specified graph into the specified stream starting at the specified offset in the stream.
     /// </summary>
@@ -49,12 +63,12 @@ partial class ByteSerializer<TSerializable> : IBothWaySerializer<TSerializable>
     /// <exception cref="ArgumentNullException"/>
     /// <exception cref="InvalidOperationException"/>
     public UInt64 Serialize([DisallowNull] Stream stream, 
-                            [DisallowNull] TSerializable graph, 
+                            [AllowNull] TSerializable? graph, 
                             in Int64 offset) =>
-        this.Serialize(stream, 
-                       graph, 
-                       offset, 
-                       SerializationFinishAction.None);
+        base.Serialize(stream: stream, 
+                       graph: graph, 
+                       offset: offset, 
+                       actionAfter: SerializationFinishAction.None);
     /// <summary>
     /// Serializes the specified graph into the specified stream.
     /// </summary>
@@ -65,12 +79,12 @@ partial class ByteSerializer<TSerializable> : IBothWaySerializer<TSerializable>
     /// <exception cref="ArgumentNullException"/>
     /// <exception cref="InvalidOperationException"/>
     public UInt64 Serialize([DisallowNull] Stream stream, 
-                            [DisallowNull] TSerializable graph, 
+                            [AllowNull] TSerializable? graph, 
                             in SerializationFinishAction actionAfter) =>
-        this.Serialize(stream, 
-                       graph, 
-                       -1, 
-                       actionAfter);
+        base.Serialize(stream: stream, 
+                       graph: graph, 
+                       offset: -1, 
+                       actionAfter: actionAfter);
     /// <summary>
     /// Serializes the specified graph into the specified stream starting at the specified offset in the stream.
     /// </summary>
@@ -82,13 +96,13 @@ partial class ByteSerializer<TSerializable> : IBothWaySerializer<TSerializable>
     /// <exception cref="ArgumentNullException"/>
     /// <exception cref="InvalidOperationException"/>
     public UInt64 Serialize([DisallowNull] Stream stream,
-                            [DisallowNull] TSerializable graph,
+                            [AllowNull] TSerializable? graph,
                             in Int64 offset,
                             in SerializationFinishAction actionAfter) =>
-        this.Serialize(stream,
-                       (ISerializable)graph,
-                       offset,
-                       actionAfter);
+        base.Serialize(stream: stream,
+                       graph: graph,
+                       offset: offset,
+                       actionAfter: actionAfter);
 
     /// <summary>
     /// Tries to serialize the specified graph into the specified stream.
@@ -97,12 +111,12 @@ partial class ByteSerializer<TSerializable> : IBothWaySerializer<TSerializable>
     /// <param name="graph">The graph to serialize.</param>
     /// <returns><see langword="true"/> if the serialization succeeded; else, <see langword="false"/></returns>
     public Boolean TrySerialize([DisallowNull] Stream stream, 
-                                [DisallowNull] TSerializable graph) =>
-        this.TrySerialize(stream, 
-                          graph, 
-                          -1, 
-                          out UInt64 _,
-                          SerializationFinishAction.None);
+                                [AllowNull] TSerializable? graph) =>
+        base.TrySerialize(stream: stream, 
+                          graph: graph, 
+                          offset: -1, 
+                          written: out UInt64 _,
+                          actionAfter: SerializationFinishAction.None);
     /// <summary>
     /// Tries to serialize the specified graph into the specified stream starting at the specified offset in the stream.
     /// </summary>
@@ -111,13 +125,13 @@ partial class ByteSerializer<TSerializable> : IBothWaySerializer<TSerializable>
     /// <param name="offset">The offset in the stream where to begin writing.</param>
     /// <returns><see langword="true"/> if the serialization succeeded; else, <see langword="false"/></returns>
     public Boolean TrySerialize([DisallowNull] Stream stream, 
-                                [DisallowNull] TSerializable graph, 
+                                [AllowNull] TSerializable? graph, 
                                 in Int64 offset) =>
-        this.TrySerialize(stream, 
-                          graph, 
-                          offset,
-                          out UInt64 _,
-                          SerializationFinishAction.None);
+        base.TrySerialize(stream: stream, 
+                          graph: graph, 
+                          offset: offset,
+                          written: out UInt64 _,
+                          actionAfter: SerializationFinishAction.None);
     /// <summary>
     /// Tries to serialize the specified graph into the specified stream starting at the specified offset in the stream.
     /// </summary>
@@ -126,13 +140,13 @@ partial class ByteSerializer<TSerializable> : IBothWaySerializer<TSerializable>
     /// <param name="written">The amount of bytes written.</param>
     /// <returns><see langword="true"/> if the serialization succeeded; else, <see langword="false"/></returns>
     public Boolean TrySerialize([DisallowNull] Stream stream,
-                                [DisallowNull] TSerializable graph,
+                                [AllowNull] TSerializable? graph,
                                 out UInt64 written) =>
-        this.TrySerialize(stream,
-                          graph,
-                          -1,
-                          out written,
-                          SerializationFinishAction.None);
+        base.TrySerialize(stream: stream,
+                          graph: graph,
+                          offset: -1,
+                          written: out written,
+                          actionAfter: SerializationFinishAction.None);
     /// <summary>
     /// Tries to serialize the specified graph into the specified stream starting at the specified offset in the stream.
     /// </summary>
@@ -142,14 +156,14 @@ partial class ByteSerializer<TSerializable> : IBothWaySerializer<TSerializable>
     /// <param name="written">The amount of bytes written.</param>
     /// <returns><see langword="true"/> if the serialization succeeded; else, <see langword="false"/></returns>
     public Boolean TrySerialize([DisallowNull] Stream stream,
-                                [DisallowNull] TSerializable graph,
+                                [AllowNull] TSerializable? graph,
                                 in Int64 offset,
                                 out UInt64 written) =>
-        this.TrySerialize(stream,
-                          graph,
-                          offset,
-                          out written,
-                          SerializationFinishAction.None);
+        base.TrySerialize(stream: stream,
+                          graph: graph,
+                          offset: offset,
+                          written: out written,
+                          actionAfter: SerializationFinishAction.None);
     /// <summary>
     /// Tries to serialize the specified graph into the specified stream.
     /// </summary>
@@ -158,13 +172,13 @@ partial class ByteSerializer<TSerializable> : IBothWaySerializer<TSerializable>
     /// <param name="actionAfter">The actions to perform after the writing operation has finished.</param>
     /// <returns><see langword="true"/> if the serialization succeeded; else, <see langword="false"/></returns>
     public Boolean TrySerialize([DisallowNull] Stream stream, 
-                                [DisallowNull] TSerializable graph, 
+                                [AllowNull] TSerializable? graph, 
                                 in SerializationFinishAction actionAfter) =>
-        this.TrySerialize(stream, 
-                          graph, 
-                          -1,
-                          out UInt64 _,
-                          actionAfter);
+        base.TrySerialize(stream: stream, 
+                          graph: graph, 
+                          offset: -1,
+                          written: out UInt64 _,
+                          actionAfter: actionAfter);
     /// <summary>
     /// Tries to serialize the specified graph into the specified stream.
     /// </summary>
@@ -174,14 +188,14 @@ partial class ByteSerializer<TSerializable> : IBothWaySerializer<TSerializable>
     /// <param name="actionAfter">The actions to perform after the writing operation has finished.</param>
     /// <returns><see langword="true"/> if the serialization succeeded; else, <see langword="false"/></returns>
     public Boolean TrySerialize([DisallowNull] Stream stream,
-                                [DisallowNull] TSerializable graph,
+                                [AllowNull] TSerializable? graph,
                                 in Int64 offset,
                                 in SerializationFinishAction actionAfter) =>
-        this.TrySerialize(stream,
-                          graph,
-                          offset,
-                          out UInt64 _,
-                          actionAfter);
+        base.TrySerialize(stream: stream,
+                          graph: graph,
+                          offset: offset,
+                          written: out UInt64 _,
+                          actionAfter: actionAfter);
     /// <summary>
     /// Tries to serialize the specified graph into the specified stream.
     /// </summary>
@@ -191,14 +205,14 @@ partial class ByteSerializer<TSerializable> : IBothWaySerializer<TSerializable>
     /// <param name="actionAfter">The actions to perform after the writing operation has finished.</param>
     /// <returns><see langword="true"/> if the serialization succeeded; else, <see langword="false"/></returns>
     public Boolean TrySerialize([DisallowNull] Stream stream,
-                                [DisallowNull] TSerializable graph,
+                                [AllowNull] TSerializable? graph,
                                 out UInt64 written,
                                 in SerializationFinishAction actionAfter) =>
-        this.TrySerialize(stream,
-                          graph,
-                          -1,
-                          out written,
-                          actionAfter);
+        base.TrySerialize(stream: stream,
+                          graph: graph,
+                          offset: -1,
+                          written: out written,
+                          actionAfter: actionAfter);
     /// <summary>
     /// Tries to serialize the specified graph into the specified stream starting at the specified offset in the stream.
     /// </summary>
@@ -209,15 +223,15 @@ partial class ByteSerializer<TSerializable> : IBothWaySerializer<TSerializable>
     /// <param name="actionAfter">The actions to perform after the writing operation has finished.</param>
     /// <returns><see langword="true"/> if the serialization succeeded; else, <see langword="false"/></returns>
     public Boolean TrySerialize([DisallowNull] Stream stream,
-                                [DisallowNull] TSerializable graph,
+                                [AllowNull] TSerializable? graph,
                                 in Int64 offset,
                                 out UInt64 written,
                                 in SerializationFinishAction actionAfter) =>
-        this.TrySerialize(stream,
-                          (ISerializable)graph,
-                          offset,
-                          out written,
-                          actionAfter);
+        base.TrySerialize(stream: stream,
+                          graph: graph,
+                          offset: offset,
+                          written: out written,
+                          actionAfter: actionAfter);
 
     /// <summary>
     /// Deserializes the specified stream into an instance of type <typeparamref name="TSerializable"/>.
@@ -226,12 +240,12 @@ partial class ByteSerializer<TSerializable> : IBothWaySerializer<TSerializable>
     /// <returns>The instance represented by the bytes in the specified stream</returns>
     /// <exception cref="ArgumentNullException"/>
     /// <exception cref="InvalidOperationException"/>
-    [return: NotNull]
-    public TSerializable Deserialize([DisallowNull] Stream stream) =>
-        this.Deserialize(stream, 
-                         -1,
-                         out UInt64 _,
-                         SerializationFinishAction.None);
+    [return: MaybeNull]
+    public TSerializable? Deserialize([DisallowNull] Stream stream) =>
+        this.Deserialize(stream: stream, 
+                         offset: -1,
+                         read: out UInt64 _,
+                         actionAfter: SerializationFinishAction.None);
     /// <summary>
     /// Deserializes the specified stream starting at the specified offset into an instance of type <typeparamref name="TSerializable"/>.
     /// </summary>
@@ -240,13 +254,13 @@ partial class ByteSerializer<TSerializable> : IBothWaySerializer<TSerializable>
     /// <returns>The instance represented by the bytes in the specified stream</returns>
     /// <exception cref="ArgumentNullException"/>
     /// <exception cref="InvalidOperationException"/>
-    [return: NotNull]
-    public TSerializable Deserialize([DisallowNull] Stream stream,
-                                     in Int64 offset) =>
-        this.Deserialize(stream,
-                         offset,
-                         out UInt64 _,
-                         SerializationFinishAction.None);
+    [return: MaybeNull]
+    public TSerializable? Deserialize([DisallowNull] Stream stream,
+                                      in Int64 offset) =>
+        this.Deserialize(stream: stream,
+                         offset: offset,
+                         read: out UInt64 _,
+                         actionAfter: SerializationFinishAction.None);
     /// <summary>
     /// Deserializes the specified stream starting at the specified offset into an instance of type <typeparamref name="TSerializable"/>.
     /// </summary>
@@ -255,13 +269,13 @@ partial class ByteSerializer<TSerializable> : IBothWaySerializer<TSerializable>
     /// <returns>The instance represented by the bytes in the specified stream</returns>
     /// <exception cref="ArgumentNullException"/>
     /// <exception cref="InvalidOperationException"/>
-    [return: NotNull]
-    public TSerializable Deserialize([DisallowNull] Stream stream,
-                                     out UInt64 read) =>
-        this.Deserialize(stream,
-                         -1,
-                         out read,
-                         SerializationFinishAction.None);
+    [return: MaybeNull]
+    public TSerializable? Deserialize([DisallowNull] Stream stream,
+                                      out UInt64 read) =>
+        this.Deserialize(stream: stream,
+                         offset: -1,
+                         read: out read,
+                         actionAfter: SerializationFinishAction.None);
     /// <summary>
     /// Deserializes the specified stream starting at the specified offset into an instance of type <typeparamref name="TSerializable"/>.
     /// </summary>
@@ -271,14 +285,14 @@ partial class ByteSerializer<TSerializable> : IBothWaySerializer<TSerializable>
     /// <returns>The instance represented by the bytes in the specified stream</returns>
     /// <exception cref="ArgumentNullException"/>
     /// <exception cref="InvalidOperationException"/>
-    [return: NotNull]
-    public TSerializable Deserialize([DisallowNull] Stream stream, 
-                                     in Int64 offset,
-                                     out UInt64 read) =>
-        this.Deserialize(stream, 
-                         offset,
-                         out read,
-                         SerializationFinishAction.None);
+    [return: MaybeNull]
+    public TSerializable? Deserialize([DisallowNull] Stream stream, 
+                                      in Int64 offset,
+                                      out UInt64 read) =>
+        this.Deserialize(stream: stream, 
+                         offset: offset,
+                         read: out read,
+                         actionAfter: SerializationFinishAction.None);
     /// <summary>
     /// Deserializes the specified stream into an instance of type <typeparamref name="TSerializable"/>.
     /// </summary>
@@ -287,13 +301,13 @@ partial class ByteSerializer<TSerializable> : IBothWaySerializer<TSerializable>
     /// <returns>The instance represented by the bytes in the specified stream</returns>
     /// <exception cref="ArgumentNullException"/>
     /// <exception cref="InvalidOperationException"/>
-    [return: NotNull]
-    public TSerializable Deserialize([DisallowNull] Stream stream, 
-                                     in SerializationFinishAction actionAfter) =>
-        this.Deserialize(stream, 
-                         -1,
-                         out UInt64 _,
-                         actionAfter);
+    [return: MaybeNull]
+    public TSerializable? Deserialize([DisallowNull] Stream stream, 
+                                      in SerializationFinishAction actionAfter) =>
+        this.Deserialize(stream: stream, 
+                         offset: -1,
+                         read: out UInt64 _,
+                         actionAfter: actionAfter);
     /// <summary>
     /// Deserializes the specified stream starting at the specified offset into an instance of type <typeparamref name="TSerializable"/>.
     /// </summary>
@@ -303,14 +317,14 @@ partial class ByteSerializer<TSerializable> : IBothWaySerializer<TSerializable>
     /// <returns>The instance represented by the bytes in the specified stream</returns>
     /// <exception cref="ArgumentNullException"/>
     /// <exception cref="InvalidOperationException"/>
-    [return: NotNull]
-    public TSerializable Deserialize([DisallowNull] Stream stream,
-                                     in Int64 offset,
-                                     in SerializationFinishAction actionAfter) =>
-        this.Deserialize(stream,
-                         offset,
-                         out UInt64 _,
-                         actionAfter);
+    [return: MaybeNull]
+    public TSerializable? Deserialize([DisallowNull] Stream stream,
+                                      in Int64 offset,
+                                      in SerializationFinishAction actionAfter) =>
+        this.Deserialize(stream: stream,
+                         offset: offset,
+                         read: out UInt64 _,
+                         actionAfter: actionAfter);
     /// <summary>
     /// Deserializes the specified stream starting at the specified offset into an instance of type <typeparamref name="TSerializable"/>.
     /// </summary>
@@ -320,14 +334,14 @@ partial class ByteSerializer<TSerializable> : IBothWaySerializer<TSerializable>
     /// <returns>The instance represented by the bytes in the specified stream</returns>
     /// <exception cref="ArgumentNullException"/>
     /// <exception cref="InvalidOperationException"/>
-    [return: NotNull]
-    public TSerializable Deserialize([DisallowNull] Stream stream,
-                                     out UInt64 read, 
-                                     in SerializationFinishAction actionAfter) =>
-        this.Deserialize(stream, 
-                         -1,
-                         out read,
-                         actionAfter);
+    [return: MaybeNull]
+    public TSerializable? Deserialize([DisallowNull] Stream stream,
+                                      out UInt64 read, 
+                                      in SerializationFinishAction actionAfter) =>
+        this.Deserialize(stream: stream, 
+                         offset: -1,
+                         read: out read,
+                         actionAfter: actionAfter);
     /// <summary>
     /// Deserializes the specified stream starting at the specified offset into an instance of type <typeparamref name="TSerializable"/>.
     /// </summary>
@@ -338,35 +352,32 @@ partial class ByteSerializer<TSerializable> : IBothWaySerializer<TSerializable>
     /// <returns>The instance represented by the bytes in the specified stream</returns>
     /// <exception cref="ArgumentNullException"/>
     /// <exception cref="InvalidOperationException"/>
-    [return: NotNull]
-    public TSerializable Deserialize([DisallowNull] Stream stream, 
-                                     in Int64 offset, 
-                                     out UInt64 read,
-                                     in SerializationFinishAction actionAfter)
+    [return: MaybeNull]
+    public TSerializable? Deserialize([DisallowNull] Stream stream, 
+                                      in Int64 offset, 
+                                      out UInt64 read,
+                                      in SerializationFinishAction actionAfter)
     {
-        if (stream is null)
-        {
-            throw new ArgumentNullException(nameof(stream));
-        }
+        ExceptionHelpers.ThrowIfArgumentNull(stream);
         if (!stream.CanRead)
         {
-            throw new InvalidOperationException(STREAM_DOES_NOT_SUPPORT_READING);
+            throw new InvalidOperationException(message: STREAM_DOES_NOT_SUPPORT_READING);
         }
         if (offset > -1 &&
             !stream.CanSeek)
         {
-            throw new InvalidOperationException(STREAM_DOES_NOT_SUPPORT_SEEKING);
+            throw new InvalidOperationException(message: STREAM_DOES_NOT_SUPPORT_SEEKING);
         }
 
         if (offset > -1)
         {
-            stream.Seek(offset, 
-                        SeekOrigin.Begin);
+            stream.Seek(offset: offset, 
+                        origin: SeekOrigin.Begin);
         }
 
-        SerializationInfo info = this.DeserializeInternal(stream,
-                                                          out read);
-        TSerializable result = TSerializable.ConstructFromSerializationData(info);
+        ISerializationInfoGetter info = this.DeserializeInternal(stream: stream,
+                                                                 read: out read);
+        TSerializable? result = TSerializable.ConstructFromSerializationData(info);
 
         if (actionAfter.HasFlag(SerializationFinishAction.FlushStream))
         {
@@ -386,12 +397,12 @@ partial class ByteSerializer<TSerializable> : IBothWaySerializer<TSerializable>
     /// <param name="result">The instance represented by the bytes in the specified stream.</param>
     /// <returns><see langword="true"/> if the serialization succeeded; else, <see langword="false"/></returns>
     public Boolean TryDeserialize([DisallowNull] Stream stream,
-                                  [NotNullWhen(true)] out TSerializable? result) =>
-        this.TryDeserialize(stream,
-                            -1,
-                            out UInt64 _,
-                            SerializationFinishAction.None,
-                            out result);
+                                  [AllowNull] out TSerializable? result) =>
+        this.TryDeserialize(stream: stream,
+                            offset: -1,
+                            read: out UInt64 _,
+                            actionAfter: SerializationFinishAction.None,
+                            result: out result);
     /// <summary>
     /// Tries to deserialize the specified stream starting at the specified offset into an instance of type <typeparamref name="TSerializable"/>.
     /// </summary>
@@ -401,12 +412,12 @@ partial class ByteSerializer<TSerializable> : IBothWaySerializer<TSerializable>
     /// <returns><see langword="true"/> if the serialization succeeded; else, <see langword="false"/></returns>
     public Boolean TryDeserialize([DisallowNull] Stream stream,
                                   in Int64 offset,
-                                  [NotNullWhen(true)] out TSerializable? result) =>
-        this.TryDeserialize(stream,
-                            offset,
-                            out UInt64 _,
-                            SerializationFinishAction.None,
-                            out result);
+                                  [AllowNull] out TSerializable? result) =>
+        this.TryDeserialize(stream: stream,
+                            offset: offset,
+                            read: out UInt64 _,
+                            actionAfter: SerializationFinishAction.None,
+                            result: out result);
     /// <summary>
     /// Tries to deserialize the specified stream starting at the specified offset into an instance of type <typeparamref name="TSerializable"/>.
     /// </summary>
@@ -416,12 +427,12 @@ partial class ByteSerializer<TSerializable> : IBothWaySerializer<TSerializable>
     /// <returns><see langword="true"/> if the serialization succeeded; else, <see langword="false"/></returns>
     public Boolean TryDeserialize([DisallowNull] Stream stream,
                                   out UInt64 read,
-                                  [NotNullWhen(true)] out TSerializable? result) =>
-        this.TryDeserialize(stream,
-                            -1,
-                            out read,
-                            SerializationFinishAction.None,
-                            out result);
+                                  [AllowNull] out TSerializable? result) =>
+        this.TryDeserialize(stream: stream,
+                            offset: -1,
+                            read: out read,
+                            actionAfter: SerializationFinishAction.None,
+                            result: out result);
     /// <summary>
     /// Tries to deserialize the specified stream starting at the specified offset into an instance of type <typeparamref name="TSerializable"/>.
     /// </summary>
@@ -433,12 +444,12 @@ partial class ByteSerializer<TSerializable> : IBothWaySerializer<TSerializable>
     public Boolean TryDeserialize([DisallowNull] Stream stream,
                                   in Int64 offset,
                                   out UInt64 read,
-                                  [NotNullWhen(true)] out TSerializable? result) =>
-        this.TryDeserialize(stream,
-                            offset,
-                            out read,
-                            SerializationFinishAction.None,
-                            out result);
+                                  [AllowNull] out TSerializable? result) =>
+        this.TryDeserialize(stream: stream,
+                            offset: offset,
+                            read: out read,
+                            actionAfter: SerializationFinishAction.None,
+                            result: out result);
     /// <summary>
     /// Tries to deserialize the specified stream starting at the specified offset into an instance of type <typeparamref name="TSerializable"/>.
     /// </summary>
@@ -448,12 +459,12 @@ partial class ByteSerializer<TSerializable> : IBothWaySerializer<TSerializable>
     /// <returns><see langword="true"/> if the serialization succeeded; else, <see langword="false"/></returns>
     public Boolean TryDeserialize([DisallowNull] Stream stream,
                                   in SerializationFinishAction actionAfter,
-                                  [NotNullWhen(true)] out TSerializable? result) =>
-        this.TryDeserialize(stream,
-                            -1,
-                            out UInt64 _,
-                            actionAfter,
-                            out result);
+                                  [AllowNull] out TSerializable? result) =>
+        this.TryDeserialize(stream: stream,
+                            offset: -1,
+                            read: out UInt64 _,
+                            actionAfter: actionAfter,
+                            result: out result);
     /// <summary>
     /// Tries to deserialize the specified stream starting at the specified offset into an instance of type <typeparamref name="TSerializable"/>.
     /// </summary>
@@ -465,12 +476,12 @@ partial class ByteSerializer<TSerializable> : IBothWaySerializer<TSerializable>
     public Boolean TryDeserialize([DisallowNull] Stream stream,
                                   in Int64 offset,
                                   in SerializationFinishAction actionAfter,
-                                  [NotNullWhen(true)] out TSerializable? result) =>
-        this.TryDeserialize(stream,
-                            offset,
-                            out UInt64 _,
-                            actionAfter,
-                            out result);
+                                  [AllowNull] out TSerializable? result) =>
+        this.TryDeserialize(stream: stream,
+                            offset: offset,
+                            read: out UInt64 _,
+                            actionAfter: actionAfter,
+                            result: out result);
     /// <summary>
     /// Tries to deserialize the specified stream starting at the specified offset into an instance of type <typeparamref name="TSerializable"/>.
     /// </summary>
@@ -482,12 +493,12 @@ partial class ByteSerializer<TSerializable> : IBothWaySerializer<TSerializable>
     public Boolean TryDeserialize([DisallowNull] Stream stream,
                                   out UInt64 read,
                                   in SerializationFinishAction actionAfter,
-                                  [NotNullWhen(true)] out TSerializable? result) =>
-        this.TryDeserialize(stream, 
-                            -1,
-                            out read,
-                            actionAfter, 
-                            out result);
+                                  [AllowNull] out TSerializable? result) =>
+        this.TryDeserialize(stream: stream, 
+                            offset: -1,
+                            read: out read,
+                            actionAfter: actionAfter, 
+                            result: out result);
     /// <summary>
     /// Tries to deserialize the specified stream starting at the specified offset into an instance of type <typeparamref name="TSerializable"/>.
     /// </summary>
@@ -500,13 +511,13 @@ partial class ByteSerializer<TSerializable> : IBothWaySerializer<TSerializable>
     public Boolean TryDeserialize([DisallowNull] Stream stream, 
                                   in Int64 offset,
                                   out UInt64 read, 
-                                  in SerializationFinishAction actionAfter, 
-                                  [NotNullWhen(true)] out TSerializable? result)
+                                  in SerializationFinishAction actionAfter,
+                                  [AllowNull] out TSerializable? result)
     {
         if (stream is null ||
             !stream.CanRead ||
-            (offset > -1 &&
-            !stream.CanSeek))
+            offset > -1 &&
+            !stream.CanSeek)
         {
             read = 0;
             result = default;
@@ -515,12 +526,12 @@ partial class ByteSerializer<TSerializable> : IBothWaySerializer<TSerializable>
 
         if (offset > -1)
         {
-            stream.Seek(offset,
-                        SeekOrigin.Begin);
+            stream.Seek(offset: offset,
+                        origin: SeekOrigin.Begin);
         }
 
-        SerializationInfo info = this.DeserializeInternal(stream,
-                                                          out read);
+        ISerializationInfoGetter info = this.DeserializeInternal(stream: stream,
+                                                                 read: out read);
         result = TSerializable.ConstructFromSerializationData(info);
 
         if (actionAfter.HasFlag(SerializationFinishAction.FlushStream))

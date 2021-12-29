@@ -6,6 +6,7 @@ internal class __HeaderItem
     {
         MemoryStream result = new();
 
+        result.WriteByte(this.NullValue);
         result.Write(BitConverter.GetBytes(this.Position));
         result.Write(BitConverter.GetBytes(this.Length));
         result.Write(BitConverter.GetBytes(this.TypenameGlyphs));
@@ -19,6 +20,7 @@ internal class __HeaderItem
 
     public Int64 Position { get; set; }
     public Int64 Length { get; set; }
+    public Boolean IsNull { get; set; }
     public Int32 TypenameGlyphs => this._typenameRaw.Length;
     public String Typename
     {
@@ -45,6 +47,18 @@ internal class __HeaderItem
             }
             this._name = value;
             this._nameRaw = Encoding.UTF8.GetBytes(value);
+        }
+    }
+
+    private Byte NullValue
+    {
+        get
+        {
+            if (this.IsNull)
+            {
+                return 1;
+            }
+            return 0;
         }
     }
 

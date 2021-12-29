@@ -4,15 +4,14 @@ internal class __Header
 {
     private __Header()
     { }
-    public __Header(Type type)
+    public __Header(ISerializationInfo info)
     {
-        ExceptionHelpers.ThrowIfArgumentNull(type);
-        ExceptionHelpers.ThrowIfNullOrEmpty(type.AssemblyQualifiedName,
-                                            nameof(type));
+        ExceptionHelpers.ThrowIfArgumentNull(info);
+        ExceptionHelpers.ThrowIfNullOrEmpty(info.Type.AssemblyQualifiedName,
+                                            nameof(info.Type));
 
-#pragma warning disable
-        this.Typename = type.AssemblyQualifiedName;
-#pragma warning restore
+        this.Typename = info.Type.AssemblyQualifiedName!;
+        this.IsNull = info.IsNull;
     }
 
     public static __Header FromStream(Stream source,
@@ -36,6 +35,13 @@ internal class __Header
         read = Convert.ToUInt64(size);
 
         Int32 offset = 0;
+
+        Byte nullValue = data[offset++];
+        if (nullValue == 1)
+        {
+            result.IsNull = true;
+        }
+
         Int32 stringLength = BitConverter.ToInt32(data,
                                                   offset);
         offset += sizeof(Int32);
@@ -52,6 +58,10 @@ internal class __Header
         for (Int32 i = 0; i < count; i++)
         {
             __HeaderItem item = new();
+            if (data[offset++] == 1)
+            {
+                item.IsNull = true;
+            }
             item.Position = BitConverter.ToInt64(data,
                                                  offset);
             offset += sizeof(Int64);
@@ -82,12 +92,14 @@ internal class __Header
     {
         MemoryStream result = new();
 
+        result.WriteByte(this.NullValue);
         result.Write(BitConverter.GetBytes(this.TypenameGlyphs));
         result.Write(this._typenameRaw);
         result.Write(BitConverter.GetBytes(this.MemberCount));
         for (Int32 i = 0; i < this.MemberCount; i++)
         {
-            using MemoryStream item = this.Items[i].AsMemory();
+            using MemoryStream item = this.Items[i]
+                                          .AsMemory();
             item.CopyTo(result);
         }
 
@@ -95,21 +107,25 @@ internal class __Header
         return result;
     }
 
-    public Int32 TypenameGlyphs => this._typenameRaw.Length;
+    public Boolean IsNull { get; set; }
+    public Int32 TypenameGlyphs => 
+        this._typenameRaw
+            .Length;
     public String Typename
     {
         get => this._typename;
         set
         {
-            if (String.IsNullOrWhiteSpace(value))
-            {
-                throw new ArgumentNullException(nameof(value));
-            }
+            ExceptionHelpers.ThrowIfNullOrEmpty(value);
+
             this._typename = value;
-            this._typenameRaw = Encoding.UTF8.GetBytes(value);
+            this._typenameRaw = Encoding.UTF8
+                                        .GetBytes(value);
         }
     }
-    public Int32 MemberCount => this.Items.Count;
+    public Int32 MemberCount => 
+        this.Items
+            .Count;
     public Int64 Size
     {
         get
@@ -118,7 +134,19 @@ internal class __Header
             return temp.Length;
         }
     }
-    public List<__HeaderItem> Items { get; } = new List<__HeaderItem>();
+    public IList<__HeaderItem> Items { get; } = new List<__HeaderItem>();
+
+    private Byte NullValue
+    {
+        get
+        {
+            if (this.IsNull)
+            {
+                return 1;
+            }
+            return 0;
+        }
+    }
 
     private String _typename = String.Empty;
     private Byte[] _typenameRaw = Array.Empty<Byte>();

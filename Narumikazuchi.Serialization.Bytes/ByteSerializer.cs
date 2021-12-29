@@ -1,7 +1,7 @@
 ﻿namespace Narumikazuchi.Serialization.Bytes;
 
 /// <summary>
-/// Represents an <see cref="ISerializer"/> for objects that are marked with the <see cref="CustomSerializableAttribute"/> or are provided with a custom state-reader/writer.
+/// Represents an <see cref="ISerializer"/> for objects that are provided with a custom state-reader/writer delegate.
 /// </summary>
 public sealed partial class ByteSerializer : SharedByteSerializer
 {
@@ -9,13 +9,25 @@ public sealed partial class ByteSerializer : SharedByteSerializer
     /// Instantiates a new instance of the <see cref="ByteSerializer"/> class.
     /// </summary>
     public ByteSerializer() :
-        base()
+        base(__SerializationStrategies.Integrated)
     { }
     /// <summary>
     /// Instantiates a new instance of the <see cref="ByteSerializer"/> class.
     /// </summary>
-    public ByteSerializer([DisallowNull] IReadOnlyDictionary<Type, ISerializationStrategy<Byte[]>> strategies) :
-        base(strategies)
+    public ByteSerializer([DisallowNull] IEnumerable<KeyValuePair<Type, ISerializationStrategy<Byte[]>>> strategies) :
+        base(strategies: strategies)
+    { }
+    /// <summary>
+    /// Instantiates a new instance of the <see cref="ByteSerializer"/> class.
+    /// </summary>
+    public ByteSerializer([DisallowNull] IEnumerable<(Type, ISerializationStrategy<Byte[]>)> strategies) :
+        base(strategies: strategies)
+    { }
+    /// <summary>
+    /// Instantiates a new instance of the <see cref="ByteSerializer"/> class.
+    /// </summary>
+    public ByteSerializer([DisallowNull] IEnumerable<Tuple<Type, ISerializationStrategy<Byte[]>>> strategies) :
+        base(strategies: strategies)
     { }
 }
 
@@ -26,43 +38,43 @@ partial class ByteSerializer : IUnboundSerializer
     /// <exception cref="ArgumentNullException"/>
     /// <exception cref="InvalidOperationException"/>
     public UInt64 Serialize<TAny>([DisallowNull] Stream stream,
-                                  [DisallowNull] TAny graph,
-                                  [DisallowNull] Action<TAny, SerializationInfo> getSerializationData) =>
-        this.Serialize(stream,
-                       graph,
-                       getSerializationData,
-                       -1,
-                       SerializationFinishAction.None);
+                                  [AllowNull] TAny? graph,
+                                  [DisallowNull] Action<TAny?, ISerializationInfoAdder> getSerializationData) =>
+        this.Serialize(stream: stream,
+                       graph: graph,
+                       getSerializationData: getSerializationData,
+                       offset: -1,
+                       actionAfter: SerializationFinishAction.None);
     /// <inheritdoc/>
     /// <exception cref="ArgumentNullException"/>
     /// <exception cref="InvalidOperationException"/>
     public UInt64 Serialize<TAny>([DisallowNull] Stream stream,
-                                  [DisallowNull] TAny graph,
-                                  [DisallowNull] Action<TAny, SerializationInfo> getSerializationData,
+                                  [AllowNull] TAny? graph,
+                                  [DisallowNull] Action<TAny?, ISerializationInfoAdder> getSerializationData,
                                   in Int64 offset) =>
-        this.Serialize(stream,
-                       graph,
-                       getSerializationData,
-                       offset,
-                       SerializationFinishAction.None);
+        this.Serialize(stream: stream,
+                       graph: graph,
+                       getSerializationData: getSerializationData,
+                       offset: offset,
+                       actionAfter: SerializationFinishAction.None);
     /// <inheritdoc/>
     /// <exception cref="ArgumentNullException"/>
     /// <exception cref="InvalidOperationException"/>
     public UInt64 Serialize<TAny>([DisallowNull] Stream stream,
-                                  [DisallowNull] TAny graph,
-                                  [DisallowNull] Action<TAny, SerializationInfo> getSerializationData,
+                                  [AllowNull] TAny? graph,
+                                  [DisallowNull] Action<TAny?, ISerializationInfoAdder> getSerializationData,
                                   in SerializationFinishAction actionAfter) =>
-        this.Serialize(stream,
-                       graph,
-                       getSerializationData,
-                       -1,
-                       actionAfter);
+        this.Serialize(stream: stream,
+                       graph: graph,
+                       getSerializationData: getSerializationData,
+                       offset: -1,
+                       actionAfter: actionAfter);
     /// <inheritdoc/>
     /// <exception cref="ArgumentNullException"/>
     /// <exception cref="InvalidOperationException"/>
     public UInt64 Serialize<TAny>([DisallowNull] Stream stream,
-                                  [DisallowNull] TAny graph,
-                                  [DisallowNull] Action<TAny, SerializationInfo> getSerializationData,
+                                  [AllowNull] TAny? graph,
+                                  [DisallowNull] Action<TAny?, ISerializationInfoAdder> getSerializationData,
                                   in Int64 offset,
                                   in SerializationFinishAction actionAfter)
     {
@@ -71,28 +83,24 @@ partial class ByteSerializer : IUnboundSerializer
         ExceptionHelpers.ThrowIfArgumentNull(getSerializationData);
         if (!stream.CanWrite)
         {
-            throw new InvalidOperationException(STREAM_DOES_NOT_SUPPORT_WRITING);
+            throw new InvalidOperationException(message: STREAM_DOES_NOT_SUPPORT_WRITING);
         }
         if (offset > -1 &&
             !stream.CanSeek)
         {
-            throw new InvalidOperationException(STREAM_DOES_NOT_SUPPORT_SEEKING);
+            throw new InvalidOperationException(message: STREAM_DOES_NOT_SUPPORT_SEEKING);
         }
 
         if (offset > -1)
         {
-            stream.Seek(offset,
-                        SeekOrigin.Begin);
+            stream.Seek(offset: offset,
+                        origin: SeekOrigin.Begin);
         }
 
-#nullable disable
-        __Header header = new(graph.GetType());
-        SerializationInfo info = SerializationInfo.Create(graph,
-                                                          getSerializationData);
-        UInt64 result = this.SerializeWithInfo(stream,
-                                               info,
-                                               header);
-#nullable enable
+        ISerializationInfoAdder info = SerializationInfoBuilder.CreateFrom(from: graph,
+                                                                           write: getSerializationData);
+        UInt64 result = this.SerializeWithInfo(stream: stream,
+                                               info: info);
 
         if (actionAfter.HasFlag(SerializationFinishAction.MoveToBeginning))
         {
@@ -116,87 +124,87 @@ partial class ByteSerializer : IUnboundSerializer
 
     /// <inheritdoc/>
     public Boolean TrySerialize<TAny>([DisallowNull] Stream stream,
-                                      [DisallowNull] TAny graph,
-                                      [DisallowNull] Action<TAny, SerializationInfo> getSerializationData) =>
-        this.TrySerialize(stream,
-                          graph,
-                          getSerializationData,
-                          -1,
-                          out UInt64 _,
-                          SerializationFinishAction.None);
+                                      [AllowNull] TAny? graph,
+                                      [DisallowNull] Action<TAny?, ISerializationInfoAdder> getSerializationData) =>
+        this.TrySerialize(stream: stream,
+                          graph: graph,
+                          getSerializationData : getSerializationData,
+                          offset: -1,
+                          written: out UInt64 _,
+                          actionAfter: SerializationFinishAction.None);
     /// <inheritdoc/>
     public Boolean TrySerialize<TAny>([DisallowNull] Stream stream,
-                                      [DisallowNull] TAny graph,
-                                      [DisallowNull] Action<TAny, SerializationInfo> getSerializationData,
+                                      [AllowNull] TAny? graph,
+                                      [DisallowNull] Action<TAny?, ISerializationInfoAdder> getSerializationData,
                                       in Int64 offset) =>
-        this.TrySerialize(stream,
-                          graph,
-                          getSerializationData,
-                          offset,
-                          out UInt64 _,
-                          SerializationFinishAction.None);
+        this.TrySerialize(stream: stream,
+                          graph: graph,
+                          getSerializationData: getSerializationData,
+                          offset: offset,
+                          written: out UInt64 _,
+                          actionAfter: SerializationFinishAction.None);
     /// <inheritdoc/>
     public Boolean TrySerialize<TAny>([DisallowNull] Stream stream,
-                                      [DisallowNull] TAny graph,
-                                      [DisallowNull] Action<TAny, SerializationInfo> getSerializationData,
+                                      [AllowNull] TAny? graph,
+                                      [DisallowNull] Action<TAny?, ISerializationInfoAdder> getSerializationData,
                                       out UInt64 written) =>
-        this.TrySerialize(stream,
-                          graph,
-                          getSerializationData,
-                          -1,
-                          out written,
-                          SerializationFinishAction.None);
+        this.TrySerialize(stream: stream,
+                          graph: graph,
+                          getSerializationData: getSerializationData,
+                          offset: -1,
+                          written: out written,
+                          actionAfter: SerializationFinishAction.None);
     /// <inheritdoc/>
     public Boolean TrySerialize<TAny>([DisallowNull] Stream stream,
-                                      [DisallowNull] TAny graph,
-                                      [DisallowNull] Action<TAny, SerializationInfo> getSerializationData,
+                                      [AllowNull] TAny? graph,
+                                      [DisallowNull] Action<TAny?, ISerializationInfoAdder> getSerializationData,
                                       in Int64 offset,
                                       out UInt64 written) =>
-        this.TrySerialize(stream,
-                          graph,
-                          getSerializationData,
-                          offset,
-                          out written,
-                          SerializationFinishAction.None);
+        this.TrySerialize(stream: stream,
+                          graph: graph,
+                          getSerializationData: getSerializationData,
+                          offset: offset,
+                          written: out written,
+                          actionAfter: SerializationFinishAction.None);
     /// <inheritdoc/>
     public Boolean TrySerialize<TAny>([DisallowNull] Stream stream,
-                                      [DisallowNull] TAny graph,
-                                      [DisallowNull] Action<TAny, SerializationInfo> getSerializationData,
+                                      [AllowNull] TAny? graph,
+                                      [DisallowNull] Action<TAny?, ISerializationInfoAdder> getSerializationData,
                                       in SerializationFinishAction actionAfter) =>
-        this.TrySerialize(stream,
-                          graph,
-                          getSerializationData,
-                          -1,
-                          out UInt64 _,
-                          actionAfter);
+        this.TrySerialize(stream: stream,
+                          graph: graph,
+                          getSerializationData: getSerializationData,
+                          offset: -1,
+                          written: out UInt64 _,
+                          actionAfter: actionAfter);
     /// <inheritdoc/>
     public Boolean TrySerialize<TAny>([DisallowNull] Stream stream,
-                                      [DisallowNull] TAny graph,
-                                      [DisallowNull] Action<TAny, SerializationInfo> getSerializationData,
+                                      [AllowNull] TAny? graph,
+                                      [DisallowNull] Action<TAny?, ISerializationInfoAdder> getSerializationData,
                                       in Int64 offset,
                                       in SerializationFinishAction actionAfter) =>
-        this.TrySerialize(stream,
-                          graph,
-                          getSerializationData,
-                          offset,
-                          out UInt64 _,
-                          actionAfter);
+        this.TrySerialize(stream: stream,
+                          graph: graph,
+                          getSerializationData: getSerializationData,
+                          offset: offset,
+                          written: out UInt64 _,
+                          actionAfter: actionAfter);
     /// <inheritdoc/>
     public Boolean TrySerialize<TAny>([DisallowNull] Stream stream,
-                                      [DisallowNull] TAny graph,
-                                      [DisallowNull] Action<TAny, SerializationInfo> getSerializationData,
+                                      [AllowNull] TAny? graph,
+                                      [DisallowNull] Action<TAny?, ISerializationInfoAdder> getSerializationData,
                                       out UInt64 written,
                                       in SerializationFinishAction actionAfter) =>
-        this.TrySerialize(stream,
-                          graph,
-                          getSerializationData,
-                          -1,
-                          out written,
-                          actionAfter);
+        this.TrySerialize(stream: stream,
+                          graph: graph,
+                          getSerializationData: getSerializationData,
+                          offset: -1,
+                          written: out written,
+                          actionAfter: actionAfter);
     /// <inheritdoc/>
     public Boolean TrySerialize<TAny>([DisallowNull] Stream stream,
-                                      [DisallowNull] TAny graph,
-                                      [DisallowNull] Action<TAny, SerializationInfo> getSerializationData,
+                                      [AllowNull] TAny? graph,
+                                      [DisallowNull] Action<TAny?, ISerializationInfoAdder> getSerializationData,
                                       in Int64 offset,
                                       out UInt64 written,
                                       in SerializationFinishAction actionAfter)
@@ -205,8 +213,8 @@ partial class ByteSerializer : IUnboundSerializer
             graph is null ||
             getSerializationData is null ||
             !stream.CanWrite ||
-            (offset > -1 &&
-            !stream.CanSeek))
+            offset > -1 &&
+            !stream.CanSeek)
         {
             written = 0;
             return false;
@@ -214,18 +222,14 @@ partial class ByteSerializer : IUnboundSerializer
 
         if (offset > -1)
         {
-            stream.Seek(offset,
-                        SeekOrigin.Begin);
+            stream.Seek(offset: offset,
+                        origin: SeekOrigin.Begin);
         }
 
-#nullable disable
-        __Header header = new(graph.GetType());
-        SerializationInfo info = SerializationInfo.Create(graph,
-                                                          getSerializationData);
-        written = this.SerializeWithInfo(stream,
-                                         info,
-                                         header);
-#nullable enable
+        ISerializationInfoAdder info = SerializationInfoBuilder.CreateFrom(from: graph,
+                                                                           write: getSerializationData);
+        written = this.SerializeWithInfo(stream: stream,
+                                         info: info);
 
         if (actionAfter.HasFlag(SerializationFinishAction.MoveToBeginning))
         {
@@ -250,124 +254,120 @@ partial class ByteSerializer : IUnboundSerializer
     /// <inheritdoc/>
     /// <exception cref="ArgumentNullException"/>
     /// <exception cref="InvalidOperationException"/>
-    [return: NotNull]
-    public TAny Deserialize<TAny>([DisallowNull] Stream stream,
-                                  [DisallowNull] Func<SerializationInfo, TAny> constructFromSerializationData) =>
-        this.Deserialize(stream,
-                         constructFromSerializationData,
-                         -1,
-                         out UInt64 _,
-                         SerializationFinishAction.None);
+    [return: MaybeNull]
+    public TAny? Deserialize<TAny>([DisallowNull] Stream stream,
+                                   [DisallowNull] Func<ISerializationInfoGetter, TAny?> constructFromSerializationData) =>
+        this.Deserialize(stream: stream,
+                         constructFromSerializationData: constructFromSerializationData,
+                         offset: -1,
+                         read: out UInt64 _,
+                         actionAfter: SerializationFinishAction.None);
     /// <inheritdoc/>
     /// <exception cref="ArgumentNullException"/>
     /// <exception cref="InvalidOperationException"/>
-    [return: NotNull]
-    public TAny Deserialize<TAny>([DisallowNull] Stream stream,
-                                  [DisallowNull] Func<SerializationInfo, TAny> constructFromSerializationData,
-                                  in Int64 offset) =>
-        this.Deserialize(stream,
-                         constructFromSerializationData,
-                         offset,
-                         out UInt64 _,
-                         SerializationFinishAction.None);
+    [return: MaybeNull]
+    public TAny? Deserialize<TAny>([DisallowNull] Stream stream,
+                                   [DisallowNull] Func<ISerializationInfoGetter, TAny?> constructFromSerializationData,
+                                   in Int64 offset) =>
+        this.Deserialize(stream: stream,
+                         constructFromSerializationData: constructFromSerializationData,
+                         offset: offset,
+                         read: out UInt64 _,
+                         actionAfter: SerializationFinishAction.None);
     /// <inheritdoc/>
     /// <exception cref="ArgumentNullException"/>
     /// <exception cref="InvalidOperationException"/>
-    [return: NotNull]
-    public TAny Deserialize<TAny>([DisallowNull] Stream stream,
-                                  [DisallowNull] Func<SerializationInfo, TAny> constructFromSerializationData,
-                                  out UInt64 read) =>
-        this.Deserialize(stream,
-                         constructFromSerializationData,
-                         -1,
-                         out read,
-                         SerializationFinishAction.None);
+    [return: MaybeNull]
+    public TAny? Deserialize<TAny>([DisallowNull] Stream stream,
+                                   [DisallowNull] Func<ISerializationInfoGetter, TAny?> constructFromSerializationData,
+                                   out UInt64 read) =>
+        this.Deserialize(stream: stream,
+                         constructFromSerializationData: constructFromSerializationData,
+                         offset: -1,
+                         read: out read,
+                         actionAfter: SerializationFinishAction.None);
     /// <inheritdoc/>
     /// <exception cref="ArgumentNullException"/>
     /// <exception cref="InvalidOperationException"/>
-    [return: NotNull]
-    public TAny Deserialize<TAny>([DisallowNull] Stream stream,
-                                  [DisallowNull] Func<SerializationInfo, TAny> constructFromSerializationData,
-                                  in Int64 offset,
-                                  out UInt64 read) =>
-        this.Deserialize(stream,
-                         constructFromSerializationData,
-                         offset,
-                         out read,
-                         SerializationFinishAction.None);
+    [return: MaybeNull]
+    public TAny? Deserialize<TAny>([DisallowNull] Stream stream,
+                                   [DisallowNull] Func<ISerializationInfoGetter, TAny?> constructFromSerializationData,
+                                   in Int64 offset,
+                                   out UInt64 read) =>
+        this.Deserialize(stream: stream,
+                         constructFromSerializationData: constructFromSerializationData,
+                         offset: offset,
+                         read: out read,
+                         actionAfter: SerializationFinishAction.None);
     /// <inheritdoc/>
     /// <exception cref="ArgumentNullException"/>
     /// <exception cref="InvalidOperationException"/>
-    [return: NotNull]
-    public TAny Deserialize<TAny>([DisallowNull] Stream stream,
-                                  [DisallowNull] Func<SerializationInfo, TAny> constructFromSerializationData,
-                                  in SerializationFinishAction actionAfter) =>
-        this.Deserialize(stream,
-                         constructFromSerializationData,
-                         -1,
-                         out UInt64 _,
-                         actionAfter);
+    [return: MaybeNull]
+    public TAny? Deserialize<TAny>([DisallowNull] Stream stream,
+                                   [DisallowNull] Func<ISerializationInfoGetter, TAny?> constructFromSerializationData,
+                                   in SerializationFinishAction actionAfter) =>
+        this.Deserialize(stream: stream,
+                         constructFromSerializationData: constructFromSerializationData,
+                         offset: -1,
+                         read: out UInt64 _,
+                         actionAfter: actionAfter);
     /// <inheritdoc/>
     /// <exception cref="ArgumentNullException"/>
     /// <exception cref="InvalidOperationException"/>
-    [return: NotNull]
-    public TAny Deserialize<TAny>([DisallowNull] Stream stream,
-                                  [DisallowNull] Func<SerializationInfo, TAny> constructFromSerializationData,
-                                  in Int64 offset,
-                                  in SerializationFinishAction actionAfter) =>
-        this.Deserialize(stream,
-                         constructFromSerializationData,
-                         offset,
-                         out UInt64 _,
-                         actionAfter);
+    [return: MaybeNull]
+    public TAny? Deserialize<TAny>([DisallowNull] Stream stream,
+                                   [DisallowNull] Func<ISerializationInfoGetter, TAny?> constructFromSerializationData,
+                                   in Int64 offset,
+                                   in SerializationFinishAction actionAfter) =>
+        this.Deserialize(stream: stream,
+                         constructFromSerializationData: constructFromSerializationData,
+                         offset: offset,
+                         read: out UInt64 _,
+                         actionAfter: actionAfter);
     /// <inheritdoc/>
     /// <exception cref="ArgumentNullException"/>
     /// <exception cref="InvalidOperationException"/>
-    [return: NotNull]
-    public TAny Deserialize<TAny>([DisallowNull] Stream stream,
-                                  [DisallowNull] Func<SerializationInfo, TAny> constructFromSerializationData,
-                                  out UInt64 read,
-                                  in SerializationFinishAction actionAfter) =>
-        this.Deserialize(stream,
-                         constructFromSerializationData,
-                         -1,
-                         out read,
-                         actionAfter);
+    [return: MaybeNull]
+    public TAny? Deserialize<TAny>([DisallowNull] Stream stream,
+                                   [DisallowNull] Func<ISerializationInfoGetter, TAny?> constructFromSerializationData,
+                                   out UInt64 read,
+                                   in SerializationFinishAction actionAfter) =>
+        this.Deserialize(stream: stream,
+                         constructFromSerializationData: constructFromSerializationData,
+                         offset: -1,
+                         read: out read,
+                         actionAfter: actionAfter);
     /// <inheritdoc/>
     /// <exception cref="ArgumentNullException"/>
     /// <exception cref="InvalidOperationException"/>
-    [return: NotNull]
-    public TAny Deserialize<TAny>([DisallowNull] Stream stream,
-                                  [DisallowNull] Func<SerializationInfo, TAny> constructFromSerializationData,
-                                  in Int64 offset,
-                                  out UInt64 read,
-                                  in SerializationFinishAction actionAfter)
+    [return: MaybeNull]
+    public TAny? Deserialize<TAny>([DisallowNull] Stream stream,
+                                   [DisallowNull] Func<ISerializationInfoGetter, TAny?> constructFromSerializationData,
+                                   in Int64 offset,
+                                   out UInt64 read,
+                                   in SerializationFinishAction actionAfter)
     {
         ExceptionHelpers.ThrowIfArgumentNull(stream);
         ExceptionHelpers.ThrowIfArgumentNull(constructFromSerializationData);
         if (!stream.CanRead)
         {
-            throw new InvalidOperationException(STREAM_DOES_NOT_SUPPORT_READING);
+            throw new InvalidOperationException(message: STREAM_DOES_NOT_SUPPORT_READING);
         }
         if (offset > -1 &&
             !stream.CanSeek)
         {
-            throw new InvalidOperationException(STREAM_DOES_NOT_SUPPORT_SEEKING);
+            throw new InvalidOperationException(message: STREAM_DOES_NOT_SUPPORT_SEEKING);
         }
 
         if (offset > -1)
         {
-            stream.Seek(offset,
-                        SeekOrigin.Begin);
+            stream.Seek(offset: offset,
+                        origin: SeekOrigin.Begin);
         }
 
-        SerializationInfo info = this.DeserializeInternal(stream,
-                                                          out read);
-        TAny result = constructFromSerializationData.Invoke(info);
-        if (result is null)
-        {
-            throw new InvalidOperationException("Object construction delegate is not allowed to return null.");
-        }
+        ISerializationInfoGetter info = this.DeserializeInternal(stream: stream,
+                                                                 read: out read);
+        TAny? result = constructFromSerializationData.Invoke(info);
 
         if (actionAfter.HasFlag(SerializationFinishAction.MoveToBeginning))
         {
@@ -389,99 +389,98 @@ partial class ByteSerializer : IUnboundSerializer
         return result;
     }
 
-#pragma warning disable CS8767
     /// <inheritdoc/>
     public Boolean TryDeserialize<TAny>([DisallowNull] Stream stream,
-                                        [DisallowNull] Func<SerializationInfo, TAny> constructFromSerializationData,
-                                        [NotNullWhen(true)] out TAny? result) =>
-        this.TryDeserialize(stream,
-                            constructFromSerializationData,
-                            -1,
-                            out UInt64 _,
-                            SerializationFinishAction.None,
-                            out result);
+                                        [DisallowNull] Func<ISerializationInfoGetter, TAny?> constructFromSerializationData,
+                                        [AllowNull] out TAny? result) =>
+        this.TryDeserialize(stream: stream,
+                            constructFromSerializationData: constructFromSerializationData,
+                            offset: -1,
+                            read: out UInt64 _,
+                            actionAfter: SerializationFinishAction.None,
+                            result: out result);
     /// <inheritdoc/>
     public Boolean TryDeserialize<TAny>([DisallowNull] Stream stream,
-                                        [DisallowNull] Func<SerializationInfo, TAny> constructFromSerializationData,
+                                        [DisallowNull] Func<ISerializationInfoGetter, TAny?> constructFromSerializationData,
                                         in Int64 offset,
-                                        [NotNullWhen(true)] out TAny? result) =>
-        this.TryDeserialize(stream,
-                            constructFromSerializationData,
-                            offset,
-                            out UInt64 _,
-                            SerializationFinishAction.None,
-                            out result);
+                                        [AllowNull] out TAny? result) =>
+        this.TryDeserialize(stream: stream,
+                            constructFromSerializationData: constructFromSerializationData,
+                            offset: offset,
+                            read: out UInt64 _,
+                            actionAfter: SerializationFinishAction.None,
+                            result: out result);
     /// <inheritdoc/>
     public Boolean TryDeserialize<TAny>([DisallowNull] Stream stream,
-                                        [DisallowNull] Func<SerializationInfo, TAny> constructFromSerializationData,
+                                        [DisallowNull] Func<ISerializationInfoGetter, TAny?> constructFromSerializationData,
                                         out UInt64 read,
-                                        [NotNullWhen(true)] out TAny? result) =>
-        this.TryDeserialize(stream,
-                            constructFromSerializationData,
-                            -1,
-                            out read,
-                            SerializationFinishAction.None,
-                            out result);
+                                        [AllowNull] out TAny? result) =>
+        this.TryDeserialize(stream: stream,
+                            constructFromSerializationData: constructFromSerializationData,
+                            offset: -1,
+                            read: out read,
+                            actionAfter: SerializationFinishAction.None,
+                            result: out result);
     /// <inheritdoc/>
     public Boolean TryDeserialize<TAny>([DisallowNull] Stream stream,
-                                        [DisallowNull] Func<SerializationInfo, TAny> constructFromSerializationData,
-                                        in Int64 offset,
-                                        out UInt64 read,
-                                        [NotNullWhen(true)] out TAny? result) =>
-        this.TryDeserialize(stream,
-                            constructFromSerializationData,
-                            offset,
-                            out read,
-                            SerializationFinishAction.None,
-                            out result);
-    /// <inheritdoc/>
-    public Boolean TryDeserialize<TAny>([DisallowNull] Stream stream,
-                                        [DisallowNull] Func<SerializationInfo, TAny> constructFromSerializationData,
-                                        in SerializationFinishAction actionAfter,
-                                        [NotNullWhen(true)] out TAny? result) =>
-        this.TryDeserialize(stream,
-                            constructFromSerializationData,
-                            -1,
-                            out UInt64 _,
-                            actionAfter,
-                            out result);
-    /// <inheritdoc/>
-    public Boolean TryDeserialize<TAny>([DisallowNull] Stream stream,
-                                        [DisallowNull] Func<SerializationInfo, TAny> constructFromSerializationData,
-                                        in Int64 offset,
-                                        in SerializationFinishAction actionAfter,
-                                        [NotNullWhen(true)] out TAny? result) =>
-        this.TryDeserialize(stream,
-                            constructFromSerializationData,
-                            offset,
-                            out UInt64 _,
-                            actionAfter,
-                            out result);
-    /// <inheritdoc/>
-    public Boolean TryDeserialize<TAny>([DisallowNull] Stream stream,
-                                        [DisallowNull] Func<SerializationInfo, TAny> constructFromSerializationData,
-                                        out UInt64 read,
-                                        in SerializationFinishAction actionAfter,
-                                        [NotNullWhen(true)] out TAny? result) =>
-        this.TryDeserialize(stream,
-                            constructFromSerializationData,
-                            -1,
-                            out read,
-                            actionAfter,
-                            out result);
-    /// <inheritdoc/>
-    public Boolean TryDeserialize<TAny>([DisallowNull] Stream stream,
-                                        [DisallowNull] Func<SerializationInfo, TAny> constructFromSerializationData,
+                                        [DisallowNull] Func<ISerializationInfoGetter, TAny?> constructFromSerializationData,
                                         in Int64 offset,
                                         out UInt64 read,
+                                        [AllowNull] out TAny? result) =>
+        this.TryDeserialize(stream: stream,
+                            constructFromSerializationData: constructFromSerializationData,
+                            offset: offset,
+                            read: out read,
+                            actionAfter: SerializationFinishAction.None,
+                            result: out result);
+    /// <inheritdoc/>
+    public Boolean TryDeserialize<TAny>([DisallowNull] Stream stream,
+                                        [DisallowNull] Func<ISerializationInfoGetter, TAny?> constructFromSerializationData,
                                         in SerializationFinishAction actionAfter,
-                                        [NotNullWhen(true)] out TAny? result)
+                                        [AllowNull] out TAny? result) =>
+        this.TryDeserialize(stream: stream,
+                            constructFromSerializationData: constructFromSerializationData,
+                            offset: -1,
+                            read: out UInt64 _,
+                            actionAfter: actionAfter,
+                            result: out result);
+    /// <inheritdoc/>
+    public Boolean TryDeserialize<TAny>([DisallowNull] Stream stream,
+                                        [DisallowNull] Func<ISerializationInfoGetter, TAny?> constructFromSerializationData,
+                                        in Int64 offset,
+                                        in SerializationFinishAction actionAfter,
+                                        [AllowNull] out TAny? result) =>
+        this.TryDeserialize(stream: stream,
+                            constructFromSerializationData: constructFromSerializationData,
+                            offset: offset,
+                            read: out UInt64 _,
+                            actionAfter: actionAfter,
+                            result: out result);
+    /// <inheritdoc/>
+    public Boolean TryDeserialize<TAny>([DisallowNull] Stream stream,
+                                        [DisallowNull] Func<ISerializationInfoGetter, TAny?> constructFromSerializationData,
+                                        out UInt64 read,
+                                        in SerializationFinishAction actionAfter,
+                                        [AllowNull] out TAny? result) =>
+        this.TryDeserialize(stream: stream,
+                            constructFromSerializationData: constructFromSerializationData,
+                            offset: -1,
+                            read: out read,
+                            actionAfter: actionAfter,
+                            result: out result);
+    /// <inheritdoc/>
+    public Boolean TryDeserialize<TAny>([DisallowNull] Stream stream,
+                                        [DisallowNull] Func<ISerializationInfoGetter, TAny?> constructFromSerializationData,
+                                        in Int64 offset,
+                                        out UInt64 read,
+                                        in SerializationFinishAction actionAfter,
+                                        [AllowNull] out TAny? result)
     {
         if (stream is null ||
             constructFromSerializationData is null ||
             !stream.CanRead ||
-            (offset > -1 &&
-            !stream.CanSeek))
+            offset > -1 &&
+            !stream.CanSeek)
         {
             read = 0;
             result = default;
@@ -490,12 +489,12 @@ partial class ByteSerializer : IUnboundSerializer
 
         if (offset > -1)
         {
-            stream.Seek(offset,
-                        SeekOrigin.Begin);
+            stream.Seek(offset: offset,
+                        origin: SeekOrigin.Begin);
         }
 
-        SerializationInfo info = this.DeserializeInternal(stream,
-                                                          out read);
+        ISerializationInfoGetter info = this.DeserializeInternal(stream: stream,
+                                                                 read: out read);
         result = constructFromSerializationData.Invoke(info);
 
         if (actionAfter.HasFlag(SerializationFinishAction.MoveToBeginning))
@@ -515,6 +514,6 @@ partial class ByteSerializer : IUnboundSerializer
             stream.Dispose();
         }
 
-        return result is not null;
+        return read > 0;
     }
 }
