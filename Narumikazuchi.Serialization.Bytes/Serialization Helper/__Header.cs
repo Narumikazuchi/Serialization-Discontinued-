@@ -13,6 +13,16 @@ internal class __Header
         this.Typename = info.Type.AssemblyQualifiedName!;
         this.IsNull = info.IsNull;
     }
+    public __Header(Type type,
+                    Object? value)
+    {
+        ExceptionHelpers.ThrowIfArgumentNull(type);
+        ExceptionHelpers.ThrowIfNullOrEmpty(type.AssemblyQualifiedName,
+                                            nameof(type));
+
+        this.Typename = type.AssemblyQualifiedName!;
+        this.IsNull = value is null;
+    }
 
     public static __Header FromStream(Stream source,
                                       Int64 size,

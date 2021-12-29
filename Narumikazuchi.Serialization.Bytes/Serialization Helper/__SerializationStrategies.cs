@@ -19,6 +19,9 @@ internal static class __SerializationStrategies
         { typeof(System.UInt64),    UInt64.Default },
         { typeof(System.UIntPtr),   UIntPtr.Default },
         { typeof(System.DateTime),  DateTime.Default },
+        { typeof(System.DateOnly),  DateOnly.Default },
+        { typeof(System.TimeSpan),  TimeSpan.Default },
+        { typeof(System.TimeOnly),  TimeOnly.Default },
         { typeof(System.Guid),      Guid.Default },
         { typeof(System.Half),      Half.Default },
         { typeof(System.String),    String.Default }
@@ -311,6 +314,77 @@ internal static class __SerializationStrategies
         public static ref DateTime Default => ref _default;
 
         private static DateTime _default;
+    }
+
+    public readonly struct DateOnly : ISerializationStrategy<System.Byte[], System.DateOnly>
+    {
+        public System.Byte[] Serialize(System.DateOnly input) =>
+            BitConverter.GetBytes(input.Year)
+                        .Union(BitConverter.GetBytes(input.Month))
+                        .Union(BitConverter.GetBytes(input.Day))
+                        .ToArray();
+
+        public System.DateOnly Deserialize(System.Byte[] input)
+        {
+            System.Int32 day = BitConverter.ToInt32(input, 0);
+            System.Int32 month = BitConverter.ToInt32(input, 4);
+            System.Int32 year = BitConverter.ToInt32(input, 8);
+            return new(year, month, day);
+        }
+
+        System.Byte[] ISerializationStrategy<System.Byte[]>.Serialize(Object? input) =>
+            this.Serialize((System.DateOnly)input);
+
+        Object? ISerializationStrategy<System.Byte[]>.Deserialize(System.Byte[] input) =>
+            this.Deserialize(input);
+
+        public static ref DateOnly Default => ref _default;
+
+        private static DateOnly _default;
+    }
+
+    public readonly struct TimeSpan : ISerializationStrategy<System.Byte[], System.TimeSpan>
+    {
+        public System.Byte[] Serialize(System.TimeSpan input) =>
+            BitConverter.GetBytes(input.Ticks);
+
+        public System.TimeSpan Deserialize(System.Byte[] input)
+        {
+            System.Int64 ticks = BitConverter.ToInt64(input, 0);
+            return new(ticks);
+        }
+
+        System.Byte[] ISerializationStrategy<System.Byte[]>.Serialize(Object? input) =>
+            this.Serialize((System.TimeSpan)input);
+
+        Object? ISerializationStrategy<System.Byte[]>.Deserialize(System.Byte[] input) =>
+            this.Deserialize(input);
+
+        public static ref TimeSpan Default => ref _default;
+
+        private static TimeSpan _default;
+    }
+
+    public readonly struct TimeOnly : ISerializationStrategy<System.Byte[], System.TimeOnly>
+    {
+        public System.Byte[] Serialize(System.TimeOnly input) =>
+            BitConverter.GetBytes(input.Ticks);
+
+        public System.TimeOnly Deserialize(System.Byte[] input)
+        {
+            System.Int64 ticks = BitConverter.ToInt64(input, 0);
+            return new(ticks);
+        }
+
+        System.Byte[] ISerializationStrategy<System.Byte[]>.Serialize(Object? input) =>
+            this.Serialize((System.TimeOnly)input);
+
+        Object? ISerializationStrategy<System.Byte[]>.Deserialize(System.Byte[] input) =>
+            this.Deserialize(input);
+
+        public static ref TimeOnly Default => ref _default;
+
+        private static TimeOnly _default;
     }
 
     public readonly struct Guid : ISerializationStrategy<System.Byte[], System.Guid>
