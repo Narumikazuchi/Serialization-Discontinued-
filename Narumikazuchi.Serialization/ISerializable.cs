@@ -4,7 +4,7 @@
 /// Represents an object that can be serialized.
 /// </summary>
 /// <remarks>
-/// If you plan to also deserialize a type you should use <see cref="ISerializable{TSelf}"/> instead, since this interface does not implement a way to deserialize.<para/>
+/// If you plan to also deserialize a type you should use <see cref="IDeserializable{TSelf}"/> instead, since this interface does not implement a way to deserialize.<para/>
 /// If you write a serializer for types that implement this interface, consider using <see langword="lock"/> on the object during the serialization process to prevent changes from other threads until the state retrieval finishes.
 /// </remarks>
 public interface ISerializable
@@ -15,19 +15,4 @@ public interface ISerializable
     /// <param name="info">The object, which will hold the information to serialize.</param>
     [Pure]
     public void GetSerializationData([DisallowNull] ISerializationInfoAdder info);
-}
-
-/// <summary>
-/// Represents an object that can be serialized and deserialized.
-/// </summary>
-public interface ISerializable<TSelf> : ISerializable
-    where TSelf : ISerializable<TSelf>
-{
-    /// <summary>
-    /// Constructs an object of type <typeparamref name="TSelf"/> from the corresponding serialization data.
-    /// </summary>
-    /// <param name="info">The object, which holds the deserialized information.</param>
-    /// <returns>The object of type <typeparamref name="TSelf"/> containing the state that is stored in the serialization data</returns>
-    [return: NotNull]
-    public static abstract TSelf ConstructFromSerializationData([DisallowNull] ISerializationInfoGetter info);
 }
