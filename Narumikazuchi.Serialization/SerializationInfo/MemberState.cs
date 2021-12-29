@@ -19,7 +19,8 @@ public sealed partial class MemberState
     /// <summary>
     /// Gets the value of this member in the object.
     /// </summary>
-    public Object? Value => this._value;
+    public Object? Value => 
+        this._value;
     /// <summary>
     /// Gets the member type.
     /// </summary>

@@ -14,7 +14,7 @@ public interface ISerializable
     /// </summary>
     /// <param name="info">The object, which will hold the information to serialize.</param>
     [Pure]
-    public void GetSerializationData([DisallowNull] SerializationInfo info);
+    public void GetSerializationData([DisallowNull] ISerializationInfoAdder info);
 }
 
 /// <summary>
@@ -29,5 +29,5 @@ public interface ISerializable<TSelf> : ISerializable
     /// <param name="info">The object, which holds the deserialized information.</param>
     /// <returns>The object of type <typeparamref name="TSelf"/> containing the state that is stored in the serialization data</returns>
     [return: NotNull]
-    public static abstract TSelf ConstructFromSerializationData([DisallowNull] SerializationInfo info);
+    public static abstract TSelf ConstructFromSerializationData([DisallowNull] ISerializationInfoGetter info);
 }

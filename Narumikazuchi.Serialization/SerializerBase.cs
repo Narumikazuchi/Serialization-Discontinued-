@@ -25,8 +25,8 @@ public abstract partial class SerializerBase<T>
             this._strategies[forType] = strategy;
             return;
         }
-        this._strategies.Add(forType,
-                             strategy);
+        this._strategies.Add(key: forType,
+                             value: strategy);
     }
 }
 
@@ -41,58 +41,95 @@ partial class SerializerBase<T>
     /// <summary>
     /// Instantiates a new instance of the <see cref="SerializerBase{T}"/> class with the specified strategies.
     /// </summary>
-    protected SerializerBase([DisallowNull] IReadOnlyDictionary<Type, ISerializationStrategy<T>> strategies)
+    protected SerializerBase([DisallowNull] IEnumerable<KeyValuePair<Type, ISerializationStrategy<T>>> strategies)
     {
         ExceptionHelpers.ThrowIfArgumentNull(strategies);
-        this._strategies = new(strategies);
+        this._strategies = new Dictionary<Type, ISerializationStrategy<T>>(collection: strategies);
+    }
+    /// <summary>
+    /// Instantiates a new instance of the <see cref="SerializerBase{T}"/> class with the specified strategies.
+    /// </summary>
+    protected SerializerBase([DisallowNull] IEnumerable<(Type, ISerializationStrategy<T>)> strategies)
+    {
+        ExceptionHelpers.ThrowIfArgumentNull(strategies);
+        this._strategies = new Dictionary<Type, ISerializationStrategy<T>>();
+        foreach ((Type, ISerializationStrategy<T>) tuple in strategies)
+        {
+            this._strategies
+                .Add(key: tuple.Item1,
+                     value: tuple.Item2);
+        }
+    }
+    /// <summary>
+    /// Instantiates a new instance of the <see cref="SerializerBase{T}"/> class with the specified strategies.
+    /// </summary>
+    protected SerializerBase([DisallowNull] IEnumerable<Tuple<Type, ISerializationStrategy<T>>> strategies)
+    {
+        ExceptionHelpers.ThrowIfArgumentNull(strategies);
+        this._strategies = new Dictionary<Type, ISerializationStrategy<T>>();
+        foreach (Tuple<Type, ISerializationStrategy<T>> tuple in strategies)
+        {
+            this._strategies
+                .Add(key: tuple.Item1,
+                     value: tuple.Item2);
+        }
     }
 
     /// <summary>
     /// Tries to create an object from the specified serialization data.
-    /// This method is designed for classes that are marked with the <see cref="CustomSerializableAttribute"/>.
     /// </summary>
     /// <param name="info">The serialization data for the object to create.</param>
     /// <returns>The object specified in the serialization data</returns>
     /// <exception cref="MissingMemberException"/>
     [return: NotNull]
-    protected static Object CreateObject([DisallowNull] SerializationInfo info)
+    protected static Object CreateObject([DisallowNull] ISerializationInfoGetter info)
     {
         ExceptionHelpers.ThrowIfArgumentNull(info);
-#nullable disable
-        ConstructorInfo ctor = info.Type.GetConstructor(Type.EmptyTypes);
+        ConstructorInfo? ctor = info.Type
+                                    .GetConstructor(types: Type.EmptyTypes);
+        if (ctor is null)
+        {
+            throw new MissingMemberException(className: info.Type
+                                                            .FullName,
+                                             memberName: "ctor");
+        }
+
         Object result = ctor.Invoke(Array.Empty<Object>());
         foreach (String member in info.Members)
         {
-            PropertyInfo property = info.Type.GetProperty(member,
-                                                          BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+            PropertyInfo? property = info.Type
+                                         .GetProperty(name: member,
+                                                      bindingAttr: BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
             if (property is not null)
             {
-                property.SetValue(result,
-                                  info.Get<Object>(member));
+                property.SetValue(obj: result,
+                                  value: info.Get<Object>(member));
                 continue;
             }
-            FieldInfo field = info.Type.GetField(member,
-                                                 BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+            FieldInfo? field = info.Type
+                                   .GetField(name: member,
+                                             bindingAttr: BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
             if (field is not null)
             {
-                field.SetValue(result,
-                               info.Get<Object>(member));
+                field.SetValue(obj: result,
+                               value: info.Get<Object>(member));
                 continue;
             }
-            // Member not found?
-            throw new MissingMemberException();
+
+            throw new MissingMemberException(className: info.Type.FullName,
+                                             memberName: member);
         }
 
         return result;
-#nullable enable
     }
 
     /// <summary>
     /// Contains the serialization strategies for the various types to serialize.
     /// </summary>
-    protected readonly Dictionary<Type, ISerializationStrategy<T>> _strategies = new();
+    protected readonly IDictionary<Type, ISerializationStrategy<T>> _strategies = new Dictionary<Type, ISerializationStrategy<T>>();
 
-#pragma warning disable
+#pragma warning disable IDE1006
+#pragma warning disable CS1591
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     protected const String STREAM_DOES_NOT_SUPPORT_READING = "The specified stream does not support reading.";
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -107,5 +144,7 @@ partial class SerializerBase<T> : ISerializer
 {
     /// <inheritdoc/>
     [NotNull]
-    public IReadOnlyCollection<Type> RegisteredStrategies => this._strategies.Keys;
+    public IReadOnlyCollection<Type> RegisteredStrategies => 
+        (IReadOnlyCollection<Type>)this._strategies
+                                       .Keys;
 }
