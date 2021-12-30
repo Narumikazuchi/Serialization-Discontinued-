@@ -29,14 +29,6 @@ partial class __ConfigurationInformation : IByteDeserializerTypeConfigurator
         __BuildInformation<TSerializable> result = new();
         return result;
     }
-    IByteDeserializerDefaultStrategyAppender<TSerializable> IByteDeserializerTypeConfigurator.ConfigureForOwnedType<TSerializable>(ISerializationStrategy<Byte[], TSerializable> strategy)
-    {
-        __BuildInformation<TSerializable> result = new();
-        result.Strategies
-              .Add(key: typeof(TSerializable),
-                   value: strategy);
-        return result;
-    }
 }
 
 // IByteSerializerTypeConfigurator
@@ -62,14 +54,6 @@ partial class __ConfigurationInformation : IByteSerializerTypeConfigurator
     IByteSerializerDefaultStrategyAppender<TSerializable> IByteSerializerTypeConfigurator.ConfigureForOwnedType<TSerializable>()
     {
         __BuildInformation<TSerializable> result = new();
-        return result;
-    }
-    IByteSerializerDefaultStrategyAppender<TSerializable> IByteSerializerTypeConfigurator.ConfigureForOwnedType<TSerializable>(ISerializationStrategy<Byte[], TSerializable> strategy)
-    {
-        __BuildInformation<TSerializable> result = new();
-        result.Strategies
-              .Add(key: typeof(TSerializable),
-                   value: strategy);
         return result;
     }
 }
@@ -99,14 +83,6 @@ partial class __ConfigurationInformation : IByteSerializerDeserializerTypeConfig
     IByteSerializerDeserializerDefaultStrategyAppender<TSerializable> IByteSerializerDeserializerTypeConfigurator.ConfigureForOwnedType<TSerializable>()
     {
         __BuildInformation<TSerializable> result = new();
-        return result;
-    }
-    IByteSerializerDeserializerDefaultStrategyAppender<TSerializable> IByteSerializerDeserializerTypeConfigurator.ConfigureForOwnedType<TSerializable>(ISerializationStrategy<Byte[], TSerializable> strategy)
-    {
-        __BuildInformation<TSerializable> result = new();
-        result.Strategies
-              .Add(key: typeof(TSerializable),
-                   value: strategy);
         return result;
     }
 }
