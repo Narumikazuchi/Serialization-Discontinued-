@@ -99,8 +99,54 @@ partial class __BuildInformation<TSerializable> : IByteDeserializerStrategyAppen
 // IByteDeserializerStrategyAppenderOrFinalizer<T>
 partial class __BuildInformation<TSerializable> : IByteDeserializerStrategyAppenderOrFinalizer<TSerializable>
 {
-    IByteDeserializer<TSerializable> IByteDeserializerStrategyAppenderOrFinalizer<TSerializable>.Construct() =>
-        new __ByteSerializer<TSerializable>(this);
+    IByteDeserializer<TSerializable> IByteDeserializerStrategyAppenderOrFinalizer<TSerializable>.Construct()
+    {
+        __ByteSerializer<TSerializable> deserializer;
+        if (__Cache.CreatedDeserializers
+                   .ContainsKey(typeof(TSerializable)))
+        {
+            IList<Object> deserializers = __Cache.CreatedDeserializers[typeof(TSerializable)];
+            for (Int32 i = 0; i < deserializers.Count; i++)
+            {
+                deserializer = (__ByteSerializer<TSerializable>)deserializers[i];
+                if (this._dataGetter != deserializer.DataGetter)
+                {
+                    continue;
+                }
+                if (this._dataSetter != deserializer.DataSetter)
+                {
+                    continue;
+                }
+                Boolean next = false;
+                foreach (KeyValuePair<Type, ISerializationStrategy<Byte[]>> kv in this._strategies)
+                {
+                    if (!deserializer.Strategies
+                                     .Contains(kv))
+                    {
+                        next = true;
+                        break;
+                    }
+                }
+                if (next)
+                {
+                    continue;
+                }
+
+                return deserializer;
+            }
+        }
+        else
+        {
+            __Cache.CreatedDeserializers
+                   .Add(key: typeof(TSerializable),
+                        value: new List<Object>());
+        }
+
+        deserializer = new __ByteSerializer<TSerializable>(this);
+        __Cache.CreatedDeserializers[typeof(TSerializable)]
+               .Add(deserializer);
+        return deserializer;
+    }
 }
 
 // IByteSerializerDefaultStrategyAppender<T>
@@ -132,8 +178,54 @@ partial class __BuildInformation<TSerializable> : IByteSerializerStrategyAppende
 // IByteSerializerStrategyAppenderOrFinalizer<T>
 partial class __BuildInformation<TSerializable> : IByteSerializerStrategyAppenderOrFinalizer<TSerializable>
 {
-    IByteSerializer<TSerializable> IByteSerializerStrategyAppenderOrFinalizer<TSerializable>.Construct() =>
-        new __ByteSerializer<TSerializable>(this);
+    IByteSerializer<TSerializable> IByteSerializerStrategyAppenderOrFinalizer<TSerializable>.Construct()
+    {
+        __ByteSerializer<TSerializable> serializer;
+        if (__Cache.CreatedSerializers
+                   .ContainsKey(typeof(TSerializable)))
+        {
+            IList<Object> deserializers = __Cache.CreatedSerializers[typeof(TSerializable)];
+            for (Int32 i = 0; i < deserializers.Count; i++)
+            {
+                serializer = (__ByteSerializer<TSerializable>)deserializers[i];
+                if (this._dataGetter != serializer.DataGetter)
+                {
+                    continue;
+                }
+                if (this._dataSetter != serializer.DataSetter)
+                {
+                    continue;
+                }
+                Boolean next = false;
+                foreach (KeyValuePair<Type, ISerializationStrategy<Byte[]>> kv in this._strategies)
+                {
+                    if (!serializer.Strategies
+                                   .Contains(kv))
+                    {
+                        next = true;
+                        break;
+                    }
+                }
+                if (next)
+                {
+                    continue;
+                }
+
+                return serializer;
+            }
+        }
+        else
+        {
+            __Cache.CreatedSerializers
+                   .Add(key: typeof(TSerializable),
+                        value: new List<Object>());
+        }
+
+        serializer = new __ByteSerializer<TSerializable>(this);
+        __Cache.CreatedSerializers[typeof(TSerializable)]
+               .Add(serializer);
+        return serializer;
+    }
 }
 
 // IByteSerializerDeserializerDefaultStrategyAppender<T>
@@ -165,6 +257,124 @@ partial class __BuildInformation<TSerializable> : IByteSerializerDeserializerStr
 // IByteSerializerDeserializerStrategyAppenderOrFinalizer<T>
 partial class __BuildInformation<TSerializable> : IByteSerializerDeserializerStrategyAppenderOrFinalizer<TSerializable>
 {
-    IByteSerializerDeserializer<TSerializable> IByteSerializerDeserializerStrategyAppenderOrFinalizer<TSerializable>.Construct() =>
-        new __ByteSerializer<TSerializable>(this);
+    IByteSerializerDeserializer<TSerializable> IByteSerializerDeserializerStrategyAppenderOrFinalizer<TSerializable>.Construct()
+    {
+        __ByteSerializer<TSerializable> serializer;
+        if (__Cache.CreatedSerializers
+                   .ContainsKey(typeof(TSerializable)))
+        {
+            IList<Object> deserializers = __Cache.CreatedSerializers[typeof(TSerializable)];
+            for (Int32 i = 0; i < deserializers.Count; i++)
+            {
+                serializer = (__ByteSerializer<TSerializable>)deserializers[i];
+                if (this._dataGetter != serializer.DataGetter)
+                {
+                    continue;
+                }
+                if (this._dataSetter != serializer.DataSetter)
+                {
+                    continue;
+                }
+                Boolean next = false;
+                foreach (KeyValuePair<Type, ISerializationStrategy<Byte[]>> kv in this._strategies)
+                {
+                    if (!serializer.Strategies
+                                   .Contains(kv))
+                    {
+                        next = true;
+                        break;
+                    }
+                }
+                if (next)
+                {
+                    continue;
+                }
+
+                if (__Cache.CreatedDeserializers
+                           .ContainsKey(typeof(TSerializable)))
+                {
+                    __Cache.CreatedDeserializers[typeof(TSerializable)]
+                           .Add(serializer);
+                }
+                else
+                {
+                    __Cache.CreatedDeserializers
+                           .Add(key: typeof(TSerializable),
+                                value: new List<Object>
+                                    {
+                                        serializer
+                                    });
+                }
+                return serializer;
+            }
+        }
+        else
+        {
+            __Cache.CreatedSerializers
+                   .Add(key: typeof(TSerializable),
+                        value: new List<Object>());
+        }
+
+        if (__Cache.CreatedDeserializers
+                   .ContainsKey(typeof(TSerializable)))
+        {
+            IList<Object> deserializers = __Cache.CreatedDeserializers[typeof(TSerializable)];
+            for (Int32 i = 0; i < deserializers.Count; i++)
+            {
+                serializer = (__ByteSerializer<TSerializable>)deserializers[i];
+                if (this._dataGetter != serializer.DataGetter)
+                {
+                    continue;
+                }
+                if (this._dataSetter != serializer.DataSetter)
+                {
+                    continue;
+                }
+                Boolean next = false;
+                foreach (KeyValuePair<Type, ISerializationStrategy<Byte[]>> kv in this._strategies)
+                {
+                    if (!serializer.Strategies
+                                   .Contains(kv))
+                    {
+                        next = true;
+                        break;
+                    }
+                }
+                if (next)
+                {
+                    continue;
+                }
+
+                if (__Cache.CreatedSerializers
+                           .ContainsKey(typeof(TSerializable)))
+                {
+                    __Cache.CreatedSerializers[typeof(TSerializable)]
+                           .Add(serializer);
+                }
+                else
+                {
+                    __Cache.CreatedSerializers
+                           .Add(key: typeof(TSerializable),
+                                value: new List<Object>
+                                    {
+                                        serializer
+                                    });
+                }
+                return serializer;
+            }
+        }
+        else
+        {
+            __Cache.CreatedDeserializers
+                   .Add(key: typeof(TSerializable),
+                        value: new List<Object>());
+        }
+
+        serializer = new __ByteSerializer<TSerializable>(this);
+        __Cache.CreatedDeserializers[typeof(TSerializable)]
+               .Add(serializer);
+        __Cache.CreatedSerializers[typeof(TSerializable)]
+               .Add(serializer);
+        return serializer;
+    }
 }

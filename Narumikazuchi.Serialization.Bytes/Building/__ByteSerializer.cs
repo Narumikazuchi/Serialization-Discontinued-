@@ -191,9 +191,10 @@ partial class __ByteSerializer<TSerializable> : IByteSerializerDeserializer<TSer
     {
         IByteSerializer<ISerializable> serializer;
 
-        if (_usedSerializers.ContainsKey(data.MemberType))
+        if (__Cache.CreatedOwnedSerializers
+                   .ContainsKey(data.MemberType))
         {
-            serializer = _usedSerializers[data.MemberType];
+            serializer = __Cache.CreatedOwnedSerializers[data.MemberType][0];
         }
         else
         {
@@ -202,8 +203,12 @@ partial class __ByteSerializer<TSerializable> : IByteSerializerDeserializer<TSer
                         .ConfigureForOwnedType<ISerializable>()
                         .UseStrategies(this._strategies)
                         .Construct();
-            _usedSerializers.Add(key: data.MemberType,
-                                 value: serializer);
+            __Cache.CreatedOwnedSerializers
+                   .Add(key: data.MemberType,
+                        value: new List<IByteSerializer<ISerializable>>
+                        {
+                            serializer
+                        });
         }
 
         using MemoryStream temp = new();
@@ -420,9 +425,10 @@ partial class __ByteSerializer<TSerializable> : IByteSerializerDeserializer<TSer
     {
         IByteDeserializer<TResult> deserializer;
 
-        if (_usedDeserializers.ContainsKey(typeof(TResult)))
+        if (__Cache.CreatedDeserializers
+                   .ContainsKey(typeof(TResult)))
         {
-            deserializer = (IByteDeserializer<TResult>)_usedDeserializers[typeof(TResult)];
+            deserializer = (IByteDeserializer<TResult>)__Cache.CreatedDeserializers[typeof(TResult)][0];
         }
         else
         {
@@ -431,8 +437,6 @@ partial class __ByteSerializer<TSerializable> : IByteSerializerDeserializer<TSer
                           .ConfigureForOwnedType<TResult>()
                           .UseStrategies(this._strategies)
                           .Construct();
-            _usedDeserializers.Add(key: typeof(TResult), 
-                                   value: deserializer);
         }
 
         stream.Position = bodyStart + item.Position;
@@ -470,9 +474,16 @@ partial class __ByteSerializer<TSerializable> : IByteSerializerDeserializer<TSer
         return BitConverter.ToInt64(value: data);
     }
 
-    private static readonly IDictionary<Type, Object> _usedDeserializers = new Dictionary<Type, Object>();
+    internal Action<TSerializable, ISerializationInfoAdder>? DataGetter =>
+        this._dataGetter;
+
+    internal Func<ISerializationInfoGetter, TSerializable>? DataSetter =>
+        this._dataSetter;
+
+    internal IDictionary<Type, ISerializationStrategy<Byte[]>> Strategies =>
+        this._strategies;
+
     private static readonly IDictionary<Type, MethodInfo> _usedInterfaceDeserializations = new Dictionary<Type, MethodInfo>();
-    private static readonly IDictionary<Type, IByteSerializer<ISerializable>> _usedSerializers = new Dictionary<Type, IByteSerializer<ISerializable>>();
     private readonly IDictionary<Type, ISerializationStrategy<Byte[]>> _strategies = new Dictionary<Type, ISerializationStrategy<Byte[]>>();
     private readonly Action<TSerializable, ISerializationInfoAdder>? _dataGetter;
     private readonly Func<ISerializationInfoGetter, TSerializable>? _dataSetter;
