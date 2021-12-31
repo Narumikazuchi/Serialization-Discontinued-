@@ -96,6 +96,7 @@ partial class __ByteSerializer<TSerializable> : IByteSerializerDeserializer<TSer
                 Position = body.Position
             };
 
+            Boolean added = false;
             foreach (KeyValuePair<Type, ISerializationStrategy<Byte[]>> kv in this._serializationStrategies)
             {
                 if (kv.Key == member.MemberType)
@@ -106,9 +107,15 @@ partial class __ByteSerializer<TSerializable> : IByteSerializerDeserializer<TSer
                                                strategy: kv.Value);
                     header.Items
                           .Add(item);
-                    continue;
+                    added = true;
+                    break;
                 }
             }
+            if (added)
+            {
+                continue;
+            }
+
             foreach (KeyValuePair<Type, ISerializationDeserializationStrategy<Byte[]>> kv in this._twoWayStrategies)
             {
                 if (kv.Key == member.MemberType)
@@ -119,9 +126,15 @@ partial class __ByteSerializer<TSerializable> : IByteSerializerDeserializer<TSer
                                                strategy: kv.Value);
                     header.Items
                           .Add(item);
-                    continue;
+                    added = true;
+                    break;
                 }
             }
+            if (added)
+            {
+                continue;
+            }
+
             if (member.MemberType
                       .GetInterfaces()
                       .Any(i => i == typeof(ISerializable)))
@@ -154,6 +167,20 @@ partial class __ByteSerializer<TSerializable> : IByteSerializerDeserializer<TSer
                      .Add(key: "Typename",
                           value: member.MemberType
                                        .FullName);
+            List<String> values = new();
+            foreach (KeyValuePair<Type, ISerializationStrategy<Byte[]>> kv in this._serializationStrategies)
+            {
+                String value = $"key: {kv.Key.FullName};";
+                values.Add(value);
+            }
+            foreach (KeyValuePair<Type, ISerializationDeserializationStrategy<Byte[]>> kv in this._twoWayStrategies)
+            {
+                String value = $"key: {kv.Key.FullName};";
+                values.Add(value);
+            }
+            exception.Data
+                     .Add(key: "Strategies",
+                          value: values);
             throw exception;
         }
 
@@ -235,10 +262,27 @@ partial class __ByteSerializer<TSerializable> : IByteSerializerDeserializer<TSer
         }
         else
         {
+            IDictionary<Type, ISerializationStrategy<Byte[]>> strategies;
+
+            if (this._serializationStrategies
+                    .Count > 0)
+            {
+                strategies = this._serializationStrategies;
+            }
+            else
+            {
+                strategies = new Dictionary<Type, ISerializationStrategy<Byte[]>>();
+                foreach (KeyValuePair<Type, ISerializationDeserializationStrategy<Byte[]>> kv in this._twoWayStrategies)
+                {
+                    strategies.Add(key: kv.Key,
+                                   value: kv.Value);
+                }
+            }
+
             serializer = CreateByteSerializer
                         .ForSerialization()
                         .ConfigureForOwnedType<ISerializable>()
-                        .UseStrategies(this._serializationStrategies)
+                        .UseStrategies(strategies)
                         .Construct();
             __Cache.CreatedOwnedSerializers
                    .Add(key: data.MemberType,
@@ -440,7 +484,8 @@ partial class __ByteSerializer<TSerializable> : IByteSerializerDeserializer<TSer
 
         // Attempting through implemented interface
         if (type.GetInterfaces()
-                .Any(i => i.GetGenericTypeDefinition() == typeof(IDeserializable<>)))
+                .Any(i => i.IsGenericType &&
+                          i.GetGenericTypeDefinition() == typeof(IDeserializable<>)))
         {
             MethodInfo method;
             if (_usedInterfaceDeserializations.ContainsKey(type))
@@ -507,11 +552,31 @@ partial class __ByteSerializer<TSerializable> : IByteSerializerDeserializer<TSer
         }
         else
         {
+            __Cache.CreatedDeserializers[typeof(TResult)] = new List<Object>();
+            IDictionary<Type, IDeserializationStrategy<Byte[]>> strategies;
+
+            if (this._deserializationStrategies
+                    .Count > 0)
+            {
+                strategies = this._deserializationStrategies;
+            }
+            else
+            {
+                strategies = new Dictionary<Type, IDeserializationStrategy<Byte[]>>();
+                foreach (KeyValuePair<Type, ISerializationDeserializationStrategy<Byte[]>> kv in this._twoWayStrategies)
+                {
+                    strategies.Add(key: kv.Key,
+                                   value: kv.Value);
+                }
+            }
+
             deserializer = CreateByteSerializer
                           .ForDeserialization()
                           .ConfigureForOwnedType<TResult>()
-                          .UseStrategies(this._deserializationStrategies)
+                          .UseStrategies(strategies)
                           .Construct();
+            __Cache.CreatedDeserializers[typeof(TResult)]
+                   .Add(deserializer);
         }
 
         stream.Position = bodyStart + item.Position;
@@ -577,9 +642,9 @@ partial class __ByteSerializer<TSerializable> : IByteSerializerDeserializer<TSer
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     private const String STREAM_DOES_NOT_SUPPORT_SEEKING = "The specified stream does not support seeking.";
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private const String COULD_NOT_SERIALIZE_TYPE = "Couldn't serialize type. (Are you missing a serialization strategy? Consider implementing the ISerializable´1 interface, if it's a type you own.)";
+    private const String COULD_NOT_SERIALIZE_TYPE = "Couldn't serialize type. (Are you missing a serialization strategy? Consider implementing the ISerializable interface, if it's a type you own.)";
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private const String COULD_NOT_DESERIALIZE_TYPE = "Couldn't deserialize type. (Are you missing a serialization strategy? Consider implementing the ISerializable´1 interface, if it's a type you own.)";
+    private const String COULD_NOT_DESERIALIZE_TYPE = "Couldn't deserialize type. (Are you missing a serialization strategy? Consider implementing the IDeserializable´1 interface, if it's a type you own.)";
 #pragma warning restore
 }
 
