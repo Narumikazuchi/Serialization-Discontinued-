@@ -11,13 +11,6 @@ public interface ISerializationStrategy<TReturn>
     /// <param name="input">The object to serialize.</param>
     /// <returns>An object of type <typeparamref name="TReturn"/> representing the state of the input object at the time of method invocation.</returns>
     public TReturn Serialize(Object? input);
-
-    /// <summary>
-    /// Deserializes the specified object into it's original type and state.
-    /// </summary>
-    /// <param name="input">The object to deserialize.</param>
-    /// <returns>The represented objects original state.</returns>
-    public Object? Deserialize(TReturn input);
 }
 
 /// <summary>
@@ -32,11 +25,4 @@ public interface ISerializationStrategy<TReturn, TInput> :
     /// <param name="input">The object to serialize.</param>
     /// <returns>An object of type <typeparamref name="TReturn"/> representing the state of the input object at the time of method invocation.</returns>
     public TReturn Serialize(TInput input);
-
-    /// <summary>
-    /// Deserializes the specified object into it's original type <typeparamref name="TInput"/> and state.
-    /// </summary>
-    /// <param name="input">The object to deserialize.</param>
-    /// <returns>The represented objects original state.</returns>
-    public new TInput Deserialize(TReturn input);
 }

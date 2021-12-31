@@ -2,7 +2,7 @@
 
 internal static class __SerializationStrategies
 {
-    public static IDictionary<Type, ISerializationStrategy<System.Byte[]>> Integrated { get; } = new Dictionary<Type, ISerializationStrategy<System.Byte[]>>()
+    public static IDictionary<Type, ISerializationDeserializationStrategy<System.Byte[]>> Integrated { get; } = new Dictionary<Type, ISerializationDeserializationStrategy<System.Byte[]>>()
     {
         { typeof(System.Boolean),   Boolean.Default },
         { typeof(System.Byte),      Byte.Default },
@@ -28,7 +28,7 @@ internal static class __SerializationStrategies
     };
 
 #pragma warning disable CS8605
-    public readonly struct Boolean : ISerializationStrategy<System.Byte[], System.Boolean>
+    public readonly struct Boolean : ISerializationDeserializationStrategy<System.Byte[], System.Boolean>
     {
         public System.Byte[] Serialize(System.Boolean input) =>
             BitConverter.GetBytes(input);
@@ -39,7 +39,7 @@ internal static class __SerializationStrategies
         System.Byte[] ISerializationStrategy<System.Byte[]>.Serialize(Object? input) =>
             this.Serialize((System.Boolean)input);
 
-        Object? ISerializationStrategy<System.Byte[]>.Deserialize(System.Byte[] input) =>
+        Object? IDeserializationStrategy<System.Byte[]>.Deserialize(System.Byte[] input) =>
             this.Deserialize(input);
 
         public static ref Boolean Default => ref _default;
@@ -47,7 +47,7 @@ internal static class __SerializationStrategies
         private static Boolean _default;
     }
 
-    public readonly struct Byte : ISerializationStrategy<System.Byte[], System.Byte>
+    public readonly struct Byte : ISerializationDeserializationStrategy<System.Byte[], System.Byte>
     {
         public System.Byte[] Serialize(System.Byte input) =>
             new System.Byte[] { input };
@@ -58,7 +58,7 @@ internal static class __SerializationStrategies
         System.Byte[] ISerializationStrategy<System.Byte[]>.Serialize(Object? input) =>
             this.Serialize((System.Byte)input);
 
-        Object? ISerializationStrategy<System.Byte[]>.Deserialize(System.Byte[] input) =>
+        Object? IDeserializationStrategy<System.Byte[]>.Deserialize(System.Byte[] input) =>
             this.Deserialize(input);
 
         public static ref Byte Default => ref _default;
@@ -66,7 +66,7 @@ internal static class __SerializationStrategies
         private static Byte _default;
     }
 
-    public readonly struct Char : ISerializationStrategy<System.Byte[], System.Char>
+    public readonly struct Char : ISerializationDeserializationStrategy<System.Byte[], System.Char>
     {
         public System.Byte[] Serialize(System.Char input) =>
             BitConverter.GetBytes(input);
@@ -77,7 +77,7 @@ internal static class __SerializationStrategies
         System.Byte[] ISerializationStrategy<System.Byte[]>.Serialize(Object? input) =>
             this.Serialize((System.Char)input);
 
-        Object? ISerializationStrategy<System.Byte[]>.Deserialize(System.Byte[] input) =>
+        Object? IDeserializationStrategy<System.Byte[]>.Deserialize(System.Byte[] input) =>
             this.Deserialize(input);
 
         public static ref Char Default => ref _default;
@@ -85,7 +85,7 @@ internal static class __SerializationStrategies
         private static Char _default;
     }
 
-    public readonly struct Double : ISerializationStrategy<System.Byte[], System.Double>
+    public readonly struct Double : ISerializationDeserializationStrategy<System.Byte[], System.Double>
     {
         public System.Byte[] Serialize(System.Double input) =>
             BitConverter.GetBytes(input);
@@ -96,7 +96,7 @@ internal static class __SerializationStrategies
         System.Byte[] ISerializationStrategy<System.Byte[]>.Serialize(Object? input) =>
             this.Serialize((System.Double)input);
 
-        Object? ISerializationStrategy<System.Byte[]>.Deserialize(System.Byte[] input) =>
+        Object? IDeserializationStrategy<System.Byte[]>.Deserialize(System.Byte[] input) =>
             this.Deserialize(input);
 
         public static ref Double Default => ref _default;
@@ -104,7 +104,7 @@ internal static class __SerializationStrategies
         private static Double _default;
     }
 
-    public readonly struct Int16 : ISerializationStrategy<System.Byte[], System.Int16>
+    public readonly struct Int16 : ISerializationDeserializationStrategy<System.Byte[], System.Int16>
     {
         public System.Byte[] Serialize(System.Int16 input) =>
             BitConverter.GetBytes(input);
@@ -115,7 +115,7 @@ internal static class __SerializationStrategies
         System.Byte[] ISerializationStrategy<System.Byte[]>.Serialize(Object? input) =>
             this.Serialize((System.Int16)input);
 
-        Object? ISerializationStrategy<System.Byte[]>.Deserialize(System.Byte[] input) =>
+        Object? IDeserializationStrategy<System.Byte[]>.Deserialize(System.Byte[] input) =>
             this.Deserialize(input);
 
         public static ref Int16 Default => ref _default;
@@ -123,7 +123,7 @@ internal static class __SerializationStrategies
         private static Int16 _default;
     }
 
-    public readonly struct Int32 : ISerializationStrategy<System.Byte[], System.Int32>
+    public readonly struct Int32 : ISerializationDeserializationStrategy<System.Byte[], System.Int32>
     {
         public System.Byte[] Serialize(System.Int32 input) =>
             BitConverter.GetBytes(input);
@@ -134,7 +134,7 @@ internal static class __SerializationStrategies
         System.Byte[] ISerializationStrategy<System.Byte[]>.Serialize(Object? input) =>
             this.Serialize((System.Int32)input);
 
-        Object? ISerializationStrategy<System.Byte[]>.Deserialize(System.Byte[] input) =>
+        Object? IDeserializationStrategy<System.Byte[]>.Deserialize(System.Byte[] input) =>
             this.Deserialize(input);
 
         public static ref Int32 Default => ref _default;
@@ -142,7 +142,7 @@ internal static class __SerializationStrategies
         private static Int32 _default;
     }
 
-    public readonly struct Int64 : ISerializationStrategy<System.Byte[], System.Int64>
+    public readonly struct Int64 : ISerializationDeserializationStrategy<System.Byte[], System.Int64>
     {
         public System.Byte[] Serialize(System.Int64 input) =>
             BitConverter.GetBytes(input);
@@ -153,7 +153,7 @@ internal static class __SerializationStrategies
         System.Byte[] ISerializationStrategy<System.Byte[]>.Serialize(Object? input) =>
             this.Serialize((System.Int64)input);
 
-        Object? ISerializationStrategy<System.Byte[]>.Deserialize(System.Byte[] input) =>
+        Object? IDeserializationStrategy<System.Byte[]>.Deserialize(System.Byte[] input) =>
             this.Deserialize(input);
 
         public static ref Int64 Default => ref _default;
@@ -161,7 +161,7 @@ internal static class __SerializationStrategies
         private static Int64 _default;
     }
 
-    public readonly struct IntPtr : ISerializationStrategy<System.Byte[], System.IntPtr>
+    public readonly struct IntPtr : ISerializationDeserializationStrategy<System.Byte[], System.IntPtr>
     {
         public System.Byte[] Serialize(System.IntPtr input) =>
             BitConverter.GetBytes(input.ToInt64());
@@ -172,7 +172,7 @@ internal static class __SerializationStrategies
         System.Byte[] ISerializationStrategy<System.Byte[]>.Serialize(Object? input) =>
             this.Serialize((System.IntPtr)input);
 
-        Object? ISerializationStrategy<System.Byte[]>.Deserialize(System.Byte[] input) =>
+        Object? IDeserializationStrategy<System.Byte[]>.Deserialize(System.Byte[] input) =>
             this.Deserialize(input);
 
         public static ref IntPtr Default => ref _default;
@@ -180,7 +180,7 @@ internal static class __SerializationStrategies
         private static IntPtr _default;
     }
 
-    public readonly struct SByte : ISerializationStrategy<System.Byte[], System.SByte>
+    public readonly struct SByte : ISerializationDeserializationStrategy<System.Byte[], System.SByte>
     {
         public System.Byte[] Serialize(System.SByte input) =>
             new System.Byte[] { (System.Byte)input };
@@ -191,7 +191,7 @@ internal static class __SerializationStrategies
         System.Byte[] ISerializationStrategy<System.Byte[]>.Serialize(Object? input) =>
             this.Serialize((System.SByte)input);
 
-        Object? ISerializationStrategy<System.Byte[]>.Deserialize(System.Byte[] input) =>
+        Object? IDeserializationStrategy<System.Byte[]>.Deserialize(System.Byte[] input) =>
             this.Deserialize(input);
 
         public static ref SByte Default => ref _default;
@@ -199,7 +199,7 @@ internal static class __SerializationStrategies
         private static SByte _default;
     }
 
-    public readonly struct Single : ISerializationStrategy<System.Byte[], System.Single>
+    public readonly struct Single : ISerializationDeserializationStrategy<System.Byte[], System.Single>
     {
         public System.Byte[] Serialize(System.Single input) =>
             BitConverter.GetBytes(input);
@@ -210,7 +210,7 @@ internal static class __SerializationStrategies
         System.Byte[] ISerializationStrategy<System.Byte[]>.Serialize(Object? input) =>
             this.Serialize((System.Single)input);
 
-        Object? ISerializationStrategy<System.Byte[]>.Deserialize(System.Byte[] input) =>
+        Object? IDeserializationStrategy<System.Byte[]>.Deserialize(System.Byte[] input) =>
             this.Deserialize(input);
 
         public static ref Single Default => ref _default;
@@ -218,7 +218,7 @@ internal static class __SerializationStrategies
         private static Single _default;
     }
 
-    public readonly struct UInt16 : ISerializationStrategy<System.Byte[], System.UInt16>
+    public readonly struct UInt16 : ISerializationDeserializationStrategy<System.Byte[], System.UInt16>
     {
         public System.Byte[] Serialize(System.UInt16 input) =>
             BitConverter.GetBytes(input);
@@ -229,7 +229,7 @@ internal static class __SerializationStrategies
         System.Byte[] ISerializationStrategy<System.Byte[]>.Serialize(Object? input) =>
             this.Serialize((System.UInt16)input);
 
-        Object? ISerializationStrategy<System.Byte[]>.Deserialize(System.Byte[] input) =>
+        Object? IDeserializationStrategy<System.Byte[]>.Deserialize(System.Byte[] input) =>
             this.Deserialize(input);
 
         public static ref UInt16 Default => ref _default;
@@ -237,7 +237,7 @@ internal static class __SerializationStrategies
         private static UInt16 _default;
     }
 
-    public readonly struct UInt32 : ISerializationStrategy<System.Byte[], System.UInt32>
+    public readonly struct UInt32 : ISerializationDeserializationStrategy<System.Byte[], System.UInt32>
     {
         public System.Byte[] Serialize(System.UInt32 input) =>
             BitConverter.GetBytes(input);
@@ -248,7 +248,7 @@ internal static class __SerializationStrategies
         System.Byte[] ISerializationStrategy<System.Byte[]>.Serialize(Object? input) =>
             this.Serialize((System.UInt32)input);
 
-        Object? ISerializationStrategy<System.Byte[]>.Deserialize(System.Byte[] input) =>
+        Object? IDeserializationStrategy<System.Byte[]>.Deserialize(System.Byte[] input) =>
             this.Deserialize(input);
 
         public static ref UInt32 Default => ref _default;
@@ -256,7 +256,7 @@ internal static class __SerializationStrategies
         private static UInt32 _default;
     }
 
-    public readonly struct UInt64 : ISerializationStrategy<System.Byte[], System.UInt64>
+    public readonly struct UInt64 : ISerializationDeserializationStrategy<System.Byte[], System.UInt64>
     {
         public System.Byte[] Serialize(System.UInt64 input) =>
             BitConverter.GetBytes(input);
@@ -267,7 +267,7 @@ internal static class __SerializationStrategies
         System.Byte[] ISerializationStrategy<System.Byte[]>.Serialize(Object? input) =>
             this.Serialize((System.UInt64)input);
 
-        Object? ISerializationStrategy<System.Byte[]>.Deserialize(System.Byte[] input) =>
+        Object? IDeserializationStrategy<System.Byte[]>.Deserialize(System.Byte[] input) =>
             this.Deserialize(input);
 
         public static ref UInt64 Default => ref _default;
@@ -275,7 +275,7 @@ internal static class __SerializationStrategies
         private static UInt64 _default;
     }
 
-    public readonly struct UIntPtr : ISerializationStrategy<System.Byte[], System.UIntPtr>
+    public readonly struct UIntPtr : ISerializationDeserializationStrategy<System.Byte[], System.UIntPtr>
     {
         public System.Byte[] Serialize(System.UIntPtr input) =>
             BitConverter.GetBytes(input.ToUInt64());
@@ -286,7 +286,7 @@ internal static class __SerializationStrategies
         System.Byte[] ISerializationStrategy<System.Byte[]>.Serialize(Object? input) =>
             this.Serialize((System.UIntPtr)input);
 
-        Object? ISerializationStrategy<System.Byte[]>.Deserialize(System.Byte[] input) =>
+        Object? IDeserializationStrategy<System.Byte[]>.Deserialize(System.Byte[] input) =>
             this.Deserialize(input);
 
         public static ref UIntPtr Default => ref _default;
@@ -294,7 +294,7 @@ internal static class __SerializationStrategies
         private static UIntPtr _default;
     }
 
-    public readonly struct DateTime : ISerializationStrategy<System.Byte[], System.DateTime>
+    public readonly struct DateTime : ISerializationDeserializationStrategy<System.Byte[], System.DateTime>
     {
         public System.Byte[] Serialize(System.DateTime input) => 
             BitConverter.GetBytes(input.Ticks);
@@ -308,7 +308,7 @@ internal static class __SerializationStrategies
         System.Byte[] ISerializationStrategy<System.Byte[]>.Serialize(Object? input) =>
             this.Serialize((System.DateTime)input);
 
-        Object? ISerializationStrategy<System.Byte[]>.Deserialize(System.Byte[] input) =>
+        Object? IDeserializationStrategy<System.Byte[]>.Deserialize(System.Byte[] input) =>
             this.Deserialize(input);
 
         public static ref DateTime Default => ref _default;
@@ -316,7 +316,7 @@ internal static class __SerializationStrategies
         private static DateTime _default;
     }
 
-    public readonly struct DateOnly : ISerializationStrategy<System.Byte[], System.DateOnly>
+    public readonly struct DateOnly : ISerializationDeserializationStrategy<System.Byte[], System.DateOnly>
     {
         public System.Byte[] Serialize(System.DateOnly input) =>
             BitConverter.GetBytes(input.Year)
@@ -335,7 +335,7 @@ internal static class __SerializationStrategies
         System.Byte[] ISerializationStrategy<System.Byte[]>.Serialize(Object? input) =>
             this.Serialize((System.DateOnly)input);
 
-        Object? ISerializationStrategy<System.Byte[]>.Deserialize(System.Byte[] input) =>
+        Object? IDeserializationStrategy<System.Byte[]>.Deserialize(System.Byte[] input) =>
             this.Deserialize(input);
 
         public static ref DateOnly Default => ref _default;
@@ -343,7 +343,7 @@ internal static class __SerializationStrategies
         private static DateOnly _default;
     }
 
-    public readonly struct TimeSpan : ISerializationStrategy<System.Byte[], System.TimeSpan>
+    public readonly struct TimeSpan : ISerializationDeserializationStrategy<System.Byte[], System.TimeSpan>
     {
         public System.Byte[] Serialize(System.TimeSpan input) =>
             BitConverter.GetBytes(input.Ticks);
@@ -357,7 +357,7 @@ internal static class __SerializationStrategies
         System.Byte[] ISerializationStrategy<System.Byte[]>.Serialize(Object? input) =>
             this.Serialize((System.TimeSpan)input);
 
-        Object? ISerializationStrategy<System.Byte[]>.Deserialize(System.Byte[] input) =>
+        Object? IDeserializationStrategy<System.Byte[]>.Deserialize(System.Byte[] input) =>
             this.Deserialize(input);
 
         public static ref TimeSpan Default => ref _default;
@@ -365,7 +365,7 @@ internal static class __SerializationStrategies
         private static TimeSpan _default;
     }
 
-    public readonly struct TimeOnly : ISerializationStrategy<System.Byte[], System.TimeOnly>
+    public readonly struct TimeOnly : ISerializationDeserializationStrategy<System.Byte[], System.TimeOnly>
     {
         public System.Byte[] Serialize(System.TimeOnly input) =>
             BitConverter.GetBytes(input.Ticks);
@@ -379,7 +379,7 @@ internal static class __SerializationStrategies
         System.Byte[] ISerializationStrategy<System.Byte[]>.Serialize(Object? input) =>
             this.Serialize((System.TimeOnly)input);
 
-        Object? ISerializationStrategy<System.Byte[]>.Deserialize(System.Byte[] input) =>
+        Object? IDeserializationStrategy<System.Byte[]>.Deserialize(System.Byte[] input) =>
             this.Deserialize(input);
 
         public static ref TimeOnly Default => ref _default;
@@ -387,7 +387,7 @@ internal static class __SerializationStrategies
         private static TimeOnly _default;
     }
 
-    public readonly struct Guid : ISerializationStrategy<System.Byte[], System.Guid>
+    public readonly struct Guid : ISerializationDeserializationStrategy<System.Byte[], System.Guid>
     {
         public System.Byte[] Serialize(System.Guid input) =>
             input.ToByteArray();
@@ -398,7 +398,7 @@ internal static class __SerializationStrategies
         System.Byte[] ISerializationStrategy<System.Byte[]>.Serialize(Object? input) =>
             this.Serialize((System.Guid)input);
 
-        Object? ISerializationStrategy<System.Byte[]>.Deserialize(System.Byte[] input) =>
+        Object? IDeserializationStrategy<System.Byte[]>.Deserialize(System.Byte[] input) =>
             this.Deserialize(input);
 
         public static ref Guid Default => ref _default;
@@ -406,7 +406,7 @@ internal static class __SerializationStrategies
         private static Guid _default;
     }
 
-    public readonly struct Half : ISerializationStrategy<System.Byte[], System.Half>
+    public readonly struct Half : ISerializationDeserializationStrategy<System.Byte[], System.Half>
     {
         public System.Byte[] Serialize(System.Half input) =>
             BitConverter.GetBytes(input);
@@ -417,7 +417,7 @@ internal static class __SerializationStrategies
         System.Byte[] ISerializationStrategy<System.Byte[]>.Serialize(Object? input) =>
             this.Serialize((System.Half)input);
 
-        Object? ISerializationStrategy<System.Byte[]>.Deserialize(System.Byte[] input) =>
+        Object? IDeserializationStrategy<System.Byte[]>.Deserialize(System.Byte[] input) =>
             this.Deserialize(input);
 
         public static ref Half Default => ref _default;
@@ -425,7 +425,7 @@ internal static class __SerializationStrategies
         private static Half _default;
     }
 
-    public readonly struct String : ISerializationStrategy<System.Byte[], System.String?>
+    public readonly struct String : ISerializationDeserializationStrategy<System.Byte[], System.String?>
     {
         public System.Byte[] Serialize(System.String? input)
         {
@@ -453,7 +453,7 @@ internal static class __SerializationStrategies
         System.Byte[] ISerializationStrategy<System.Byte[]>.Serialize(Object? input) =>
             this.Serialize((System.String?)input);
 
-        Object? ISerializationStrategy<System.Byte[]>.Deserialize(System.Byte[] input) =>
+        Object? IDeserializationStrategy<System.Byte[]>.Deserialize(System.Byte[] input) =>
             this.Deserialize(input);
 
         public static ref String Default => ref _default;

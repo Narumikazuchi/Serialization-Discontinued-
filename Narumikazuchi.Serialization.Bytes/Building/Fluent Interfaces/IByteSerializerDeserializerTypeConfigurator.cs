@@ -16,7 +16,7 @@ public interface IByteSerializerDeserializerTypeConfigurator
     /// Configure the <see cref="IByteSerializerDeserializer{TSerializable}"/> for a type that you do not own or that does neither implement <see cref="ISerializable"/> nor <see cref="IDeserializable{TSelf}"/>.
     /// </summary>
     /// <param name="strategy">The strategy to use when serializing and deserializing this type.</param>
-    public IByteSerializerDeserializerDefaultStrategyAppender<TSerializable> ConfigureForForeignType<TSerializable>([DisallowNull] ISerializationStrategy<Byte[], TSerializable> strategy);
+    public IByteSerializerDeserializerDefaultStrategyAppender<TSerializable> ConfigureForForeignType<TSerializable>([DisallowNull] ISerializationDeserializationStrategy<Byte[], TSerializable> strategy);
 
     /// <summary>
     /// Configure the <see cref="IByteSerializerDeserializer{TSerializable}"/> for a type that does implement both <see cref="ISerializable"/> and <see cref="IDeserializable{TSelf}"/>.

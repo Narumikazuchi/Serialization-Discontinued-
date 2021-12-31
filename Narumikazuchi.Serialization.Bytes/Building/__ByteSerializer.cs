@@ -6,9 +6,19 @@ internal sealed partial class __ByteSerializer<TSerializable>
     {
         ExceptionHelpers.ThrowIfArgumentNull(info);
 
-        foreach (KeyValuePair<Type, ISerializationStrategy<Byte[]>> strategy in info.Strategies)
+        foreach (KeyValuePair<Type, ISerializationStrategy<Byte[]>> strategy in info.SerializationStrategies)
         {
-            this._strategies
+            this._serializationStrategies
+                .Add(item: strategy);
+        }
+        foreach (KeyValuePair<Type, IDeserializationStrategy<Byte[]>> strategy in info.DeserializationStrategies)
+        {
+            this._deserializationStrategies
+                .Add(item: strategy);
+        }
+        foreach (KeyValuePair<Type, ISerializationDeserializationStrategy<Byte[]>> strategy in info.TwoWayStrategies)
+        {
+            this._twoWayStrategies
                 .Add(item: strategy);
         }
         this._dataGetter = info.DataGetter;
@@ -42,7 +52,17 @@ partial class __ByteSerializer<TSerializable> : IByteSerializerDeserializer<TSer
         Type type = graph.GetType();
         if (graph is not ISerializable serializable)
         {
-            foreach (KeyValuePair<Type, ISerializationStrategy<Byte[]>> kv in this._strategies)
+            foreach (KeyValuePair<Type, ISerializationStrategy<Byte[]>> kv in this._serializationStrategies)
+            {
+                if (kv.Key == type)
+                {
+                    return this.SerializeWithStrategy(stream: stream,
+                                                      graph: graph,
+                                                      type: type,
+                                                      strategy: kv.Value);
+                }
+            }
+            foreach (KeyValuePair<Type, ISerializationDeserializationStrategy<Byte[]>> kv in this._twoWayStrategies)
             {
                 if (kv.Key == type)
                 {
@@ -75,15 +95,32 @@ partial class __ByteSerializer<TSerializable> : IByteSerializerDeserializer<TSer
             {
                 Position = body.Position
             };
-            if (this._strategies
-                    .ContainsKey(member.MemberType))
+
+            foreach (KeyValuePair<Type, ISerializationStrategy<Byte[]>> kv in this._serializationStrategies)
             {
-                this.SerializeWithStrategy(stream: body,
-                                           item: item,
-                                           data: member);
-                header.Items
-                      .Add(item);
-                continue;
+                if (kv.Key == member.MemberType)
+                {
+                    this.SerializeWithStrategy(stream: body,
+                                               item: item,
+                                               data: member,
+                                               strategy: kv.Value);
+                    header.Items
+                          .Add(item);
+                    continue;
+                }
+            }
+            foreach (KeyValuePair<Type, ISerializationDeserializationStrategy<Byte[]>> kv in this._twoWayStrategies)
+            {
+                if (kv.Key == member.MemberType)
+                {
+                    this.SerializeWithStrategy(stream: body,
+                                               item: item,
+                                               data: member,
+                                               strategy: kv.Value);
+                    header.Items
+                          .Add(item);
+                    continue;
+                }
             }
             if (member.MemberType
                       .GetInterfaces()
@@ -164,7 +201,8 @@ partial class __ByteSerializer<TSerializable> : IByteSerializerDeserializer<TSer
 
     private void SerializeWithStrategy(Stream stream,
                                        __HeaderItem item,
-                                       MemberState data)
+                                       MemberState data,
+                                       ISerializationStrategy<Byte[]> strategy)
     {
         item.Typename = data.MemberType
                             .AssemblyQualifiedName!;
@@ -177,8 +215,7 @@ partial class __ByteSerializer<TSerializable> : IByteSerializerDeserializer<TSer
             return;
         }
 
-        Byte[] bytes = this._strategies[data.MemberType]
-                            .Serialize(data.Value);
+        Byte[] bytes = strategy.Serialize(data.Value);
 
         item.Length = bytes.Length;
         stream.Write(bytes);
@@ -201,7 +238,7 @@ partial class __ByteSerializer<TSerializable> : IByteSerializerDeserializer<TSer
             serializer = CreateByteSerializer
                         .ForSerialization()
                         .ConfigureForOwnedType<ISerializable>()
-                        .UseStrategies(this._strategies)
+                        .UseStrategies(this._serializationStrategies)
                         .Construct();
             __Cache.CreatedOwnedSerializers
                    .Add(key: data.MemberType,
@@ -227,6 +264,11 @@ partial class __ByteSerializer<TSerializable> : IByteSerializerDeserializer<TSer
     {
         read = 0;
 
+        if (stream.Length < sizeof(Int64) * 3)
+        {
+            return default;
+        }
+
         // Segment sizes
         UInt64 tempRead = 0;
         Int64 sizeofObject = ReadInt64(stream,
@@ -240,6 +282,14 @@ partial class __ByteSerializer<TSerializable> : IByteSerializerDeserializer<TSer
         Int64 sizeofBody = ReadInt64(stream,
                                      out tempRead);
         read += tempRead;
+
+
+        if (sizeofObject < 8 ||
+            sizeofHead < 13 ||
+            sizeofBody == 0)
+        {
+            return default;
+        }
 
         // Read header
         __Header header = __Header.FromStream(source: stream,
@@ -264,14 +314,24 @@ partial class __ByteSerializer<TSerializable> : IByteSerializerDeserializer<TSer
         Int64 bodyStart = 3 * sizeof(UInt64) + sizeofHead;
 
         // Strategy-approach
-        if (this._strategies
+        if (this._deserializationStrategies
                 .ContainsKey(type))
         {
             Byte[] body = new Byte[sizeofBody];
             stream.Read(buffer: body,
                         offset: 0,
                         count: (Int32)sizeofBody);
-            return (TSerializable?)this._strategies[type]
+            return (TSerializable?)this._deserializationStrategies[type]
+                                       .Deserialize(body);
+        }
+        if (this._twoWayStrategies
+                .ContainsKey(type))
+        {
+            Byte[] body = new Byte[sizeofBody];
+            stream.Read(buffer: body,
+                        offset: 0,
+                        count: (Int32)sizeofBody);
+            return (TSerializable?)this._twoWayStrategies[type]
                                        .Deserialize(body);
         }
 
@@ -349,17 +409,33 @@ partial class __ByteSerializer<TSerializable> : IByteSerializerDeserializer<TSer
         }
 
         // Attempting through known strategies
-        if (this._strategies
-                .ContainsKey(type))
+        foreach (KeyValuePair<Type, IDeserializationStrategy<Byte[]>> kv in this._deserializationStrategies)
         {
-            member = this.DeserializeWithStrategy(stream: stream,
-                                                  type: type,
-                                                  bodyStart: bodyStart,
-                                                  item: item);
-            info.SetState(memberName: item.Name,
-                          memberValue: member);
-            read += Convert.ToUInt64(item.Length);
-            return true;
+            if (kv.Key == type)
+            {
+                member = this.DeserializeWithStrategy(stream: stream,
+                                                      bodyStart: bodyStart,
+                                                      item: item,
+                                                      strategy: kv.Value);
+                info.SetState(memberName: item.Name,
+                              memberValue: member);
+                read += Convert.ToUInt64(item.Length);
+                return true;
+            }
+        }
+        foreach (KeyValuePair<Type, ISerializationDeserializationStrategy<Byte[]>> kv in this._twoWayStrategies)
+        {
+            if (kv.Key == type)
+            {
+                member = this.DeserializeWithStrategy(stream: stream,
+                                                      bodyStart: bodyStart,
+                                                      item: item,
+                                                      strategy: kv.Value);
+                info.SetState(memberName: item.Name,
+                              memberValue: member);
+                read += Convert.ToUInt64(item.Length);
+                return true;
+            }
         }
 
         // Attempting through implemented interface
@@ -396,9 +472,9 @@ partial class __ByteSerializer<TSerializable> : IByteSerializerDeserializer<TSer
     }
 
     private Object? DeserializeWithStrategy(Stream stream,
-                                            Type type,
                                             Int64 bodyStart,
-                                            __HeaderItem item)
+                                            __HeaderItem item,
+                                            IDeserializationStrategy<Byte[]> strategy)
     {
         stream.Position = bodyStart + item.Position;
         Byte[] bytes = new Byte[item.Length];
@@ -413,8 +489,7 @@ partial class __ByteSerializer<TSerializable> : IByteSerializerDeserializer<TSer
             }
             bytes[index++] = (Byte)b;
         }
-        return this._strategies[type]
-                   .Deserialize(bytes);
+        return strategy.Deserialize(bytes);
     }
 
     private TResult? DeserializeThroughInterface<TResult>(Stream stream,
@@ -435,7 +510,7 @@ partial class __ByteSerializer<TSerializable> : IByteSerializerDeserializer<TSer
             deserializer = CreateByteSerializer
                           .ForDeserialization()
                           .ConfigureForOwnedType<TResult>()
-                          .UseStrategies(this._strategies)
+                          .UseStrategies(this._deserializationStrategies)
                           .Construct();
         }
 
@@ -480,11 +555,17 @@ partial class __ByteSerializer<TSerializable> : IByteSerializerDeserializer<TSer
     internal Func<ISerializationInfoGetter, TSerializable>? DataSetter =>
         this._dataSetter;
 
-    internal IDictionary<Type, ISerializationStrategy<Byte[]>> Strategies =>
-        this._strategies;
+    public IDictionary<Type, ISerializationStrategy<Byte[]>> SerializationStrategies =>
+        this._serializationStrategies;
+    public IDictionary<Type, IDeserializationStrategy<Byte[]>> DeserializationStrategies =>
+        this._deserializationStrategies;
+    public IDictionary<Type, ISerializationDeserializationStrategy<Byte[]>> TwoWayStrategies =>
+        this._twoWayStrategies;
 
     private static readonly IDictionary<Type, MethodInfo> _usedInterfaceDeserializations = new Dictionary<Type, MethodInfo>();
-    private readonly IDictionary<Type, ISerializationStrategy<Byte[]>> _strategies = new Dictionary<Type, ISerializationStrategy<Byte[]>>();
+    private readonly IDictionary<Type, ISerializationStrategy<Byte[]>> _serializationStrategies = new Dictionary<Type, ISerializationStrategy<Byte[]>>();
+    private readonly IDictionary<Type, IDeserializationStrategy<Byte[]>> _deserializationStrategies = new Dictionary<Type, IDeserializationStrategy<Byte[]>>();
+    private readonly IDictionary<Type, ISerializationDeserializationStrategy<Byte[]>> _twoWayStrategies = new Dictionary<Type, ISerializationDeserializationStrategy<Byte[]>>();
     private readonly Action<TSerializable, ISerializationInfoAdder>? _dataGetter;
     private readonly Func<ISerializationInfoGetter, TSerializable>? _dataSetter;
 
@@ -861,7 +942,29 @@ partial class __ByteSerializer<TSerializable> : IByteSerializer<TSerializable>
 // IUsesSerializationStrategies
 partial class __ByteSerializer<TSerializable> : IUsesSerializationStrategies
 {
-    public IEnumerable<Type> RegisteredStrategies =>
-        this._strategies
-            .Keys;
+    public IEnumerable<Type> RegisteredStrategies
+    {
+        get
+        {
+            if (this._serializationStrategies
+                    .Count > 0)
+            {
+                return this._serializationStrategies
+                           .Keys;
+            }
+            if (this._deserializationStrategies
+                    .Count > 0)
+            {
+                return this._deserializationStrategies
+                           .Keys;
+            }
+            if (this._twoWayStrategies
+                    .Count > 0)
+            {
+                return this._twoWayStrategies
+                           .Keys;
+            }
+            throw new ImpossibleState();
+        }
+    }
 }
