@@ -412,7 +412,8 @@ partial class __ByteSerializer<TSerializable> : IByteSerializerDeserializer<TSer
 
         // Do we implement the interface?
         if (type.GetInterfaces()
-                .Any(i => i.GetGenericTypeDefinition() == typeof(IDeserializable<>)))
+                .Any(i => i.IsGenericType &&
+                          i.GetGenericTypeDefinition() == typeof(IDeserializable<>)))
         {
             MethodInfo method = this.GetType()
                                     .GetMethod(name: nameof(CreateObject),
