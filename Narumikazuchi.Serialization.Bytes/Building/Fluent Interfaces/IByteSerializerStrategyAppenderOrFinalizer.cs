@@ -3,6 +3,8 @@
 /// <summary>
 /// Configures a <see cref="IByteSerializer{TSerializable}"/> to use specified strategies for serialization or finalizes the configuration.
 /// </summary>
+[Browsable(false)]
+[EditorBrowsable(EditorBrowsableState.Never)]
 public interface IByteSerializerStrategyAppenderOrFinalizer<TSerializable> :
     IByteSerializerStrategyAppender<TSerializable>
 {

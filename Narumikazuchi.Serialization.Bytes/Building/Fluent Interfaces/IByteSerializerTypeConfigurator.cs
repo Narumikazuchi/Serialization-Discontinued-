@@ -3,6 +3,8 @@
 /// <summary>
 /// Configures the <see cref="IByteSerializer{TSerializable}"/> for a specific type.
 /// </summary>
+[Browsable(false)]
+[EditorBrowsable(EditorBrowsableState.Never)]
 public interface IByteSerializerTypeConfigurator
 {
     /// <summary>
