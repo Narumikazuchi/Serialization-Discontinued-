@@ -83,7 +83,7 @@ partial class __SerializationInfo : ISerializationInfoAdder
     public ISerializationInfoAdder AddState<TMember>([DisallowNull] String memberName,
                                                      [AllowNull] TMember? memberValue)
     {
-        ExceptionHelpers.ThrowIfNullOrEmpty(memberName);
+        ExceptionHelpers.ThrowIfArgumentNull(memberName);
 
         if (this.InternalMembers
                 .Any(m => m.Name == memberName))
@@ -112,7 +112,7 @@ partial class __SerializationInfo : ISerializationInfoGetter
 {
     public TMember? GetState<TMember>([DisallowNull] String memberName)
     {
-        ExceptionHelpers.ThrowIfNullOrEmpty(memberName);
+        ExceptionHelpers.ThrowIfArgumentNull(memberName);
 
         for (Int32 i = 0; i < this.Count; i++)
         {
@@ -133,7 +133,7 @@ partial class __SerializationInfo : ISerializationInfoSetter
     public void SetState<TMember>([DisallowNull] String memberName,
                                   [AllowNull] TMember? memberValue)
     {
-        ExceptionHelpers.ThrowIfNullOrEmpty(memberName);
+        ExceptionHelpers.ThrowIfArgumentNull(memberName);
 
         MemberState? state = this.InternalMembers
                                  .FirstOrDefault(m => m.Name == memberName);

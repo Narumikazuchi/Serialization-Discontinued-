@@ -34,7 +34,7 @@ partial class MemberState
                          Object? value,
                          Type type)
     {
-        ExceptionHelpers.ThrowIfNullOrEmpty(name);
+        ExceptionHelpers.ThrowIfArgumentNull(name);
         ExceptionHelpers.ThrowIfArgumentNull(type);
 
         this.Name = name;
@@ -44,7 +44,7 @@ partial class MemberState
     internal MemberState(String name,
                          Type type)
     {
-        ExceptionHelpers.ThrowIfNullOrEmpty(name);
+        ExceptionHelpers.ThrowIfArgumentNull(name);
         ExceptionHelpers.ThrowIfArgumentNull(type);
 
         this.Name = name;
