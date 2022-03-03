@@ -27,12 +27,11 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>..\..\..\Managed Code Libraries\Custom\net5.0\Narumikazuchi.Serialization.xml</DocumentationFile>
-    <OutputPath>..\..\..\Managed Code Libraries\Custom\</OutputPath>
+    <DocumentationFile>Narumikazuchi.Serialization.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="..\..\Narumikazuchi nuget.png">
+    <None Include="..\logo.png">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
