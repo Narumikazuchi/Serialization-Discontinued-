@@ -5,6 +5,10 @@ VisualStudioVersion = 17.0.31825.309
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Narumikazuchi.Serialization", "Narumikazuchi.Serialization\Narumikazuchi.Serialization.csproj", "{EDABC30A-3A73-4D6F-8C8F-2E0F274AB369}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "submodules", "submodules", "{77FA522F-C715-4F9C-8271-A17AF5601CE3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Narumikazuchi", "submodules\Common\Narumikazuchi\Narumikazuchi.csproj", "{BFFC7459-6CBA-42E6-ACB0-018A04338015}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,9 +19,16 @@ Global
 		{EDABC30A-3A73-4D6F-8C8F-2E0F274AB369}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EDABC30A-3A73-4D6F-8C8F-2E0F274AB369}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EDABC30A-3A73-4D6F-8C8F-2E0F274AB369}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BFFC7459-6CBA-42E6-ACB0-018A04338015}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BFFC7459-6CBA-42E6-ACB0-018A04338015}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BFFC7459-6CBA-42E6-ACB0-018A04338015}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BFFC7459-6CBA-42E6-ACB0-018A04338015}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{BFFC7459-6CBA-42E6-ACB0-018A04338015} = {77FA522F-C715-4F9C-8271-A17AF5601CE3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3C4F8C63-7D93-4A4E-B67B-E6ACC810C964}
