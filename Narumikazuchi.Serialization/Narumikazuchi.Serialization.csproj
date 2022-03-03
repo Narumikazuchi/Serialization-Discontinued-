@@ -19,7 +19,7 @@
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <NoPackageAnalysis>true</NoPackageAnalysis>
     <PackageProjectUrl>https://github.com/Narumikazuchi/Serialization/wiki</PackageProjectUrl>
-    <PackageIcon>Narumikazuchi nuget.png</PackageIcon>
+    <PackageIcon>logo.png</PackageIcon>
     <PackageTags>Serialization; Serializer; Interface</PackageTags>
   </PropertyGroup>
 
