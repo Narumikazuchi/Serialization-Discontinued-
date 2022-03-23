@@ -1,48 +1,46 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <PlatformTarget>x64</PlatformTarget>
-    <GenerateDocumentationFile>True</GenerateDocumentationFile>
-    <Nullable>enable</Nullable>
-    <LangVersion>preview</LangVersion>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <EnablePreviewFeatures>True</EnablePreviewFeatures>
-    <Authors>Narumikazuchi</Authors>
-    <Description>Provides the basics for any derived serializers. For a list of implementing frameworks and their usage visit https://github.com/Narumikazuchi/Serialization/wiki. </Description>
-    <Copyright>©2021 Narumikazuchi</Copyright>
-    <RepositoryUrl>https://github.com/Narumikazuchi/Serialization</RepositoryUrl>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>2.0.0</Version>
-    <PackageReleaseNotes>
-    </PackageReleaseNotes>
-    <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <NoPackageAnalysis>true</NoPackageAnalysis>
-    <PackageProjectUrl>https://github.com/Narumikazuchi/Serialization/wiki</PackageProjectUrl>
-    <PackageIcon>logo.png</PackageIcon>
-    <PackageTags>Serialization; Serializer; Interface</PackageTags>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<PlatformTarget>x64</PlatformTarget>
+		<DocumentationFile>Narumikazuchi.Serialization.xml</DocumentationFile>
+		<GenerateDocumentationFile>True</GenerateDocumentationFile>
+		<Nullable>enable</Nullable>
+		<LangVersion>preview</LangVersion>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<EnablePreviewFeatures>True</EnablePreviewFeatures>
+		<Authors>Narumikazuchi</Authors>
+		<PackageReadmeFile>README nuget.md</PackageReadmeFile>
+		<Copyright>©2021 Narumikazuchi</Copyright>
+		<RepositoryUrl>https://github.com/Narumikazuchi/Serialization</RepositoryUrl>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<Version>2.0.0</Version>
+		<PackageReleaseNotes>
+		</PackageReleaseNotes>
+		<PackageLicenseFile>LICENSE</PackageLicenseFile>
+		<NoPackageAnalysis>true</NoPackageAnalysis>
+		<PackageProjectUrl>https://github.com/Narumikazuchi/Serialization/wiki</PackageProjectUrl>
+		<PackageIcon>logo.png</PackageIcon>
+		<PackageTags>Serialization; Serializer; Interface; Interfaces</PackageTags>
+	</PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-  </PropertyGroup>
+	<ItemGroup>
+		<None Include="..\logo.png">
+			<Pack>True</Pack>
+			<PackagePath></PackagePath>
+		</None>
+		<None Include="..\LICENSE">
+			<Pack>True</Pack>
+			<PackagePath></PackagePath>
+		</None>
+		<None Include="..\README nuget.md">
+			<Pack>True</Pack>
+			<PackagePath></PackagePath>
+		</None>
+	</ItemGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>Narumikazuchi.Serialization.xml</DocumentationFile>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <None Include="..\logo.png">
-      <Pack>True</Pack>
-      <PackagePath></PackagePath>
-    </None>
-    <None Include="..\LICENSE">
-      <Pack>True</Pack>
-      <PackagePath></PackagePath>
-    </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\submodules\Common\Narumikazuchi\Narumikazuchi.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\submodules\Common\Narumikazuchi\Narumikazuchi.csproj" />
+	</ItemGroup>
 
 </Project>

@@ -1,0 +1,1 @@
+This project provides a simple interface for a user to serialize data. The interface(s) can be implemented by calsses and structs and then serialized using any serializer build on this architecture. For a list of implementing frameworks and their usage visit the [wiki](https://github.com/Narumikazuchi/Serialization/wiki).
