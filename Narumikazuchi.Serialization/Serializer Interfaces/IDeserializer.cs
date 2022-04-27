@@ -122,7 +122,7 @@ public interface IDeserializer<TSerializable> :
     /// <param name="result">The instance represented by the bytes in the specified stream.</param>
     /// <returns><see langword="true"/> if the serialization succeeded; else, <see langword="false"/></returns>
     public Boolean TryDeserialize([DisallowNull] Stream stream,
-                                  [NotNullWhen(true)] out TSerializable? result) =>
+                                  [AllowNull] out TSerializable? result) =>
         this.TryDeserialize(stream: stream,
                             offset: 0,
                             read: out _,
@@ -137,7 +137,7 @@ public interface IDeserializer<TSerializable> :
     /// <returns><see langword="true"/> if the serialization succeeded; else, <see langword="false"/></returns>
     public Boolean TryDeserialize([DisallowNull] Stream stream,
                                   in Int64 offset,
-                                  [NotNullWhen(true)] out TSerializable? result) =>
+                                  [AllowNull] out TSerializable? result) =>
         this.TryDeserialize(stream: stream,
                             offset: offset,
                             read: out _,
@@ -152,7 +152,7 @@ public interface IDeserializer<TSerializable> :
     /// <returns><see langword="true"/> if the serialization succeeded; else, <see langword="false"/></returns>
     public Boolean TryDeserialize([DisallowNull] Stream stream,
                                   out UInt64 read,
-                                  [NotNullWhen(true)] out TSerializable? result) =>
+                                  [AllowNull] out TSerializable? result) =>
         this.TryDeserialize(stream: stream,
                             offset: 0,
                             read: out read,
@@ -169,7 +169,7 @@ public interface IDeserializer<TSerializable> :
     public Boolean TryDeserialize([DisallowNull] Stream stream,
                                   in Int64 offset,
                                   out UInt64 read,
-                                  [NotNullWhen(true)] out TSerializable? result) =>
+                                  [AllowNull] out TSerializable? result) =>
         this.TryDeserialize(stream: stream,
                             offset: offset,
                             read: out read,
@@ -184,7 +184,7 @@ public interface IDeserializer<TSerializable> :
     /// <returns><see langword="true"/> if the serialization succeeded; else, <see langword="false"/></returns>
     public Boolean TryDeserialize([DisallowNull] Stream stream,
                                   in SerializationFinishAction actionAfter,
-                                  [NotNullWhen(true)] out TSerializable? result) =>
+                                  [AllowNull] out TSerializable? result) =>
         this.TryDeserialize(stream: stream,
                             offset: 0,
                             read: out _,
@@ -201,7 +201,7 @@ public interface IDeserializer<TSerializable> :
     public Boolean TryDeserialize([DisallowNull] Stream stream,
                                   in Int64 offset,
                                   in SerializationFinishAction actionAfter,
-                                  [NotNullWhen(true)] out TSerializable? result) =>
+                                  [AllowNull] out TSerializable? result) =>
         this.TryDeserialize(stream: stream,
                             offset: offset,
                             read: out _,
@@ -218,7 +218,7 @@ public interface IDeserializer<TSerializable> :
     public Boolean TryDeserialize([DisallowNull] Stream stream,
                                   out UInt64 read,
                                   in SerializationFinishAction actionAfter,
-                                  [NotNullWhen(true)] out TSerializable? result) =>
+                                  [AllowNull] out TSerializable? result) =>
         this.TryDeserialize(stream: stream,
                             offset: 0,
                             read: out read,
@@ -237,5 +237,5 @@ public interface IDeserializer<TSerializable> :
                                   in Int64 offset,
                                   out UInt64 read,
                                   in SerializationFinishAction actionAfter,
-                                  [NotNullWhen(true)] out TSerializable? result);
+                                  [AllowNull] out TSerializable? result);
 }
