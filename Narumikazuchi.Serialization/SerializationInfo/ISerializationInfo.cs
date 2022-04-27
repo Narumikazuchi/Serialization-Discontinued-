@@ -11,11 +11,13 @@ public interface ISerializationInfo :
     /// Gets if this state represents <see langword="null"/>.
     /// </summary>
     public Boolean IsNull { get; }
+
     /// <summary>
     /// Gets the members that are stored in this information object.
     /// </summary>
     [NotNull]
     public IEnumerable<String> Members { get; }
+
     /// <summary>
     /// Gets the type of the serialization target.
     /// </summary>

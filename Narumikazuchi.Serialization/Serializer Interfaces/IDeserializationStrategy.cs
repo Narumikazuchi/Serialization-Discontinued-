@@ -25,4 +25,7 @@ public interface IDeserializationStrategy<TReturn, TInput> :
     /// <param name="input">The object to deserialize.</param>
     /// <returns>The represented objects original state.</returns>
     public new TInput Deserialize(TReturn input);
+
+    Object? IDeserializationStrategy<TReturn>.Deserialize(TReturn input) =>
+        this.Deserialize(input);
 }

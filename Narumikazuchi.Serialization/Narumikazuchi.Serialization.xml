@@ -6,7 +6,7 @@
     <members>
         <member name="T:Narumikazuchi.Serialization.IDeserializable`1">
             <summary>
-            Represents an object that can be serialized and deserialized.
+            Represents an object that can be deserialized.
             </summary>
         </member>
         <member name="M:Narumikazuchi.Serialization.IDeserializable`1.ConstructFromSerializationData(Narumikazuchi.Serialization.ISerializationInfoGetter)">

@@ -13,7 +13,11 @@ public interface ISerializer<TSerializable> :
     /// <param name="graph">The graph to serialize.</param>
     /// <returns>The amount of bytes written</returns>
     public UInt64 Serialize([DisallowNull] Stream stream,
-                            [AllowNull] TSerializable? graph);
+                            [AllowNull] TSerializable? graph) =>
+        this.Serialize(stream: stream,
+                       offset: 0,
+                       actionAfter: SerializationFinishAction.CloseStream | SerializationFinishAction.DisposeStream,
+                       graph: graph);
     /// <summary>
     /// Serializes the specified graph into the specified stream starting at the specified offset in the stream.
     /// </summary>
@@ -23,7 +27,11 @@ public interface ISerializer<TSerializable> :
     /// <returns>The amount of bytes written</returns>
     public UInt64 Serialize([DisallowNull] Stream stream,
                             [AllowNull] TSerializable? graph,
-                            in Int64 offset);
+                            in Int64 offset) =>
+        this.Serialize(stream: stream,
+                       offset: offset,
+                       actionAfter: SerializationFinishAction.CloseStream | SerializationFinishAction.DisposeStream,
+                       graph: graph);
     /// <summary>
     /// Serializes the specified graph into the specified stream starting at the specified offset in the stream.
     /// </summary>
@@ -33,7 +41,11 @@ public interface ISerializer<TSerializable> :
     /// <returns>The amount of bytes written</returns>
     public UInt64 Serialize([DisallowNull] Stream stream,
                             [AllowNull] TSerializable? graph,
-                            in SerializationFinishAction actionAfter);
+                            in SerializationFinishAction actionAfter) =>
+        this.Serialize(stream: stream,
+                       offset: 0,
+                       actionAfter: actionAfter,
+                       graph: graph);
     /// <summary>
     /// Serializes the specified graph into the specified stream starting at the specified offset in the stream.
     /// </summary>
@@ -54,7 +66,12 @@ public interface ISerializer<TSerializable> :
     /// <param name="graph">The graph to serialize.</param>
     /// <returns>The amount of bytes written</returns>
     public Boolean TrySerialize([DisallowNull] Stream stream,
-                                [AllowNull] TSerializable? graph);
+                                [AllowNull] TSerializable? graph) =>
+        this.TrySerialize(stream: stream,
+                          offset: 0,
+                          written: out _,
+                          actionAfter: SerializationFinishAction.CloseStream | SerializationFinishAction.DisposeStream,
+                          graph: graph);
     /// <summary>
     /// Serializes the specified graph into the specified stream starting at the specified offset in the stream.
     /// </summary>
@@ -64,7 +81,12 @@ public interface ISerializer<TSerializable> :
     /// <returns>The amount of bytes written</returns>
     public Boolean TrySerialize([DisallowNull] Stream stream,
                                 [AllowNull] TSerializable? graph,
-                                in Int64 offset);
+                                in Int64 offset) =>
+        this.TrySerialize(stream: stream,
+                          offset: offset,
+                          written: out _,
+                          actionAfter: SerializationFinishAction.CloseStream | SerializationFinishAction.DisposeStream,
+                          graph: graph);
     /// <summary>
     /// Serializes the specified graph into the specified stream starting at the specified offset in the stream.
     /// </summary>
@@ -74,7 +96,12 @@ public interface ISerializer<TSerializable> :
     /// <returns>The amount of bytes written</returns>
     public Boolean TrySerialize([DisallowNull] Stream stream,
                                 [AllowNull] TSerializable? graph,
-                                out UInt64 written);
+                                out UInt64 written) =>
+        this.TrySerialize(stream: stream,
+                          offset: 0,
+                          written: out written,
+                          actionAfter: SerializationFinishAction.CloseStream | SerializationFinishAction.DisposeStream,
+                          graph: graph);
     /// <summary>
     /// Serializes the specified graph into the specified stream starting at the specified offset in the stream.
     /// </summary>
@@ -86,7 +113,12 @@ public interface ISerializer<TSerializable> :
     public Boolean TrySerialize([DisallowNull] Stream stream,
                                 [AllowNull] TSerializable graph,
                                 in Int64 offset,
-                                out UInt64 written);
+                                out UInt64 written) =>
+        this.TrySerialize(stream: stream,
+                          offset: offset,
+                          written: out written,
+                          actionAfter: SerializationFinishAction.CloseStream | SerializationFinishAction.DisposeStream,
+                          graph: graph);
     /// <summary>
     /// Serializes the specified graph into the specified stream starting at the specified offset in the stream.
     /// </summary>
@@ -96,7 +128,12 @@ public interface ISerializer<TSerializable> :
     /// <returns>The amount of bytes written</returns>
     public Boolean TrySerialize([DisallowNull] Stream stream,
                                 [AllowNull] TSerializable? graph,
-                                in SerializationFinishAction actionAfter);
+                                in SerializationFinishAction actionAfter) =>
+        this.TrySerialize(stream: stream,
+                          offset: 0,
+                          written: out _,
+                          actionAfter: actionAfter,
+                          graph: graph);
     /// <summary>
     /// Serializes the specified graph into the specified stream starting at the specified offset in the stream.
     /// </summary>
@@ -108,7 +145,12 @@ public interface ISerializer<TSerializable> :
     public Boolean TrySerialize([DisallowNull] Stream stream,
                                 [AllowNull] TSerializable? graph,
                                 in Int64 offset,
-                                in SerializationFinishAction actionAfter);
+                                in SerializationFinishAction actionAfter) =>
+        this.TrySerialize(stream: stream,
+                          offset: offset,
+                          written: out _,
+                          actionAfter: actionAfter,
+                          graph: graph);
     /// <summary>
     /// Serializes the specified graph into the specified stream starting at the specified offset in the stream.
     /// </summary>
@@ -120,7 +162,12 @@ public interface ISerializer<TSerializable> :
     public Boolean TrySerialize([DisallowNull] Stream stream,
                                 [AllowNull] TSerializable? graph,
                                 out UInt64 written,
-                                in SerializationFinishAction actionAfter);
+                                in SerializationFinishAction actionAfter) =>
+        this.TrySerialize(stream: stream,
+                          offset: 0,
+                          written: out written,
+                          actionAfter: actionAfter,
+                          graph: graph);
     /// <summary>
     /// Serializes the specified graph into the specified stream starting at the specified offset in the stream.
     /// </summary>

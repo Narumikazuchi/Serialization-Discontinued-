@@ -1,7 +1,7 @@
 ﻿namespace Narumikazuchi.Serialization;
 
 /// <summary>
-/// Represents an object that can be serialized and deserialized.
+/// Represents an object that can be deserialized.
 /// </summary>
 public interface IDeserializable<TSelf>
     where TSelf : IDeserializable<TSelf>

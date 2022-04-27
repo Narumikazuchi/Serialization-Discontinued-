@@ -18,16 +18,16 @@ public static partial class CreateSerializationInfo
     public static ISerializationInfoMutator From([DisallowNull] Type type,
                                                  Boolean isNull)
     {
-        ExceptionHelpers.ThrowIfArgumentNull(type);
+        ArgumentNullException.ThrowIfNull(type);
 
         __SerializationInfo result = new(type: type,
                                          isNull: isNull);
-        if (!_knownTypes.ContainsKey(type))
+        if (!s_KnownTypes.ContainsKey(type))
         {
             return result;
         }
 
-        foreach (MemberInfo member in _knownTypes[type])
+        foreach (MemberInfo member in s_KnownTypes[type])
         {
             if (member is PropertyInfo property)
             {
@@ -71,9 +71,9 @@ public static partial class CreateSerializationInfo
                                          isNull: false);
 
         from.GetSerializationData(result);
-        if (!_knownTypes.ContainsKey(type))
+        if (!s_KnownTypes.ContainsKey(type))
         {
-            _knownTypes.Add(key: type,
+            s_KnownTypes.Add(key: type,
                             value: new __TypeCache(result));
         }
         return result;
@@ -90,9 +90,9 @@ public static partial class CreateSerializationInfo
     /// <returns>A filled state object representing the specified <typeparamref name="TAny"/></returns>
     [return: NotNull]
     public static ISerializationInfoAdder From<TAny>([AllowNull] TAny? from,
-                                                           [DisallowNull] Action<TAny, ISerializationInfoAdder> write)
+                                                     [DisallowNull] Action<TAny, ISerializationInfoAdder> write)
     {
-        ExceptionHelpers.ThrowIfArgumentNull(write);
+        ArgumentNullException.ThrowIfNull(from);
 
         if (from is null)
         {
@@ -106,9 +106,9 @@ public static partial class CreateSerializationInfo
 
         write.Invoke(arg1: from,
                      arg2: result);
-        if (!_knownTypes.ContainsKey(type))
+        if (!s_KnownTypes.ContainsKey(type))
         {
-            _knownTypes.Add(key: type,
+            s_KnownTypes.Add(key: type,
                             value: new __TypeCache(result));
         }
         return result;
@@ -117,5 +117,5 @@ public static partial class CreateSerializationInfo
 
 partial class CreateSerializationInfo
 {
-    private static readonly IDictionary<Type, IEnumerable<MemberInfo>> _knownTypes = new Dictionary<Type, IEnumerable<MemberInfo>>();
+    private static readonly IDictionary<Type, IEnumerable<MemberInfo>> s_KnownTypes = new Dictionary<Type, IEnumerable<MemberInfo>>();
 }

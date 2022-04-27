@@ -6,7 +6,7 @@ internal sealed partial class __SerializationInfo : ISerializationInfoMutator
     internal __SerializationInfo(Type type,
                                  Boolean isNull)
     {
-        ExceptionHelpers.ThrowIfArgumentNull(type);
+        ArgumentNullException.ThrowIfNull(type);
 
         this.Type = type;
         this.IsNull = isNull;
@@ -83,7 +83,7 @@ partial class __SerializationInfo : ISerializationInfoAdder
     public ISerializationInfoAdder AddState<TMember>([DisallowNull] String memberName,
                                                      [AllowNull] TMember? memberValue)
     {
-        ExceptionHelpers.ThrowIfArgumentNull(memberName);
+        ArgumentNullException.ThrowIfNull(memberName);
 
         if (this.InternalMembers
                 .Any(m => m.Name == memberName))
@@ -112,7 +112,7 @@ partial class __SerializationInfo : ISerializationInfoGetter
 {
     public TMember? GetState<TMember>([DisallowNull] String memberName)
     {
-        ExceptionHelpers.ThrowIfArgumentNull(memberName);
+        ArgumentNullException.ThrowIfNull(memberName);
 
         for (Int32 i = 0; i < this.Count; i++)
         {
@@ -133,13 +133,13 @@ partial class __SerializationInfo : ISerializationInfoSetter
     public void SetState<TMember>([DisallowNull] String memberName,
                                   [AllowNull] TMember? memberValue)
     {
-        ExceptionHelpers.ThrowIfArgumentNull(memberName);
+        ArgumentNullException.ThrowIfNull(memberName);
 
         MemberState? state = this.InternalMembers
                                  .FirstOrDefault(m => m.Name == memberName);
         if (state is not null)
         {
-            state._value = memberValue;
+            state.m_Value = memberValue;
             return;
         }
 

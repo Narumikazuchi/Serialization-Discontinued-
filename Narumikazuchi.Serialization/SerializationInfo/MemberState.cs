@@ -16,11 +16,13 @@ public sealed partial class MemberState
     /// Gets the name of this member in the object.
     /// </summary>
     public String Name { get; }
+
     /// <summary>
     /// Gets the value of this member in the object.
     /// </summary>
-    public Object? Value => 
-        this._value;
+    public Object? Value =>
+        m_Value;
+
     /// <summary>
     /// Gets the member type.
     /// </summary>
@@ -34,22 +36,22 @@ partial class MemberState
                          Object? value,
                          Type type)
     {
-        ExceptionHelpers.ThrowIfArgumentNull(name);
-        ExceptionHelpers.ThrowIfArgumentNull(type);
+        ArgumentNullException.ThrowIfNull(name);
+        ArgumentNullException.ThrowIfNull(type);
 
         this.Name = name;
-        this._value = value;
+        m_Value = value;
         this.MemberType = type;
     }
     internal MemberState(String name,
                          Type type)
     {
-        ExceptionHelpers.ThrowIfArgumentNull(name);
-        ExceptionHelpers.ThrowIfArgumentNull(type);
+        ArgumentNullException.ThrowIfNull(name);
+        ArgumentNullException.ThrowIfNull(type);
 
         this.Name = name;
         this.MemberType = type;
     }
 
-    internal Object? _value = null;
+    internal Object? m_Value = null;
 }

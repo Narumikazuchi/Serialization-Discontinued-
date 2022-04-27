@@ -5,7 +5,8 @@ internal sealed partial class __TypeCache :
 {
     public __TypeCache(ISerializationInfo info)
     {
-        ExceptionHelpers.ThrowIfArgumentNull(info);
+        ArgumentNullException.ThrowIfNull(info);
+
         ICollection<MemberInfo> items = new Collection<MemberInfo>();
         foreach (MemberState state in info)
         {
@@ -27,28 +28,26 @@ internal sealed partial class __TypeCache :
                 continue;
             }
         }
-        this._items = items;
+        this.m_Items = items;
     }
 }
 
 // Non-Public
 partial class __TypeCache
 {
-    private readonly IEnumerable<MemberInfo> _items;
+    private readonly IEnumerable<MemberInfo> m_Items;
 }
 
 // IEnumerable
 partial class __TypeCache : IEnumerable
 {
     IEnumerator IEnumerable.GetEnumerator() =>
-        this._items
-            .GetEnumerator();
+        m_Items.GetEnumerator();
 }
 
 // IEnumerable<T>
 partial class __TypeCache : IEnumerable<MemberInfo>
 {
     IEnumerator<MemberInfo> IEnumerable<MemberInfo>.GetEnumerator() =>
-        this._items
-            .GetEnumerator();
+        m_Items.GetEnumerator();
 }

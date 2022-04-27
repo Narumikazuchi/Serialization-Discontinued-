@@ -25,4 +25,14 @@ public interface ISerializationStrategy<TReturn, TInput> :
     /// <param name="input">The object to serialize.</param>
     /// <returns>An object of type <typeparamref name="TReturn"/> representing the state of the input object at the time of method invocation.</returns>
     public TReturn Serialize(TInput input);
+
+    TReturn ISerializationStrategy<TReturn>.Serialize(Object? input)
+    {
+        if (input is not TInput value)
+        {
+            throw new InvalidCastException();
+        }
+
+        return this.Serialize(value);
+    }
 }

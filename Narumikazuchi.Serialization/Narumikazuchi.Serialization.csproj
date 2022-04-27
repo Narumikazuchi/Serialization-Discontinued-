@@ -39,8 +39,4 @@
 		</None>
 	</ItemGroup>
 
-	<ItemGroup>
-		<ProjectReference Include="..\submodules\Common\Narumikazuchi\Narumikazuchi.csproj" />
-	</ItemGroup>
-
 </Project>
