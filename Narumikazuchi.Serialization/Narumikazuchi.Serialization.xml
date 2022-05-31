@@ -206,7 +206,7 @@
             <param name="stream">The stream to deserialize the graph from.</param>
             <returns>The instance represented by the bytes in the specified stream</returns>
         </member>
-        <member name="M:Narumikazuchi.Serialization.IDeserializer`1.Deserialize(System.IO.Stream,System.Int64@)">
+        <member name="M:Narumikazuchi.Serialization.IDeserializer`1.Deserialize(System.IO.Stream,System.Int64)">
             <summary>
             Deserializes the specified stream starting at the specified offset into an instance of type <typeparamref name="TSerializable"/>.
             </summary>
@@ -222,7 +222,7 @@
             <param name="read">The amount of elements read from the <paramref name="stream"/> parameter.</param>
             <returns>The instance represented by the bytes in the specified stream</returns>
         </member>
-        <member name="M:Narumikazuchi.Serialization.IDeserializer`1.Deserialize(System.IO.Stream,System.Int64@,System.UInt64@)">
+        <member name="M:Narumikazuchi.Serialization.IDeserializer`1.Deserialize(System.IO.Stream,System.Int64,System.UInt64@)">
             <summary>
             Deserializes the specified stream starting at the specified offset into an instance of type <typeparamref name="TSerializable"/>.
             </summary>
@@ -231,7 +231,7 @@
             <param name="read">The amount of elements read from the <paramref name="stream"/> parameter.</param>
             <returns>The instance represented by the bytes in the specified stream</returns>
         </member>
-        <member name="M:Narumikazuchi.Serialization.IDeserializer`1.Deserialize(System.IO.Stream,Narumikazuchi.Serialization.SerializationFinishAction@)">
+        <member name="M:Narumikazuchi.Serialization.IDeserializer`1.Deserialize(System.IO.Stream,Narumikazuchi.Serialization.SerializationFinishAction)">
             <summary>
             Deserializes the specified stream starting at the specified offset into an instance of type <typeparamref name="TSerializable"/>.
             </summary>
@@ -239,7 +239,7 @@
             <param name="actionAfter">The actions to perform after the reading operation has finished.</param>
             <returns>The instance represented by the bytes in the specified stream</returns>
         </member>
-        <member name="M:Narumikazuchi.Serialization.IDeserializer`1.Deserialize(System.IO.Stream,System.Int64@,Narumikazuchi.Serialization.SerializationFinishAction@)">
+        <member name="M:Narumikazuchi.Serialization.IDeserializer`1.Deserialize(System.IO.Stream,System.Int64,Narumikazuchi.Serialization.SerializationFinishAction)">
             <summary>
             Deserializes the specified stream starting at the specified offset into an instance of type <typeparamref name="TSerializable"/>.
             </summary>
@@ -248,7 +248,7 @@
             <param name="actionAfter">The actions to perform after the reading operation has finished.</param>
             <returns>The instance represented by the bytes in the specified stream</returns>
         </member>
-        <member name="M:Narumikazuchi.Serialization.IDeserializer`1.Deserialize(System.IO.Stream,System.UInt64@,Narumikazuchi.Serialization.SerializationFinishAction@)">
+        <member name="M:Narumikazuchi.Serialization.IDeserializer`1.Deserialize(System.IO.Stream,System.UInt64@,Narumikazuchi.Serialization.SerializationFinishAction)">
             <summary>
             Deserializes the specified stream starting at the specified offset into an instance of type <typeparamref name="TSerializable"/>.
             </summary>
@@ -257,7 +257,7 @@
             <param name="actionAfter">The actions to perform after the reading operation has finished.</param>
             <returns>The instance represented by the bytes in the specified stream</returns>
         </member>
-        <member name="M:Narumikazuchi.Serialization.IDeserializer`1.Deserialize(System.IO.Stream,System.Int64@,System.UInt64@,Narumikazuchi.Serialization.SerializationFinishAction@)">
+        <member name="M:Narumikazuchi.Serialization.IDeserializer`1.Deserialize(System.IO.Stream,System.Int64,System.UInt64@,Narumikazuchi.Serialization.SerializationFinishAction)">
             <summary>
             Deserializes the specified stream starting at the specified offset into an instance of type <typeparamref name="TSerializable"/>.
             </summary>
@@ -275,7 +275,7 @@
             <param name="result">The instance represented by the bytes in the specified stream.</param>
             <returns><see langword="true"/> if the serialization succeeded; else, <see langword="false"/></returns>
         </member>
-        <member name="M:Narumikazuchi.Serialization.IDeserializer`1.TryDeserialize(System.IO.Stream,System.Int64@,`0@)">
+        <member name="M:Narumikazuchi.Serialization.IDeserializer`1.TryDeserialize(System.IO.Stream,System.Int64,`0@)">
             <summary>
             Tries to deserialize the specified stream starting at the specified offset into an instance of type <typeparamref name="TSerializable"/>.
             </summary>
@@ -293,7 +293,7 @@
             <param name="result">The instance represented by the bytes in the specified stream.</param>
             <returns><see langword="true"/> if the serialization succeeded; else, <see langword="false"/></returns>
         </member>
-        <member name="M:Narumikazuchi.Serialization.IDeserializer`1.TryDeserialize(System.IO.Stream,System.Int64@,System.UInt64@,`0@)">
+        <member name="M:Narumikazuchi.Serialization.IDeserializer`1.TryDeserialize(System.IO.Stream,System.Int64,System.UInt64@,`0@)">
             <summary>
             Tries to deserialize the specified stream starting at the specified offset into an instance of type <typeparamref name="TSerializable"/>.
             </summary>
@@ -303,7 +303,7 @@
             <param name="result">The instance represented by the bytes in the specified stream.</param>
             <returns><see langword="true"/> if the serialization succeeded; else, <see langword="false"/></returns>
         </member>
-        <member name="M:Narumikazuchi.Serialization.IDeserializer`1.TryDeserialize(System.IO.Stream,Narumikazuchi.Serialization.SerializationFinishAction@,`0@)">
+        <member name="M:Narumikazuchi.Serialization.IDeserializer`1.TryDeserialize(System.IO.Stream,Narumikazuchi.Serialization.SerializationFinishAction,`0@)">
             <summary>
             Tries to deserialize the specified stream starting at the specified offset into an instance of type <typeparamref name="TSerializable"/>.
             </summary>
@@ -312,7 +312,7 @@
             <param name="result">The instance represented by the bytes in the specified stream.</param>
             <returns><see langword="true"/> if the serialization succeeded; else, <see langword="false"/></returns>
         </member>
-        <member name="M:Narumikazuchi.Serialization.IDeserializer`1.TryDeserialize(System.IO.Stream,System.Int64@,Narumikazuchi.Serialization.SerializationFinishAction@,`0@)">
+        <member name="M:Narumikazuchi.Serialization.IDeserializer`1.TryDeserialize(System.IO.Stream,System.Int64,Narumikazuchi.Serialization.SerializationFinishAction,`0@)">
             <summary>
             Tries to deserialize the specified stream starting at the specified offset into an instance of type <typeparamref name="TSerializable"/>.
             </summary>
@@ -322,7 +322,7 @@
             <param name="result">The instance represented by the bytes in the specified stream.</param>
             <returns><see langword="true"/> if the serialization succeeded; else, <see langword="false"/></returns>
         </member>
-        <member name="M:Narumikazuchi.Serialization.IDeserializer`1.TryDeserialize(System.IO.Stream,System.UInt64@,Narumikazuchi.Serialization.SerializationFinishAction@,`0@)">
+        <member name="M:Narumikazuchi.Serialization.IDeserializer`1.TryDeserialize(System.IO.Stream,System.UInt64@,Narumikazuchi.Serialization.SerializationFinishAction,`0@)">
             <summary>
             Tries to deserialize the specified stream starting at the specified offset into an instance of type <typeparamref name="TSerializable"/>.
             </summary>
@@ -332,7 +332,7 @@
             <param name="result">The instance represented by the bytes in the specified stream.</param>
             <returns><see langword="true"/> if the serialization succeeded; else, <see langword="false"/></returns>
         </member>
-        <member name="M:Narumikazuchi.Serialization.IDeserializer`1.TryDeserialize(System.IO.Stream,System.Int64@,System.UInt64@,Narumikazuchi.Serialization.SerializationFinishAction@,`0@)">
+        <member name="M:Narumikazuchi.Serialization.IDeserializer`1.TryDeserialize(System.IO.Stream,System.Int64,System.UInt64@,Narumikazuchi.Serialization.SerializationFinishAction,`0@)">
             <summary>
             Tries to deserialize the specified stream starting at the specified offset into an instance of type <typeparamref name="TSerializable"/>.
             </summary>
@@ -390,7 +390,7 @@
             <param name="graph">The graph to serialize.</param>
             <returns>The amount of bytes written</returns>
         </member>
-        <member name="M:Narumikazuchi.Serialization.ISerializer`1.Serialize(System.IO.Stream,`0,System.Int64@)">
+        <member name="M:Narumikazuchi.Serialization.ISerializer`1.Serialize(System.IO.Stream,`0,System.Int64)">
             <summary>
             Serializes the specified graph into the specified stream starting at the specified offset in the stream.
             </summary>
@@ -399,7 +399,7 @@
             <param name="offset">The offset in the stream where to begin writing.</param>
             <returns>The amount of bytes written</returns>
         </member>
-        <member name="M:Narumikazuchi.Serialization.ISerializer`1.Serialize(System.IO.Stream,`0,Narumikazuchi.Serialization.SerializationFinishAction@)">
+        <member name="M:Narumikazuchi.Serialization.ISerializer`1.Serialize(System.IO.Stream,`0,Narumikazuchi.Serialization.SerializationFinishAction)">
             <summary>
             Serializes the specified graph into the specified stream starting at the specified offset in the stream.
             </summary>
@@ -408,7 +408,7 @@
             <param name="actionAfter">The actions to perform after the writing operation has finished.</param>
             <returns>The amount of bytes written</returns>
         </member>
-        <member name="M:Narumikazuchi.Serialization.ISerializer`1.Serialize(System.IO.Stream,`0,System.Int64@,Narumikazuchi.Serialization.SerializationFinishAction@)">
+        <member name="M:Narumikazuchi.Serialization.ISerializer`1.Serialize(System.IO.Stream,`0,System.Int64,Narumikazuchi.Serialization.SerializationFinishAction)">
             <summary>
             Serializes the specified graph into the specified stream starting at the specified offset in the stream.
             </summary>
@@ -426,7 +426,7 @@
             <param name="graph">The graph to serialize.</param>
             <returns>The amount of bytes written</returns>
         </member>
-        <member name="M:Narumikazuchi.Serialization.ISerializer`1.TrySerialize(System.IO.Stream,`0,System.Int64@)">
+        <member name="M:Narumikazuchi.Serialization.ISerializer`1.TrySerialize(System.IO.Stream,`0,System.Int64)">
             <summary>
             Serializes the specified graph into the specified stream starting at the specified offset in the stream.
             </summary>
@@ -444,7 +444,7 @@
             <param name="written">The amount of bytes written.</param>
             <returns>The amount of bytes written</returns>
         </member>
-        <member name="M:Narumikazuchi.Serialization.ISerializer`1.TrySerialize(System.IO.Stream,`0,System.Int64@,System.UInt64@)">
+        <member name="M:Narumikazuchi.Serialization.ISerializer`1.TrySerialize(System.IO.Stream,`0,System.Int64,System.UInt64@)">
             <summary>
             Serializes the specified graph into the specified stream starting at the specified offset in the stream.
             </summary>
@@ -454,7 +454,7 @@
             <param name="written">The amount of bytes written.</param>
             <returns>The amount of bytes written</returns>
         </member>
-        <member name="M:Narumikazuchi.Serialization.ISerializer`1.TrySerialize(System.IO.Stream,`0,Narumikazuchi.Serialization.SerializationFinishAction@)">
+        <member name="M:Narumikazuchi.Serialization.ISerializer`1.TrySerialize(System.IO.Stream,`0,Narumikazuchi.Serialization.SerializationFinishAction)">
             <summary>
             Serializes the specified graph into the specified stream starting at the specified offset in the stream.
             </summary>
@@ -463,7 +463,7 @@
             <param name="actionAfter">The actions to perform after the writing operation has finished.</param>
             <returns>The amount of bytes written</returns>
         </member>
-        <member name="M:Narumikazuchi.Serialization.ISerializer`1.TrySerialize(System.IO.Stream,`0,System.Int64@,Narumikazuchi.Serialization.SerializationFinishAction@)">
+        <member name="M:Narumikazuchi.Serialization.ISerializer`1.TrySerialize(System.IO.Stream,`0,System.Int64,Narumikazuchi.Serialization.SerializationFinishAction)">
             <summary>
             Serializes the specified graph into the specified stream starting at the specified offset in the stream.
             </summary>
@@ -473,7 +473,7 @@
             <param name="actionAfter">The actions to perform after the writing operation has finished.</param>
             <returns>The amount of bytes written</returns>
         </member>
-        <member name="M:Narumikazuchi.Serialization.ISerializer`1.TrySerialize(System.IO.Stream,`0,System.UInt64@,Narumikazuchi.Serialization.SerializationFinishAction@)">
+        <member name="M:Narumikazuchi.Serialization.ISerializer`1.TrySerialize(System.IO.Stream,`0,System.UInt64@,Narumikazuchi.Serialization.SerializationFinishAction)">
             <summary>
             Serializes the specified graph into the specified stream starting at the specified offset in the stream.
             </summary>
@@ -483,7 +483,7 @@
             <param name="actionAfter">The actions to perform after the writing operation has finished.</param>
             <returns>The amount of bytes written</returns>
         </member>
-        <member name="M:Narumikazuchi.Serialization.ISerializer`1.TrySerialize(System.IO.Stream,`0,System.Int64@,System.UInt64@,Narumikazuchi.Serialization.SerializationFinishAction@)">
+        <member name="M:Narumikazuchi.Serialization.ISerializer`1.TrySerialize(System.IO.Stream,`0,System.Int64,System.UInt64@,Narumikazuchi.Serialization.SerializationFinishAction)">
             <summary>
             Serializes the specified graph into the specified stream starting at the specified offset in the stream.
             </summary>

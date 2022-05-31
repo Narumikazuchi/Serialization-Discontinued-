@@ -25,7 +25,7 @@ public interface IDeserializer<TSerializable> :
     /// <returns>The instance represented by the bytes in the specified stream</returns>
     [return: MaybeNull]
     public TSerializable? Deserialize([DisallowNull] Stream stream,
-                                      in Int64 offset) =>
+                                      Int64 offset) =>
         this.Deserialize(stream: stream,
                          offset: offset,
                          read: out _,
@@ -52,7 +52,7 @@ public interface IDeserializer<TSerializable> :
     /// <returns>The instance represented by the bytes in the specified stream</returns>
     [return: MaybeNull]
     public TSerializable? Deserialize([DisallowNull] Stream stream,
-                                      in Int64 offset,
+                                      Int64 offset,
                                       out UInt64 read) =>
         this.Deserialize(stream: stream,
                          offset: offset,
@@ -66,7 +66,7 @@ public interface IDeserializer<TSerializable> :
     /// <returns>The instance represented by the bytes in the specified stream</returns>
     [return: MaybeNull]
     public TSerializable? Deserialize([DisallowNull] Stream stream,
-                                      in SerializationFinishAction actionAfter) =>
+                                      SerializationFinishAction actionAfter) =>
         this.Deserialize(stream: stream,
                          offset: 0,
                          read: out _,
@@ -80,8 +80,8 @@ public interface IDeserializer<TSerializable> :
     /// <returns>The instance represented by the bytes in the specified stream</returns>
     [return: MaybeNull]
     public TSerializable? Deserialize([DisallowNull] Stream stream,
-                                      in Int64 offset,
-                                      in SerializationFinishAction actionAfter) =>
+                                      Int64 offset,
+                                      SerializationFinishAction actionAfter) =>
         this.Deserialize(stream: stream,
                          offset: offset,
                          read: out _,
@@ -96,7 +96,7 @@ public interface IDeserializer<TSerializable> :
     [return: MaybeNull]
     public TSerializable? Deserialize([DisallowNull] Stream stream,
                                       out UInt64 read,
-                                      in SerializationFinishAction actionAfter) =>
+                                      SerializationFinishAction actionAfter) =>
         this.Deserialize(stream: stream,
                          offset: 0,
                          read: out read,
@@ -111,9 +111,9 @@ public interface IDeserializer<TSerializable> :
     /// <returns>The instance represented by the bytes in the specified stream</returns>
     [return: MaybeNull]
     public TSerializable? Deserialize([DisallowNull] Stream stream,
-                                      in Int64 offset,
+                                      Int64 offset,
                                       out UInt64 read,
-                                      in SerializationFinishAction actionAfter);
+                                      SerializationFinishAction actionAfter);
 
     /// <summary>
     /// Tries to deserialize the specified stream starting at the specified offset into an instance of type <typeparamref name="TSerializable"/>.
@@ -136,7 +136,7 @@ public interface IDeserializer<TSerializable> :
     /// <param name="result">The instance represented by the bytes in the specified stream.</param>
     /// <returns><see langword="true"/> if the serialization succeeded; else, <see langword="false"/></returns>
     public Boolean TryDeserialize([DisallowNull] Stream stream,
-                                  in Int64 offset,
+                                  Int64 offset,
                                   [AllowNull] out TSerializable? result) =>
         this.TryDeserialize(stream: stream,
                             offset: offset,
@@ -167,7 +167,7 @@ public interface IDeserializer<TSerializable> :
     /// <param name="result">The instance represented by the bytes in the specified stream.</param>
     /// <returns><see langword="true"/> if the serialization succeeded; else, <see langword="false"/></returns>
     public Boolean TryDeserialize([DisallowNull] Stream stream,
-                                  in Int64 offset,
+                                  Int64 offset,
                                   out UInt64 read,
                                   [AllowNull] out TSerializable? result) =>
         this.TryDeserialize(stream: stream,
@@ -183,7 +183,7 @@ public interface IDeserializer<TSerializable> :
     /// <param name="result">The instance represented by the bytes in the specified stream.</param>
     /// <returns><see langword="true"/> if the serialization succeeded; else, <see langword="false"/></returns>
     public Boolean TryDeserialize([DisallowNull] Stream stream,
-                                  in SerializationFinishAction actionAfter,
+                                  SerializationFinishAction actionAfter,
                                   [AllowNull] out TSerializable? result) =>
         this.TryDeserialize(stream: stream,
                             offset: 0,
@@ -199,8 +199,8 @@ public interface IDeserializer<TSerializable> :
     /// <param name="result">The instance represented by the bytes in the specified stream.</param>
     /// <returns><see langword="true"/> if the serialization succeeded; else, <see langword="false"/></returns>
     public Boolean TryDeserialize([DisallowNull] Stream stream,
-                                  in Int64 offset,
-                                  in SerializationFinishAction actionAfter,
+                                  Int64 offset,
+                                  SerializationFinishAction actionAfter,
                                   [AllowNull] out TSerializable? result) =>
         this.TryDeserialize(stream: stream,
                             offset: offset,
@@ -217,7 +217,7 @@ public interface IDeserializer<TSerializable> :
     /// <returns><see langword="true"/> if the serialization succeeded; else, <see langword="false"/></returns>
     public Boolean TryDeserialize([DisallowNull] Stream stream,
                                   out UInt64 read,
-                                  in SerializationFinishAction actionAfter,
+                                  SerializationFinishAction actionAfter,
                                   [AllowNull] out TSerializable? result) =>
         this.TryDeserialize(stream: stream,
                             offset: 0,
@@ -234,8 +234,8 @@ public interface IDeserializer<TSerializable> :
     /// <param name="result">The instance represented by the bytes in the specified stream.</param>
     /// <returns><see langword="true"/> if the serialization succeeded; else, <see langword="false"/></returns>
     public Boolean TryDeserialize([DisallowNull] Stream stream,
-                                  in Int64 offset,
+                                  Int64 offset,
                                   out UInt64 read,
-                                  in SerializationFinishAction actionAfter,
+                                  SerializationFinishAction actionAfter,
                                   [AllowNull] out TSerializable? result);
 }
