@@ -11,7 +11,7 @@ public static class DeserializerExtensions
     /// <param name="deserializer">The deserializer that will perform the serialization.</param>
     /// <param name="stream">The stream to deserialize the graph from.</param>
     /// <returns>The instance represented by the bytes in the specified stream</returns>
-    [Obsolete("Only use this when absolutetly necessary. Use the more modern IWriteableStream interfaced overload if possible.", false)]
+    [Obsolete("Only use this when absolutetly necessary. Use the more modern IReadableStream interface overload if possible.", false)]
     [return: MaybeNull]
     public static TSerializable? Deserialize<TSerializable>(this IDeserializer<TSerializable> deserializer,
                                                             [DisallowNull] Stream stream) =>
@@ -26,7 +26,7 @@ public static class DeserializerExtensions
     /// <param name="stream">The stream to deserialize the graph from.</param>
     /// <param name="offset">The offset in the stream where to begin reading.</param>
     /// <returns>The instance represented by the bytes in the specified stream</returns>
-    [Obsolete("Only use this when absolutetly necessary. Use the more modern IWriteableStream interfaced overload if possible.", false)]
+    [Obsolete("Only use this when absolutetly necessary. Use the more modern IReadableStream interface overload if possible.", false)]
     [return: MaybeNull]
     public static TSerializable? Deserialize<TSerializable>(this IDeserializer<TSerializable> deserializer,
                                                             [DisallowNull] Stream stream,
@@ -42,7 +42,7 @@ public static class DeserializerExtensions
     /// <param name="stream">The stream to deserialize the graph from.</param>
     /// <param name="read">The amount of elements read from the <paramref name="stream"/> parameter.</param>
     /// <returns>The instance represented by the bytes in the specified stream</returns>
-    [Obsolete("Only use this when absolutetly necessary. Use the more modern IWriteableStream interfaced overload if possible.", false)]
+    [Obsolete("Only use this when absolutetly necessary. Use the more modern IReadableStream interface overload if possible.", false)]
     [return: MaybeNull]
     public static TSerializable? Deserialize<TSerializable>(this IDeserializer<TSerializable> deserializer,
                                                             [DisallowNull] Stream stream,
@@ -59,7 +59,7 @@ public static class DeserializerExtensions
     /// <param name="offset">The offset in the stream where to begin reading.</param>
     /// <param name="read">The amount of elements read from the <paramref name="stream"/> parameter.</param>
     /// <returns>The instance represented by the bytes in the specified stream</returns>
-    [Obsolete("Only use this when absolutetly necessary. Use the more modern IWriteableStream interfaced overload if possible.", false)]
+    [Obsolete("Only use this when absolutetly necessary. Use the more modern IReadableStream interface overload if possible.", false)]
     [return: MaybeNull]
     public static TSerializable? Deserialize<TSerializable>(this IDeserializer<TSerializable> deserializer,
                                                             [DisallowNull] Stream stream,
@@ -76,7 +76,7 @@ public static class DeserializerExtensions
     /// <param name="stream">The stream to deserialize the graph from.</param>
     /// <param name="actionAfter">The actions to perform after the reading operation has finished.</param>
     /// <returns>The instance represented by the bytes in the specified stream</returns>
-    [Obsolete("Only use this when absolutetly necessary. Use the more modern IWriteableStream interfaced overload if possible.", false)]
+    [Obsolete("Only use this when absolutetly necessary. Use the more modern IReadableStream interface overload if possible.", false)]
     [return: MaybeNull]
     public static TSerializable? Deserialize<TSerializable>(this IDeserializer<TSerializable> deserializer,
                                                             [DisallowNull] Stream stream,
@@ -93,7 +93,7 @@ public static class DeserializerExtensions
     /// <param name="offset">The offset in the stream where to begin reading.</param>
     /// <param name="actionAfter">The actions to perform after the reading operation has finished.</param>
     /// <returns>The instance represented by the bytes in the specified stream</returns>
-    [Obsolete("Only use this when absolutetly necessary. Use the more modern IWriteableStream interfaced overload if possible.", false)]
+    [Obsolete("Only use this when absolutetly necessary. Use the more modern IReadableStream interface overload if possible.", false)]
     [return: MaybeNull]
     public static TSerializable? Deserialize<TSerializable>(this IDeserializer<TSerializable> deserializer,
                                                             [DisallowNull] Stream stream,
@@ -111,7 +111,7 @@ public static class DeserializerExtensions
     /// <param name="read">The amount of elements read from the <paramref name="stream"/> parameter.</param>
     /// <param name="actionAfter">The actions to perform after the reading operation has finished.</param>
     /// <returns>The instance represented by the bytes in the specified stream</returns>
-    [Obsolete("Only use this when absolutetly necessary. Use the more modern IWriteableStream interfaced overload if possible.", false)]
+    [Obsolete("Only use this when absolutetly necessary. Use the more modern IReadableStream interface overload if possible.", false)]
     [return: MaybeNull]
     public static TSerializable? Deserialize<TSerializable>(this IDeserializer<TSerializable> deserializer,
                                                             [DisallowNull] Stream stream,
@@ -245,7 +245,7 @@ public static class DeserializerExtensions
     /// <param name="stream">The stream to deserialize the graph from.</param>
     /// <param name="result">The instance represented by the bytes in the specified stream.</param>
     /// <returns><see langword="true"/> if the serialization succeeded; else, <see langword="false"/></returns>
-    [Obsolete("Only use this when absolutetly necessary. Use the more modern IWriteableStream interfaced overload if possible.", false)]
+    [Obsolete("Only use this when absolutetly necessary. Use the more modern IReadableStream interface overload if possible.", false)]
     public static Boolean TryDeserialize<TSerializable>(this IDeserializer<TSerializable> deserializer,
                                                         [DisallowNull] Stream stream,
                                                         [AllowNull] out TSerializable? result) =>
@@ -262,7 +262,7 @@ public static class DeserializerExtensions
     /// <param name="offset">The offset in the stream where to begin reading.</param>
     /// <param name="result">The instance represented by the bytes in the specified stream.</param>
     /// <returns><see langword="true"/> if the serialization succeeded; else, <see langword="false"/></returns>
-    [Obsolete("Only use this when absolutetly necessary. Use the more modern IWriteableStream interfaced overload if possible.", false)]
+    [Obsolete("Only use this when absolutetly necessary. Use the more modern IReadableStream interface overload if possible.", false)]
     public static Boolean TryDeserialize<TSerializable>(this IDeserializer<TSerializable> deserializer,
                                                         [DisallowNull] Stream stream,
                                                         Int64 offset,
@@ -280,7 +280,7 @@ public static class DeserializerExtensions
     /// <param name="read">The amount of elements read from the <paramref name="stream"/> parameter.</param>
     /// <param name="result">The instance represented by the bytes in the specified stream.</param>
     /// <returns><see langword="true"/> if the serialization succeeded; else, <see langword="false"/></returns>
-    [Obsolete("Only use this when absolutetly necessary. Use the more modern IWriteableStream interfaced overload if possible.", false)]
+    [Obsolete("Only use this when absolutetly necessary. Use the more modern IReadableStream interface overload if possible.", false)]
     public static Boolean TryDeserialize<TSerializable>(this IDeserializer<TSerializable> deserializer,
                                                         [DisallowNull] Stream stream,
                                                         out UInt64 read,
@@ -299,7 +299,7 @@ public static class DeserializerExtensions
     /// <param name="read">The amount of elements read from the <paramref name="stream"/> parameter.</param>
     /// <param name="result">The instance represented by the bytes in the specified stream.</param>
     /// <returns><see langword="true"/> if the serialization succeeded; else, <see langword="false"/></returns>
-    [Obsolete("Only use this when absolutetly necessary. Use the more modern IWriteableStream interfaced overload if possible.", false)]
+    [Obsolete("Only use this when absolutetly necessary. Use the more modern IReadableStream interface overload if possible.", false)]
     public static Boolean TryDeserialize<TSerializable>(this IDeserializer<TSerializable> deserializer,
                                                         [DisallowNull] Stream stream,
                                                         Int64 offset,
@@ -318,7 +318,7 @@ public static class DeserializerExtensions
     /// <param name="actionAfter">The actions to perform after the reading operation has finished.</param>
     /// <param name="result">The instance represented by the bytes in the specified stream.</param>
     /// <returns><see langword="true"/> if the serialization succeeded; else, <see langword="false"/></returns>
-    [Obsolete("Only use this when absolutetly necessary. Use the more modern IWriteableStream interfaced overload if possible.", false)]
+    [Obsolete("Only use this when absolutetly necessary. Use the more modern IReadableStream interface overload if possible.", false)]
     public static Boolean TryDeserialize<TSerializable>(this IDeserializer<TSerializable> deserializer,
                                                         [DisallowNull] Stream stream,
                                                         SerializationFinishAction actionAfter,
@@ -337,7 +337,7 @@ public static class DeserializerExtensions
     /// <param name="actionAfter">The actions to perform after the reading operation has finished.</param>
     /// <param name="result">The instance represented by the bytes in the specified stream.</param>
     /// <returns><see langword="true"/> if the serialization succeeded; else, <see langword="false"/></returns>
-    [Obsolete("Only use this when absolutetly necessary. Use the more modern IWriteableStream interfaced overload if possible.", false)]
+    [Obsolete("Only use this when absolutetly necessary. Use the more modern IReadableStream interface overload if possible.", false)]
     public static Boolean TryDeserialize<TSerializable>(this IDeserializer<TSerializable> deserializer,
                                                         [DisallowNull] Stream stream,
                                                         Int64 offset,
@@ -357,7 +357,7 @@ public static class DeserializerExtensions
     /// <param name="actionAfter">The actions to perform after the reading operation has finished.</param>
     /// <param name="result">The instance represented by the bytes in the specified stream.</param>
     /// <returns><see langword="true"/> if the serialization succeeded; else, <see langword="false"/></returns>
-    [Obsolete("Only use this when absolutetly necessary. Use the more modern IWriteableStream interfaced overload if possible.", false)]
+    [Obsolete("Only use this when absolutetly necessary. Use the more modern IReadableStream interface overload if possible.", false)]
     public static Boolean TryDeserialize<TSerializable>(this IDeserializer<TSerializable> deserializer,
                                                         [DisallowNull] Stream stream,
                                                         out UInt64 read,

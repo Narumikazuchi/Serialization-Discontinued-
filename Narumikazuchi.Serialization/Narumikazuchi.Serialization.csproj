@@ -1,21 +1,32 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net6.0</TargetFramework>
-		<PlatformTarget>x64</PlatformTarget>
-		<DocumentationFile>Narumikazuchi.Serialization.xml</DocumentationFile>
-		<GenerateDocumentationFile>True</GenerateDocumentationFile>
+		<TargetFrameworks>net6.0;net7.0</TargetFrameworks>
 		<Nullable>enable</Nullable>
 		<LangVersion>preview</LangVersion>
-		<TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+		<PlatformTarget>x64</PlatformTarget>
+	</PropertyGroup>
+
+	<PropertyGroup>
 		<EnablePreviewFeatures>True</EnablePreviewFeatures>
 		<GenerateRequiresPreviewFeaturesAttribute>True</GenerateRequiresPreviewFeaturesAttribute>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+		<WarningsNotAsErrors>1591</WarningsNotAsErrors>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<DocumentationFile>Narumikazuchi.Serialization.xml</DocumentationFile>
 		<Authors>Narumikazuchi</Authors>
-		<PackageReadmeFile>README nuget.md</PackageReadmeFile>
-		<Copyright>©2021 Narumikazuchi</Copyright>
+		<Copyright>©2022 Narumikazuchi</Copyright>
+		<Version>4.0.1-beta</Version>
+	</PropertyGroup>
+
+	<PropertyGroup>
 		<RepositoryUrl>https://github.com/Narumikazuchi/Serialization</RepositoryUrl>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-		<Version>4.0.0-beta</Version>
 		<PackageReleaseNotes>
 		</PackageReleaseNotes>
 		<PackageLicenseFile>LICENSE</PackageLicenseFile>
@@ -23,6 +34,7 @@
 		<PackageProjectUrl>https://github.com/Narumikazuchi/Serialization/wiki</PackageProjectUrl>
 		<PackageIcon>logo.png</PackageIcon>
 		<PackageTags>Serialization; Serializer; Interface; Interfaces</PackageTags>
+		<PackageReadmeFile>README nuget.md</PackageReadmeFile>
 		<Description>This project provides a simple interface for a user to serialize data. The interface(s) can be implemented by calsses and structs and then serialized using any serializer build on this architecture. For a list of implementing frameworks and their usage visit the [wiki](https://github.com/Narumikazuchi/Serialization/wiki).</Description>
 	</PropertyGroup>
 
@@ -42,8 +54,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="Narumikazuchi.Collections" Version="7.0.0" />
-	  <PackageReference Include="Narumikazuchi.InputOutput" Version="0.2.2-beta" />
+	  <PackageReference Include="Narumikazuchi.Collections" Version="7.0.3-beta" />
+	  <PackageReference Include="Narumikazuchi.InputOutput" Version="0.3.4-beta" />
 	</ItemGroup>
 
 </Project>

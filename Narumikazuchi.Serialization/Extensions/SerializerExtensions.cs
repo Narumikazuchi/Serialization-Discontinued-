@@ -12,7 +12,7 @@ public static class SerializerExtensions
     /// <param name="stream">The stream to serialize the graph into.</param>
     /// <param name="graph">The graph to serialize.</param>
     /// <returns>The amount of bytes written</returns>
-    [Obsolete("Only use this when absolutetly necessary. Use the more modern IWriteableStream interfaced overload if possible.", false)]
+    [Obsolete("Only use this when absolutetly necessary. Use the more modern IWriteableStream interface overload if possible.", false)]
     public static UInt64 Serialize<TSerializable>(this ISerializer<TSerializable> serializer,
                                                   [DisallowNull] Stream stream,
                                                   [AllowNull] TSerializable? graph) =>
@@ -28,7 +28,7 @@ public static class SerializerExtensions
     /// <param name="graph">The graph to serialize.</param>
     /// <param name="offset">The offset in the stream where to begin writing.</param>
     /// <returns>The amount of bytes written</returns>
-    [Obsolete("Only use this when absolutetly necessary. Use the more modern IWriteableStream interfaced overload if possible.", false)]
+    [Obsolete("Only use this when absolutetly necessary. Use the more modern IWriteableStream interface overload if possible.", false)]
     public static UInt64 Serialize<TSerializable>(this ISerializer<TSerializable> serializer,
                                                   [DisallowNull] Stream stream,
                                                   [AllowNull] TSerializable? graph,
@@ -45,7 +45,7 @@ public static class SerializerExtensions
     /// <param name="graph">The graph to serialize.</param>
     /// <param name="actionAfter">The actions to perform after the writing operation has finished.</param>
     /// <returns>The amount of bytes written</returns>
-    [Obsolete("Only use this when absolutetly necessary. Use the more modern IWriteableStream interfaced overload if possible.", false)]
+    [Obsolete("Only use this when absolutetly necessary. Use the more modern IWriteableStream interface overload if possible.", false)]
     public static UInt64 Serialize<TSerializable>(this ISerializer<TSerializable> serializer,
                                                   [DisallowNull] Stream stream,
                                                   [AllowNull] TSerializable? graph,
@@ -111,7 +111,7 @@ public static class SerializerExtensions
     /// <param name="stream">The stream to serialize the graph into.</param>
     /// <param name="graph">The graph to serialize.</param>
     /// <returns>The amount of bytes written</returns>
-    [Obsolete("Only use this when absolutetly necessary. Use the more modern IWriteableStream interfaced overload if possible.", false)]
+    [Obsolete("Only use this when absolutetly necessary. Use the more modern IWriteableStream interface overload if possible.", false)]
     public static Boolean TrySerialize<TSerializable>(this ISerializer<TSerializable> serializer,
                                                       [DisallowNull] Stream stream,
                                                       [AllowNull] TSerializable? graph) =>
@@ -128,7 +128,7 @@ public static class SerializerExtensions
     /// <param name="graph">The graph to serialize.</param>
     /// <param name="offset">The offset in the stream where to begin writing.</param>
     /// <returns>The amount of bytes written</returns>
-    [Obsolete("Only use this when absolutetly necessary. Use the more modern IWriteableStream interfaced overload if possible.", false)]
+    [Obsolete("Only use this when absolutetly necessary. Use the more modern IWriteableStream interface overload if possible.", false)]
     public static Boolean TrySerialize<TSerializable>(this ISerializer<TSerializable> serializer,
                                                       [DisallowNull] Stream stream,
                                                       [AllowNull] TSerializable? graph,
@@ -146,7 +146,7 @@ public static class SerializerExtensions
     /// <param name="graph">The graph to serialize.</param>
     /// <param name="written">The amount of bytes written.</param>
     /// <returns>The amount of bytes written</returns>
-    [Obsolete("Only use this when absolutetly necessary. Use the more modern IWriteableStream interfaced overload if possible.", false)]
+    [Obsolete("Only use this when absolutetly necessary. Use the more modern IWriteableStream interface overload if possible.", false)]
     public static Boolean TrySerialize<TSerializable>(this ISerializer<TSerializable> serializer,
                                                       [DisallowNull] Stream stream,
                                                       [AllowNull] TSerializable? graph,
@@ -165,7 +165,7 @@ public static class SerializerExtensions
     /// <param name="offset">The offset in the stream where to begin writing.</param>
     /// <param name="written">The amount of bytes written.</param>
     /// <returns>The amount of bytes written</returns>
-    [Obsolete("Only use this when absolutetly necessary. Use the more modern IWriteableStream interfaced overload if possible.", false)]
+    [Obsolete("Only use this when absolutetly necessary. Use the more modern IWriteableStream interface overload if possible.", false)]
     public static Boolean TrySerialize<TSerializable>(this ISerializer<TSerializable> serializer,
                                                       [DisallowNull] Stream stream,
                                                       [AllowNull] TSerializable graph,
@@ -184,7 +184,7 @@ public static class SerializerExtensions
     /// <param name="graph">The graph to serialize.</param>
     /// <param name="actionAfter">The actions to perform after the writing operation has finished.</param>
     /// <returns>The amount of bytes written</returns>
-    [Obsolete("Only use this when absolutetly necessary. Use the more modern IWriteableStream interfaced overload if possible.", false)]
+    [Obsolete("Only use this when absolutetly necessary. Use the more modern IWriteableStream interface overload if possible.", false)]
     public static Boolean TrySerialize<TSerializable>(this ISerializer<TSerializable> serializer,
                                                       [DisallowNull] Stream stream,
                                                       [AllowNull] TSerializable? graph,
@@ -203,7 +203,7 @@ public static class SerializerExtensions
     /// <param name="offset">The offset in the stream where to begin writing.</param>
     /// <param name="actionAfter">The actions to perform after the writing operation has finished.</param>
     /// <returns>The amount of bytes written</returns>
-    [Obsolete("Only use this when absolutetly necessary. Use the more modern IWriteableStream interfaced overload if possible.", false)]
+    [Obsolete("Only use this when absolutetly necessary. Use the more modern IWriteableStream interface overload if possible.", false)]
     public static Boolean TrySerialize<TSerializable>(this ISerializer<TSerializable> serializer,
                                                       [DisallowNull] Stream stream,
                                                       [AllowNull] TSerializable? graph,
@@ -223,7 +223,7 @@ public static class SerializerExtensions
     /// <param name="written">The amount of bytes written.</param>
     /// <param name="actionAfter">The actions to perform after the writing operation has finished.</param>
     /// <returns>The amount of bytes written</returns>
-    [Obsolete("Only use this when absolutetly necessary. Use the more modern IWriteableStream interfaced overload if possible.", false)]
+    [Obsolete("Only use this when absolutetly necessary. Use the more modern IWriteableStream interface overload if possible.", false)]
     public static Boolean TrySerialize<TSerializable>(this ISerializer<TSerializable> serializer,
                                                       [DisallowNull] Stream stream,
                                                       [AllowNull] TSerializable? graph,
