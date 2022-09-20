@@ -21,7 +21,7 @@
 		<DocumentationFile>Narumikazuchi.Serialization.xml</DocumentationFile>
 		<Authors>Narumikazuchi</Authors>
 		<Copyright>©2022 Narumikazuchi</Copyright>
-		<Version>4.0.1-beta</Version>
+		<Version>3.0.0-beta</Version>
 	</PropertyGroup>
 
 	<PropertyGroup>
