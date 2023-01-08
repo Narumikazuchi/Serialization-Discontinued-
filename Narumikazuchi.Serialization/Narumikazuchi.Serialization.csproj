@@ -21,7 +21,7 @@
 		<DocumentationFile>Narumikazuchi.Serialization.xml</DocumentationFile>
 		<Authors>Narumikazuchi</Authors>
 		<Copyright>©2022 Narumikazuchi</Copyright>
-		<Version>3.0.1-beta</Version>
+		<Version>3.0.2-beta</Version>
 	</PropertyGroup>
 
 	<PropertyGroup>
@@ -66,8 +66,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="Narumikazuchi.Collections" Version="7.0.3-beta" />
-	  <PackageReference Include="Narumikazuchi.InputOutput" Version="0.3.4-beta" />
+	  <PackageReference Include="Narumikazuchi.Collections" Version="7.0.5-beta" />
+	  <PackageReference Include="Narumikazuchi.InputOutput" Version="0.3.5-beta" />
 	</ItemGroup>
 
 </Project>
